@@ -99,9 +99,6 @@
 							<li class="nav-item">
 								<a class="nav-link" href="#idocs_configuration">Configuration</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#idocs_importdata">Import Data</a>
-							</li>
 						</ul>
 					</li>
 					<li class="nav-item">
@@ -132,6 +129,9 @@
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#idocs_dynamicattributes">Dynamic Attributes</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#idocs_importdata">Import Data</a>
 							</li>
 						</ul>
 					</li>
@@ -295,7 +295,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 								</ul>
 							</li>
 							<li>
-								Import update data:
+								Import sample data:
 								<ul>
 									<li>
 										Access Console:
@@ -426,46 +426,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 									<li>
 										<code>import/dev</code>
 										- Contains data to import
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<hr class="divider">
-
-					<!-- Data -->
-					<section id="idocs_importdata">
-						<h2>Import Data</h2>
-						<code>beanframework/bin/config/src/main/resources/import/</code>
-						<ul>
-							<li>
-								<code>dev/initdata/**/*.csv</code>
-								- Contains data to import every time when application startup.
-								<ul>
-									<li>
-										<code>module.imex.import.init.locations=classpath*:import/dev/initdata/**/*.csv</code>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<code>dev/initsql/**/*.sql</code>
-								- Contains sql to execute every time when application startup.
-								<ul>
-									<li>
-										<code>platform.import.startup.enabled=true</code>
-									</li>
-									<li>
-										<code>platform.import.sql.locations=classpath*:import/dev/initsql/**/*.sql</code>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<code>dev/updatedata</code>
-								- Contains data to import when manually performing platform update.
-								<ul>
-									<li>
-										<code>module.imex.import.update.locations=classpath*:import/dev/updatedata</code>
 									</li>
 								</ul>
 							</li>
@@ -959,6 +919,84 @@ for (TrainingDto dto : pagination.getContent()) {
 
 
 					<hr class="divider">
+
+					<!-- Data -->
+					<section id="idocs_importdata">
+						<h2>Import Data</h2>
+						<code>beanframework/bin/config/src/main/resources/import/</code>
+						<ul>
+							<li>
+								<code>dev/initdata/**/*.csv</code>
+								- Contains data to import every time when application startup.
+								<ul>
+									<li>
+										<code>module.imex.import.init.locations=classpath*:import/dev/initdata/**/*.csv</code>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<code>dev/initsql/**/*.sql</code>
+								- Contains sql to execute every time when application startup.
+								<ul>
+									<li>
+										<code>platform.import.startup.enabled=true</code>
+									</li>
+									<li>
+										<code>platform.import.sql.locations=classpath*:import/dev/initsql/**/*.sql</code>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<code>dev/updatedata</code>
+								- Contains data to import when manually performing platform update.
+								<ul>
+									<li>
+										<code>module.imex.import.update.locations=classpath*:import/dev/updatedata</code>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								Data Syntax in CSV:
+								<ul>
+									<li>
+										<code>INSERT</code> - To create new data only, no data created if exists in database, 
+									</li>
+									<li>
+										<code>UPDATE</code> - To modify existing data only, no data updated if not exists in database.
+									</li>
+									<li>
+										<code>INSERT_UPDATE</code> - To create or modify data in database.
+									</li>
+									<li>
+										<code>REMOVE</code> - To remove existing data in database.
+									</li>
+								</ul>
+								<br>
+								Example:
+								<pre><code class="html">
+INSERT_UPDATE Training,id      ,name
+                      ,training,Training
+								</code>
+								</pre>
+							</li>
+							<li>
+								To add more data column in CSV:
+								<ul>
+									<li>
+										<code>TrainingCsv.</code> - Add new data attribute.
+									</li>
+									<li>
+										<code>TrainingEntityCsvConverter.java</code> - Add new data attribute.
+									</li>
+									<li>
+										<code>TrainingImportListener</code> - Optional: To customizing a new import logic.
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
 				</div>
 			</div>
 
