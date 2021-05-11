@@ -5,7 +5,7 @@
 </head>
 <body class="hold-transition">
 	<th:block layout:fragment="content">
-		<div class="content-wrapper sidebar-mini">
+		<div th:class="${fullpage == true ? 'lockscreen-wrapper': 'content-wrapper sidebar-mini'}">
 
 			<!-- Content Header (Page header) -->
 			<section class="content-header">

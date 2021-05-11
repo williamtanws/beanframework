@@ -3,9 +3,9 @@ package com.beanframework.core.controller;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping(value = { "/error", "/*/error" })
@@ -33,6 +35,18 @@ public class GlobalErrorController implements ErrorController {
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 		Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
 		String message = (String) request.getAttribute("javax.servlet.error.message");
+
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				if (cookie.getName().equalsIgnoreCase("referer") && StringUtils.isNotBlank(cookie.getValue())) {
+					String[] value = cookie.getValue().split("/");
+					originalUri = "/"+value[value.length - 1];
+					model.addAttribute("fullpage", true);
+				}
+			}
+		}
 
 		if (originalUri == null) {
 			originalUri = request.getRequestURI();

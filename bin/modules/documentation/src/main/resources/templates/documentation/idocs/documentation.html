@@ -474,7 +474,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 							</li>
 						</ul>
 					</section>
-					
+
 					<!-- Architecture -->
 					<section id="idocs_architecture">
 						<h2>Architecture</h2>
@@ -485,28 +485,106 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 					<section id="idocs_springmvc">
 						<h2>Spring MVC</h2>
 						<p>Design Pattern used in this platform.</p>
-						<p><img class="img-fluid border" th:src="@{/static/beanframework/springmvc.png}" alt=""></p>
+						<p>
+							<img class="img-fluid border" th:src="@{/static/beanframework/springmvc.png}" alt="">
+						</p>
 					</section>
 
 					<!-- Spring MVC -->
 					<section id="idocs_applicationlayering">
 						<h2>Application Layering</h2>
 						<p>Spring application layers from the underlying platform.</p>
-						<p><img class="img-fluid border" th:src="@{/static/beanframework/applicationlayering.png}" alt=""></p>
+						<p>
+							<img class="img-fluid border" th:src="@{/static/beanframework/applicationlayering.png}" alt="">
+						</p>
 					</section>
 
 					<!-- Model Service -->
 					<section id="idocs_modelservice">
 						<h2>Model Service</h2>
 						<p>Model's life cycle involving listeners and interceptors.</p>
-						<p><img class="img-fluid border" th:src="@{/static/beanframework/modelservice.png}" alt=""></p>
+						<p>
+							<img class="img-fluid border" th:src="@{/static/beanframework/modelservice.png}" alt="">
+						</p>
+						<ul>
+							<li>
+								Initial a new entity object operation in model service:
+								<ul>
+									<li>
+										<code>modelService.create(...)</code>
+									</li>
+									<li>
+										<b>Initial Defaults Interceptor</b> - To create an new object with defaults attributes.
+									</li>
+								</ul>
+							</li>
+							<li>
+								Find entity operation in model service:
+								<ul>
+									<li>
+										<code>modelService.find...(...)</code>
+									</li>
+									<li>
+										<b>Database</b>
+									</li>
+									<li>
+										<b>Load Interceptor</b> - To modify an object loaded from database.
+									</li>
+								</ul>
+							</li>
+							<li>
+								Create/update entity operation in model service:
+								<ul>
+									<li>
+										<code>modelService.saveEntity(...)</code>
+									</li>
+									<li>
+										<b>Prepare Interceptor</b> - To modify an object before save to database.
+									</li>
+									<li>
+										<b>Validate Interceptor</b> - To validate an object before save to database. <span style="color:red">(Do not modify attached model)</span>
+									</li>
+									<li>
+										<b>Before Save Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+									</li>
+									<li>
+										<b>Database</b>
+									</li>
+									<li>
+										<b>After Save Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+									</li>
+								</ul>
+							</li>
+							<li>
+								Delete entity operation in model service:
+								<ul>
+									<li>
+										<code>modelService.deleteEntity(...)</code>
+									</li>
+									<li>
+										<b>Remove Interceptor</b> - To modify an object before remove from database.
+									</li>
+									<li>
+										<b>Before Remove Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+									</li>
+									<li>
+										<b>Database</b>
+									</li>
+									<li>
+										<b>After Remove Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 
 					<!-- Legacy Mode -->
 					<section id="idocs_legacymode">
 						<h2>Legacy Mode</h2>
 						<p>Performing model service with legacy mode ignoring listeners and interceptors.</p>
-						<p><img class="img-fluid border" th:src="@{/static/beanframework/legacymode.png}" alt=""></p>
+						<p>
+							<img class="img-fluid border" th:src="@{/static/beanframework/legacymode.png}" alt="">
+						</p>
 					</section>
 
 					<hr class="divider">
@@ -730,15 +808,18 @@ for (TrainingDto dto : pagination.getContent()) {
 						Example of creating Dynamic Field for a Training Model:
 						<ul>
 							<li>
-								Create/Reuse a new entry in DynamicField
+								Create/Reuse a new entry in DynamicField:
+								<br>
 								<b>name_en</b>
 							</li>
 							<li>
-								Create a new entry in DynamicFieldSlot
+								Create a new entry in DynamicFieldSlot:
+								<br>
 								<b>training_name_en</b>
 							</li>
 							<li>
-								Create a new entry in DynamicFieldTemplate
+								Create a new entry in DynamicFieldTemplate:
+								<br>
 								<b>training.dynamicfield.template</b>
 							</li>
 						</ul>
