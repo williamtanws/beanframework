@@ -111,9 +111,6 @@
 								<a class="nav-link" href="#idocs_springmvc">Spring MVC</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#idocs_applicationlayering">Application Layering</a>
-							</li>
-							<li class="nav-item">
 								<a class="nav-link" href="#idocs_modelservice">Model Service</a>
 							</li>
 							<li class="nav-item">
@@ -475,6 +472,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 						</ul>
 					</section>
 
+					<hr class="divider">
+
 					<!-- Architecture -->
 					<section id="idocs_architecture">
 						<h2>Architecture</h2>
@@ -488,16 +487,70 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 						<p>
 							<img class="img-fluid border" th:src="@{/static/beanframework/springmvc.png}" alt="">
 						</p>
+						<ul>
+							<li>
+								Presentation Layer
+								<ul>
+									<li>
+										<b>Controller</b>
+										:
+										<br>
+										<code>@Controller</code>
+										- Render view html
+										<br>
+										<code>@RestController</code>
+										- Response for web services
+									</li>
+								</ul>
+							</li>
+							<li>
+								Service/Business Layer
+								<ul>
+									<li>
+										<b>Facade</b>
+										:
+										<code>@Component</code>
+										- To mark the beans as Spring's managed components.
+										<ul>
+											<li>
+												<b>DtoConverter</b>
+												- Convert Model to DTO
+												<ul>
+													<li>
+														<b>Populator</b>
+														- Multiple populators to populate data from source Model to target DTO
+													</li>
+												</ul>
+											</li>
+											<li>
+												<b>EntityConverter</b>
+												- Convert DTO to Model
+											</li>
+										</ul>
+									</li>
+									<li>
+										<b>Service</b>
+										:
+										<code>@Service</code>
+										- To indicate that it's holding the business logic
+									</li>
+								</ul>
+							</li>
+							<li>
+								Persistence Layer
+								<ul>
+									<li>
+										<b>Repository</b>
+										:
+										<code>@Repository</code>
+										- To catch persistence specific exceptions and rethrow them as one of Spring’s unified unchecked exception.
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 
-					<!-- Spring MVC -->
-					<section id="idocs_applicationlayering">
-						<h2>Application Layering</h2>
-						<p>Spring application layers from the underlying platform.</p>
-						<p>
-							<img class="img-fluid border" th:src="@{/static/beanframework/applicationlayering.png}" alt="">
-						</p>
-					</section>
+					<hr class="divider">
 
 					<!-- Model Service -->
 					<section id="idocs_modelservice">
@@ -514,7 +567,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<code>modelService.create(...)</code>
 									</li>
 									<li>
-										<b>Initial Defaults Interceptor</b> - To create an new object with defaults attributes.
+										<b>Initial Defaults Interceptor</b>
+										- To create an new object with defaults attributes.
 									</li>
 								</ul>
 							</li>
@@ -528,7 +582,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<b>Database</b>
 									</li>
 									<li>
-										<b>Load Interceptor</b> - To modify an object loaded from database.
+										<b>Load Interceptor</b>
+										- To modify an object loaded from database.
 									</li>
 								</ul>
 							</li>
@@ -539,19 +594,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<code>modelService.saveEntity(...)</code>
 									</li>
 									<li>
-										<b>Prepare Interceptor</b> - To modify an object before save to database.
+										<b>Prepare Interceptor</b>
+										- To modify an object before save to database.
 									</li>
 									<li>
-										<b>Validate Interceptor</b> - To validate an object before save to database. <span style="color:red">(Do not modify attached model)</span>
+										<b>Validate Interceptor</b>
+										- To validate an object before save to database.
+										<span style="color: red">(Do not modify attached model)</span>
 									</li>
 									<li>
-										<b>Before Save Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+										<b>Before Save Listener</b>
+										- Perform business logic.
+										<span style="color: red">(Do not modify attached model)</span>
 									</li>
 									<li>
 										<b>Database</b>
 									</li>
 									<li>
-										<b>After Save Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+										<b>After Save Listener</b>
+										- Perform business logic.
+										<span style="color: red">(Do not modify attached model)</span>
 									</li>
 								</ul>
 							</li>
@@ -562,21 +624,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 										<code>modelService.deleteEntity(...)</code>
 									</li>
 									<li>
-										<b>Remove Interceptor</b> - To modify an object before remove from database.
+										<b>Remove Interceptor</b>
+										- To modify an object before remove from database.
 									</li>
 									<li>
-										<b>Before Remove Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+										<b>Before Remove Listener</b>
+										- Perform business logic.
+										<span style="color: red">(Do not modify attached model)</span>
 									</li>
 									<li>
 										<b>Database</b>
 									</li>
 									<li>
-										<b>After Remove Listener</b> - Perform business logic. <span style="color:red">(Do not modify attached model)</span>
+										<b>After Remove Listener</b>
+										- Perform business logic.
+										<span style="color: red">(Do not modify attached model)</span>
 									</li>
 								</ul>
 							</li>
 						</ul>
 					</section>
+
+					<hr class="divider">
 
 					<!-- Legacy Mode -->
 					<section id="idocs_legacymode">
@@ -798,6 +867,8 @@ for (TrainingDto dto : pagination.getContent()) {
 							</li>
 						</ul>
 					</section>
+
+					<hr class="divider">
 
 					<!-- Dynamic Attributes -->
 					<section id="idocs_dynamicattributes">
