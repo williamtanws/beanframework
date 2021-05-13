@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Company;
 
 public class CompanyRemoveInterceptor extends AbstractRemoveInterceptor<Company> {
 
-	@Override
-	public void onRemove(Company model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Company model, InterceptorContext context) throws InterceptorException {}
 
 }

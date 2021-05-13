@@ -7,10 +7,10 @@ import com.beanframework.media.domain.Media;
 
 public class MediaPrepareInterceptor extends AbstractPrepareInterceptor<Media> {
 
-	@Override
-	public void onPrepare(Media model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
+  @Override
+  public void onPrepare(Media model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
 
-	}
+  }
 
 }

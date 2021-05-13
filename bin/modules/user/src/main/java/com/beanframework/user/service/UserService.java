@@ -4,34 +4,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.UUID;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 
 public interface UserService {
 
-	UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception;
-		
-	User getCurrentUser() throws Exception;
+  UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception;
 
-	User updatePrincipal(User model);
+  User getCurrentUser() throws Exception;
 
-	Set<UserSession> findAllSessions();
+  User updatePrincipal(User model);
 
-	void expireAllSessionsByUuid(UUID uuid);
+  Set<UserSession> findAllSessions();
 
-	void expireAllSessions();
+  void expireAllSessionsByUuid(UUID uuid);
 
-	void saveProfilePicture(User model, MultipartFile picture) throws IOException;
+  void expireAllSessions();
 
-	void saveProfilePicture(User model, InputStream inputStream) throws IOException;
+  void saveProfilePicture(User model, MultipartFile picture) throws IOException;
 
-	void deleteProfilePictureFileByUuid(UUID uuid);
+  void saveProfilePicture(User model, InputStream inputStream) throws IOException;
 
-	Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+  void deleteProfilePictureFileByUuid(UUID uuid);
 
-	void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
+  Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+
+  void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
 }

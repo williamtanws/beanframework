@@ -7,8 +7,7 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 
 public class SiteLoadInterceptor extends AbstractLoadInterceptor<Site> {
 
-	@Override
-	public void onLoad(Site model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Site model, InterceptorContext context) throws InterceptorException {}
 
 }

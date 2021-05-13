@@ -77,7 +77,7 @@
 								<dt class="col-sm-2" th:text="#{module.cronjob.result}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{result}"></dd>
 								<dt class="col-sm-2" th:text="#{module.cronjob.message}+':'"></dt>
-								<dd class="col-sm-10" th:text="*{message}"></dd>
+								<dd class="col-sm-10"><textarea rows="3" disabled="disabled" th:text="*{message}" class="form-control"></textarea></dd>
 							</dl>
 							<dl class="row">
 								<dt class="col-sm-3" th:text="#{module.cronjob.laststartexecuteddate}+':'"></dt>
@@ -229,6 +229,24 @@
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js (tableId='parameterDataTable', columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=${cronjobDto.parameters}, selectedItemNames='selectedParameterKeys', selectedItemValues='selectedParameterValues' )}"></th:block>
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js-add (tableId='parameterDataTable')}"></th:block>
 		<th:block th:if="${cronjobDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.cronjob.history')}(uuid=${cronjobDto.uuid})})}"></th:block>
+	
+		<script th:inline="javascript">
+			    /*<![CDATA[*/
+			    $(document).ready(function() {			    
+					$('#historyDataTable').DataTable().fixedHeader.disable();
+			
+				    $('#custom-tabs-tab').on("shown.bs.tab", function (e) {
+					    	
+						$('#historyDataTable').DataTable().fixedHeader.disable();
+					    	
+					    if (e.target.id == 'custom-tabs-history-tab'){
+					    	$('#historyDataTable').DataTable().fixedHeader.enable();
+					    }
+				    });
+				});
+			    /*]]>*/
+		</script>
+	
 	</th:block>
 </body>
 

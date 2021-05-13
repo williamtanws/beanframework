@@ -7,8 +7,7 @@ import com.beanframework.configuration.domain.Configuration;
 
 public class ConfigurationLoadInterceptor extends AbstractLoadInterceptor<Configuration> {
 
-	@Override
-	public void onLoad(Configuration model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Configuration model, InterceptorContext context) throws InterceptorException {}
 
 }

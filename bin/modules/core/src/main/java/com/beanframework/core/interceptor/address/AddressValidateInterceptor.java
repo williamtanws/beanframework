@@ -7,9 +7,9 @@ import com.beanframework.user.domain.Address;
 
 public class AddressValidateInterceptor extends AbstractValidateInterceptor<Address> {
 
-	@Override
-	public void onValidate(Address model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Address model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

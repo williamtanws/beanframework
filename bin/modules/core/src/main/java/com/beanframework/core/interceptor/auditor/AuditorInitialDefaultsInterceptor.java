@@ -7,8 +7,8 @@ import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 
 public class AuditorInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Auditor> {
 
-	@Override
-	public void onInitialDefaults(Auditor model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onInitialDefaults(Auditor model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

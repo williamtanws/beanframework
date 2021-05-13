@@ -7,10 +7,10 @@ import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
 
 public class SitePrepareInterceptor extends AbstractPrepareInterceptor<Site> {
 
-	@Override
-	public void onPrepare(Site model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
+  @Override
+  public void onPrepare(Site model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
 
-	}
+  }
 
 }

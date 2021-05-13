@@ -7,9 +7,9 @@ import com.beanframework.internationalization.domain.Language;
 
 public class LanguageLoadInterceptor extends AbstractLoadInterceptor<Language> {
 
-	@Override
-	public void onLoad(Language model, InterceptorContext context) throws InterceptorException {
+  @Override
+  public void onLoad(Language model, InterceptorContext context) throws InterceptorException {
 
-	}
+  }
 
 }

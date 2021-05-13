@@ -18,26 +18,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class CronjobEnversIntegrator implements Integrator {
 
-	@Override
-	public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
+  @Override
+  public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
+      SessionFactoryServiceRegistry serviceRegistry) {
 
-		EventListenerRegistry listenerRegistry = serviceRegistry.getService(EventListenerRegistry.class);
-		listenerRegistry.addDuplicationStrategy(EnversListenerDuplicationStrategy.INSTANCE);
+    EventListenerRegistry listenerRegistry =
+        serviceRegistry.getService(EventListenerRegistry.class);
+    listenerRegistry.addDuplicationStrategy(EnversListenerDuplicationStrategy.INSTANCE);
 
-		EnversService enversService = serviceRegistry.getService(EnversService.class);
+    EnversService enversService = serviceRegistry.getService(EnversService.class);
 
-		if (enversService.getEntitiesConfigurations().hasAuditedEntities()) {
-			listenerRegistry.appendListeners(EventType.POST_DELETE, new EnversPostDeleteEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.POST_INSERT, new EnversPostInsertEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.PRE_UPDATE, new CronjobEnversPreUpdateEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.POST_UPDATE, new CronjobEnversPostUpdateEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.POST_COLLECTION_RECREATE, new EnversPostCollectionRecreateEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.PRE_COLLECTION_REMOVE, new EnversPreCollectionRemoveEventListenerImpl(enversService));
-			listenerRegistry.appendListeners(EventType.PRE_COLLECTION_UPDATE, new EnversPreCollectionUpdateEventListenerImpl(enversService));
-		}
-	}
+    if (enversService.getEntitiesConfigurations().hasAuditedEntities()) {
+      listenerRegistry.appendListeners(EventType.POST_DELETE,
+          new EnversPostDeleteEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.POST_INSERT,
+          new EnversPostInsertEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.PRE_UPDATE,
+          new CronjobEnversPreUpdateEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.POST_UPDATE,
+          new CronjobEnversPostUpdateEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.POST_COLLECTION_RECREATE,
+          new EnversPostCollectionRecreateEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.PRE_COLLECTION_REMOVE,
+          new EnversPreCollectionRemoveEventListenerImpl(enversService));
+      listenerRegistry.appendListeners(EventType.PRE_COLLECTION_UPDATE,
+          new EnversPreCollectionUpdateEventListenerImpl(enversService));
+    }
+  }
 
-	@Override
-	public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-	}
+  @Override
+  public void disintegrate(SessionFactoryImplementor sessionFactory,
+      SessionFactoryServiceRegistry serviceRegistry) {}
 }

@@ -7,10 +7,11 @@ import com.beanframework.user.domain.UserAuthority;
 
 public class UserAuthorityPrepareInterceptor extends AbstractPrepareInterceptor<UserAuthority> {
 
-	@Override
-	public void onPrepare(UserAuthority model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
+  @Override
+  public void onPrepare(UserAuthority model, InterceptorContext context)
+      throws InterceptorException {
+    super.onPrepare(model, context);
 
-	}
+  }
 
 }

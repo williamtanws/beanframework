@@ -13,39 +13,43 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PlatformCacheConfig {
 
-	@Bean
-	public CacheManager cacheManager() {
-		CacheManager cacheManager = new org.springframework.cache.concurrent.ConcurrentMapCacheManager();
-//		ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager() {
-//
-//	        @Override
-//	        protected Cache createConcurrentMapCache(final String name) {
-//	            return new ConcurrentMapCache(name, CacheBuilder.newBuilder().expireAfterWrite(1440, TimeUnit.MINUTES)
-//	                    .maximumSize(100).recordStats().build().asMap(), false); }
-//	    };
-		return cacheManager;
-	}
+  @Bean
+  public CacheManager cacheManager() {
+    CacheManager cacheManager =
+        new org.springframework.cache.concurrent.ConcurrentMapCacheManager();
+    // ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager() {
+    //
+    // @Override
+    // protected Cache createConcurrentMapCache(final String name) {
+    // return new ConcurrentMapCache(name, CacheBuilder.newBuilder().expireAfterWrite(1440,
+    // TimeUnit.MINUTES)
+    // .maximumSize(100).recordStats().build().asMap(), false); }
+    // };
+    return cacheManager;
+  }
 
-//	@Bean
-//	public JCacheCacheManager cacheManager() {
-//		
-//		CachingProvider cachingProvider = Caching.getCachingProvider();
-//		EhcacheCachingProvider ehcacheCachingProvider = (EhcacheCachingProvider) cachingProvider;
-//		
-//		JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
-//		jCacheCacheManager.setCacheManager(ehcacheCachingProvider.getCacheManager());
-//		return jCacheCacheManager;
-//	}
+  // @Bean
+  // public JCacheCacheManager cacheManager() {
+  //
+  // CachingProvider cachingProvider = Caching.getCachingProvider();
+  // EhcacheCachingProvider ehcacheCachingProvider = (EhcacheCachingProvider) cachingProvider;
+  //
+  // JCacheCacheManager jCacheCacheManager = new JCacheCacheManager();
+  // jCacheCacheManager.setCacheManager(ehcacheCachingProvider.getCacheManager());
+  // return jCacheCacheManager;
+  // }
 
-	@Bean
-	public HibernatePropertiesCustomizer hibernateSecondLevelCacheCustomizer(CacheManager cacheManager) {
-		return (properties) -> properties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+  @Bean
+  public HibernatePropertiesCustomizer hibernateSecondLevelCacheCustomizer(
+      CacheManager cacheManager) {
+    return (properties) -> properties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
 
-	}
-//
-	@Bean
-	public StatisticsService statisticsService(CacheManager cacheManager) {
-		StatisticsService statisticsService = new DefaultStatisticsService();
-		return statisticsService;
-	}
+  }
+
+  //
+  @Bean
+  public StatisticsService statisticsService(CacheManager cacheManager) {
+    StatisticsService statisticsService = new DefaultStatisticsService();
+    return statisticsService;
+  }
 }

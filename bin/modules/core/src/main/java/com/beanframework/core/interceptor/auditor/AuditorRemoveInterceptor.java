@@ -7,8 +7,7 @@ import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
 
 public class AuditorRemoveInterceptor extends AbstractRemoveInterceptor<Auditor> {
 
-	@Override
-	public void onRemove(Auditor model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Auditor model, InterceptorContext context) throws InterceptorException {}
 
 }

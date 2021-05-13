@@ -7,9 +7,10 @@ import com.beanframework.imex.domain.Imex;
 
 public class ImexInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Imex> {
 
-	@Override
-	public void onInitialDefaults(Imex model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Imex model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

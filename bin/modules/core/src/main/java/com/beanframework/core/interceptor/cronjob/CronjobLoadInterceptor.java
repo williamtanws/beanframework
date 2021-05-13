@@ -7,8 +7,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobLoadInterceptor extends AbstractLoadInterceptor<Cronjob> {
 
-	@Override
-	public void onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Cronjob model, InterceptorContext context) throws InterceptorException {}
 
 }

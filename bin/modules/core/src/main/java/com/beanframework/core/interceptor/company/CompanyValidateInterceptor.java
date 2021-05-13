@@ -7,9 +7,9 @@ import com.beanframework.user.domain.Company;
 
 public class CompanyValidateInterceptor extends AbstractValidateInterceptor<Company> {
 
-	@Override
-	public void onValidate(Company model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Company model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

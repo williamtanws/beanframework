@@ -7,8 +7,7 @@ import com.beanframework.media.domain.Media;
 
 public class MediaLoadInterceptor extends AbstractLoadInterceptor<Media> {
 
-	@Override
-	public void onLoad(Media model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Media model, InterceptorContext context) throws InterceptorException {}
 
 }

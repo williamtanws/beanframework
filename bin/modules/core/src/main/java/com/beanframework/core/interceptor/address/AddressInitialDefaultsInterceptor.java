@@ -7,9 +7,10 @@ import com.beanframework.user.domain.Address;
 
 public class AddressInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Address> {
 
-	@Override
-	public void onInitialDefaults(Address model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Address model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

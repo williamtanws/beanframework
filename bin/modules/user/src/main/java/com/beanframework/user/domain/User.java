@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -23,14 +22,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,190 +40,194 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorColumn(name = "type")
 public class User extends GenericEntity {
 
-	public static final String PASSWORD = "password";
-	public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
-	public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
-	public static final String CREDENTIALS_NON_EXPIRED = "credentialsNonExpired";
-	public static final String ENABLED = "enabled";
-	public static final String USER_GROUPS = "userGroups";
-	public static final String COMPANIES = "companies";
-	public static final String ADDRESSES = "addresses";
-	public static final String ATTRIBUTES = "fields";
-	public static final String NAME = "name";
+  public static final String PASSWORD = "password";
+  public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
+  public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
+  public static final String CREDENTIALS_NON_EXPIRED = "credentialsNonExpired";
+  public static final String ENABLED = "enabled";
+  public static final String USER_GROUPS = "userGroups";
+  public static final String COMPANIES = "companies";
+  public static final String ADDRESSES = "addresses";
+  public static final String ATTRIBUTES = "fields";
+  public static final String NAME = "name";
 
-	private static final long serialVersionUID = -7444894280894062710L;
-	
-	public User() {
-		super();
-	}
-	
-	public User(UUID uuid, String id, String name) {
-		super();
-		setUuid(uuid);
-		setId(id);
-		setName(name);
-	}
+  private static final long serialVersionUID = -7444894280894062710L;
 
-	@Column(insertable = false, updatable = false)
-	private String type;
+  public User() {
+    super();
+  }
 
-	@JsonIgnore
-	@Audited(withModifiedFlag = true)
-	@Column(length = 60)
-	private String password;
+  public User(UUID uuid, String id, String name) {
+    super();
+    setUuid(uuid);
+    setId(id);
+    setName(name);
+  }
 
-	@Audited(withModifiedFlag = true)
-	private Boolean accountNonExpired;
+  @Column(insertable = false, updatable = false)
+  private String type;
 
-	@Audited(withModifiedFlag = true)
-	private Boolean accountNonLocked;
+  @JsonIgnore
+  @Audited(withModifiedFlag = true)
+  @Column(length = 60)
+  private String password;
 
-	@Audited(withModifiedFlag = true)
-	private Boolean credentialsNonExpired;
+  @Audited(withModifiedFlag = true)
+  private Boolean accountNonExpired;
 
-	@Audited(withModifiedFlag = true)
-	private Boolean enabled;
+  @Audited(withModifiedFlag = true)
+  private Boolean accountNonLocked;
 
-	@Audited(withModifiedFlag = true)
-	private String name;
+  @Audited(withModifiedFlag = true)
+  private Boolean credentialsNonExpired;
 
-	@Audited(withModifiedFlag = true)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name = "usergroup_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private Set<UUID> userGroups = new HashSet<UUID>();
+  @Audited(withModifiedFlag = true)
+  private Boolean enabled;
 
-	@Audited(withModifiedFlag = true)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = UserConstants.Table.USER_COMPANY_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name = "company_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private Set<UUID> companies = new HashSet<UUID>();
+  @Audited(withModifiedFlag = true)
+  private String name;
 
-	@Audited(withModifiedFlag = true)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = UserConstants.Table.USER_ADDRESS_REL, joinColumns = @JoinColumn(name = "user_uuid"))
-	@Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
-	private Set<UUID> addresses = new HashSet<UUID>();
+  @Audited(withModifiedFlag = true)
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = UserConstants.Table.USER_USER_GROUP_REL,
+      joinColumns = @JoinColumn(name = "user_uuid"))
+  @Column(name = "usergroup_uuid", columnDefinition = "BINARY(16)", nullable = false)
+  private Set<UUID> userGroups = new HashSet<UUID>();
 
-	@Audited(withModifiedFlag = true)
-	@Cascade({ CascadeType.ALL })
-	@OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@OrderBy(UserAttribute.DYNAMIC_FIELD_SLOT)
-	private List<UserAttribute> attributes = new ArrayList<UserAttribute>();
+  @Audited(withModifiedFlag = true)
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = UserConstants.Table.USER_COMPANY_REL,
+      joinColumns = @JoinColumn(name = "user_uuid"))
+  @Column(name = "company_uuid", columnDefinition = "BINARY(16)", nullable = false)
+  private Set<UUID> companies = new HashSet<UUID>();
 
-	@Audited(withModifiedFlag = true)
-	@ElementCollection(fetch = FetchType.EAGER)
-	@MapKeyColumn(name = "name")
-	@Column(name = "value")
-	@CollectionTable(name = UserConstants.Table.USER_PARAMETER, joinColumns = @JoinColumn(name = "user_uuid"))
-	Map<String, String> parameters = new HashMap<String, String>();
+  @Audited(withModifiedFlag = true)
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = UserConstants.Table.USER_ADDRESS_REL,
+      joinColumns = @JoinColumn(name = "user_uuid"))
+  @Column(name = "address_uuid", columnDefinition = "BINARY(16)", nullable = false)
+  private Set<UUID> addresses = new HashSet<UUID>();
 
-	@Transient
-	private String profilePicture;
+  @Audited(withModifiedFlag = true)
+  @Cascade({CascadeType.ALL})
+  @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @OrderBy(UserAttribute.DYNAMIC_FIELD_SLOT)
+  private List<UserAttribute> attributes = new ArrayList<UserAttribute>();
 
-	public String getType() {
-		return type;
-	}
+  @Audited(withModifiedFlag = true)
+  @ElementCollection(fetch = FetchType.EAGER)
+  @MapKeyColumn(name = "name")
+  @Column(name = "value")
+  @CollectionTable(name = UserConstants.Table.USER_PARAMETER,
+      joinColumns = @JoinColumn(name = "user_uuid"))
+  Map<String, String> parameters = new HashMap<String, String>();
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  @Transient
+  private String profilePicture;
 
-	public String getPassword() {
-		return password;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
 
-	public Boolean getAccountNonExpired() {
-		return accountNonExpired;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setAccountNonExpired(Boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public Boolean getAccountNonLocked() {
-		return accountNonLocked;
-	}
+  public Boolean getAccountNonExpired() {
+    return accountNonExpired;
+  }
 
-	public void setAccountNonLocked(Boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
+  public void setAccountNonExpired(Boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
 
-	public Boolean getCredentialsNonExpired() {
-		return credentialsNonExpired;
-	}
+  public Boolean getAccountNonLocked() {
+    return accountNonLocked;
+  }
 
-	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
-	}
+  public void setAccountNonLocked(Boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+  public Boolean getCredentialsNonExpired() {
+    return credentialsNonExpired;
+  }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+  public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public Boolean getEnabled() {
+    return enabled;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 
-	public Set<UUID> getUserGroups() {
-		return userGroups;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setUserGroups(Set<UUID> userGroups) {
-		this.userGroups = userGroups;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public List<UserAttribute> getAttributes() {
-		return attributes;
-	}
+  public Set<UUID> getUserGroups() {
+    return userGroups;
+  }
 
-	public void setAttributes(List<UserAttribute> attributes) {
-		this.attributes = attributes;
-	}
+  public void setUserGroups(Set<UUID> userGroups) {
+    this.userGroups = userGroups;
+  }
 
-	public String getProfilePicture() {
-		return profilePicture;
-	}
+  public List<UserAttribute> getAttributes() {
+    return attributes;
+  }
 
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
-	}
+  public void setAttributes(List<UserAttribute> attributes) {
+    this.attributes = attributes;
+  }
 
-	public Set<UUID> getCompanies() {
-		return companies;
-	}
+  public String getProfilePicture() {
+    return profilePicture;
+  }
 
-	public void setCompanies(Set<UUID> companies) {
-		this.companies = companies;
-	}
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
+  }
 
-	public Set<UUID> getAddresses() {
-		return addresses;
-	}
+  public Set<UUID> getCompanies() {
+    return companies;
+  }
 
-	public void setAddresses(Set<UUID> addresses) {
-		this.addresses = addresses;
-	}
+  public void setCompanies(Set<UUID> companies) {
+    this.companies = companies;
+  }
 
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
+  public Set<UUID> getAddresses() {
+    return addresses;
+  }
 
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
+  public void setAddresses(Set<UUID> addresses) {
+    this.addresses = addresses;
+  }
+
+  public Map<String, String> getParameters() {
+    return parameters;
+  }
+
+  public void setParameters(Map<String, String> parameters) {
+    this.parameters = parameters;
+  }
 
 }

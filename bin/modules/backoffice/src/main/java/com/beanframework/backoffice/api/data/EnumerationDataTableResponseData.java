@@ -4,32 +4,32 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class EnumerationDataTableResponseData extends DataTableResponseData {
 
-	private Integer sort;
-	private String enumGroup;
-	private String name;
+  private Integer sort;
+  private String enumGroup;
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public Integer getSort() {
-		return sort;
-	}
+  public Integer getSort() {
+    return sort;
+  }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+  public void setSort(Integer sort) {
+    this.sort = sort;
+  }
 
-	public String getEnumGroup() {
-		return enumGroup;
-	}
+  public String getEnumGroup() {
+    return enumGroup;
+  }
 
-	public void setEnumGroup(String enumGroup) {
-		this.enumGroup = enumGroup;
-	}
+  public void setEnumGroup(String enumGroup) {
+    this.enumGroup = enumGroup;
+  }
 
 }

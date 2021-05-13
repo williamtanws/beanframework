@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.common.registry.AfterRemoveListenerRegistry;
 import com.beanframework.common.registry.AfterSaveListenerRegistry;
 import com.beanframework.common.registry.BeforeRemoveListenerRegistry;
@@ -37,133 +36,133 @@ import com.beanframework.imex.registry.ImportListenerRegistry;
 @Component
 public class CoreListener implements ApplicationListener<ContextRefreshedEvent> {
 
-	@Autowired
-	private BeforeSaveListenerRegistry beforeSaveListenerRegistry;
+  @Autowired
+  private BeforeSaveListenerRegistry beforeSaveListenerRegistry;
 
-	@Autowired
-	private AfterSaveListenerRegistry afterSaveListenerRegistry;
+  @Autowired
+  private AfterSaveListenerRegistry afterSaveListenerRegistry;
 
-	@Autowired
-	private BeforeRemoveListenerRegistry beforeRemoveListenerRegistry;
+  @Autowired
+  private BeforeRemoveListenerRegistry beforeRemoveListenerRegistry;
 
-	@Autowired
-	private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
+  @Autowired
+  private AfterRemoveListenerRegistry afterRemoveListenerRegistry;
 
-	@Autowired
-	private CoreBeforeSaveListener coreBeforeSaveListener;
+  @Autowired
+  private CoreBeforeSaveListener coreBeforeSaveListener;
 
-	@Autowired
-	private CoreAfterSaveListener coreAfterSaveListener;
+  @Autowired
+  private CoreAfterSaveListener coreAfterSaveListener;
 
-	@Autowired
-	private CoreBeforeRemoveListener coreBeforeRemoveListener;
+  @Autowired
+  private CoreBeforeRemoveListener coreBeforeRemoveListener;
 
-	@Autowired
-	private CoreAfterRemoveListener coreAfterRemoveListener;
+  @Autowired
+  private CoreAfterRemoveListener coreAfterRemoveListener;
 
-	@Autowired
-	private ImportListenerRegistry importListenerRegistry;
+  @Autowired
+  private ImportListenerRegistry importListenerRegistry;
 
-	@Autowired
-	private ConfigurationImportListener configurationImportListener;
+  @Autowired
+  private ConfigurationImportListener configurationImportListener;
 
-	@Autowired
-	private LanguageImportListener languageImportListener;
+  @Autowired
+  private LanguageImportListener languageImportListener;
 
-	@Autowired
-	private CurrencyImportListener currencyImportListener;
+  @Autowired
+  private CurrencyImportListener currencyImportListener;
 
-	@Autowired
-	private CountryImportListener countryImportListener;
+  @Autowired
+  private CountryImportListener countryImportListener;
 
-	@Autowired
-	private RegionImportListener regionImportListener;
+  @Autowired
+  private RegionImportListener regionImportListener;
 
-	@Autowired
-	private CronjobImportListener cronjobImportListener;
+  @Autowired
+  private CronjobImportListener cronjobImportListener;
 
-	@Autowired
-	private CompanyImportListener companyImportListener;
+  @Autowired
+  private CompanyImportListener companyImportListener;
 
-	@Autowired
-	private AddressImportListener addressImportListener;
+  @Autowired
+  private AddressImportListener addressImportListener;
 
-	@Autowired
-	private CustomerImportListener customerImportListener;
+  @Autowired
+  private CustomerImportListener customerImportListener;
 
-	@Autowired
-	private VendorImportListener vendorImportListener;
+  @Autowired
+  private VendorImportListener vendorImportListener;
 
-	@Autowired
-	private EnumerationImportListener enumerationImportListener;
+  @Autowired
+  private EnumerationImportListener enumerationImportListener;
 
-	@Autowired
-	private DynamicFieldImportListener dynamicFieldImportListener;
+  @Autowired
+  private DynamicFieldImportListener dynamicFieldImportListener;
 
-	@Autowired
-	private DynamicFieldSlotImportListener dynamicFieldSlotImportListener;
+  @Autowired
+  private DynamicFieldSlotImportListener dynamicFieldSlotImportListener;
 
-	@Autowired
-	private DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener;
+  @Autowired
+  private DynamicFieldTemplateImportListener dynamicFieldTemplateImportListener;
 
-	@Autowired
-	private EmployeeImportListener employeeImportListener;
+  @Autowired
+  private EmployeeImportListener employeeImportListener;
 
-	@Autowired
-	private MenuImportListener menuImportListener;
+  @Autowired
+  private MenuImportListener menuImportListener;
 
-	@Autowired
-	private UserAuthorityImportListener userAuthorityImportListener;
+  @Autowired
+  private UserAuthorityImportListener userAuthorityImportListener;
 
-	@Autowired
-	private UserGroupImportListener userGroupImportListener;
+  @Autowired
+  private UserGroupImportListener userGroupImportListener;
 
-	@Autowired
-	private UserPermissionImportListener userPermissionImportListener;
+  @Autowired
+  private UserPermissionImportListener userPermissionImportListener;
 
-	@Autowired
-	private UserRightImportListener userRightImportListener;
+  @Autowired
+  private UserRightImportListener userRightImportListener;
 
-	@Autowired
-	private SiteImportListener siteImportListener;
+  @Autowired
+  private SiteImportListener siteImportListener;
 
-	@Autowired
-	private MediaImportListener mediaImportListener;
+  @Autowired
+  private MediaImportListener mediaImportListener;
 
-	@Autowired
-	private ImexImportListener imexImportListener;
+  @Autowired
+  private ImexImportListener imexImportListener;
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+  @Override
+  public void onApplicationEvent(ContextRefreshedEvent event) {
 
-		beforeSaveListenerRegistry.addListener(coreBeforeSaveListener);
-		afterSaveListenerRegistry.addListener(coreAfterSaveListener);
-		beforeRemoveListenerRegistry.addListener(coreBeforeRemoveListener);
-		afterRemoveListenerRegistry.addListener(coreAfterRemoveListener);
+    beforeSaveListenerRegistry.addListener(coreBeforeSaveListener);
+    afterSaveListenerRegistry.addListener(coreAfterSaveListener);
+    beforeRemoveListenerRegistry.addListener(coreBeforeRemoveListener);
+    afterRemoveListenerRegistry.addListener(coreAfterRemoveListener);
 
-		importListenerRegistry.addListener(configurationImportListener);
-		importListenerRegistry.addListener(languageImportListener);
-		importListenerRegistry.addListener(currencyImportListener);
-		importListenerRegistry.addListener(countryImportListener);
-		importListenerRegistry.addListener(regionImportListener);
-		importListenerRegistry.addListener(cronjobImportListener);
-		importListenerRegistry.addListener(companyImportListener);
-		importListenerRegistry.addListener(addressImportListener);
-		importListenerRegistry.addListener(customerImportListener);
-		importListenerRegistry.addListener(vendorImportListener);
-		importListenerRegistry.addListener(enumerationImportListener);
-		importListenerRegistry.addListener(dynamicFieldImportListener);
-		importListenerRegistry.addListener(dynamicFieldSlotImportListener);
-		importListenerRegistry.addListener(dynamicFieldTemplateImportListener);
-		importListenerRegistry.addListener(employeeImportListener);
-		importListenerRegistry.addListener(menuImportListener);
-		importListenerRegistry.addListener(userAuthorityImportListener);
-		importListenerRegistry.addListener(userGroupImportListener);
-		importListenerRegistry.addListener(userPermissionImportListener);
-		importListenerRegistry.addListener(userRightImportListener);
-		importListenerRegistry.addListener(siteImportListener);
-		importListenerRegistry.addListener(mediaImportListener);
-		importListenerRegistry.addListener(imexImportListener);
-	}
+    importListenerRegistry.addListener(configurationImportListener);
+    importListenerRegistry.addListener(languageImportListener);
+    importListenerRegistry.addListener(currencyImportListener);
+    importListenerRegistry.addListener(countryImportListener);
+    importListenerRegistry.addListener(regionImportListener);
+    importListenerRegistry.addListener(cronjobImportListener);
+    importListenerRegistry.addListener(companyImportListener);
+    importListenerRegistry.addListener(addressImportListener);
+    importListenerRegistry.addListener(customerImportListener);
+    importListenerRegistry.addListener(vendorImportListener);
+    importListenerRegistry.addListener(enumerationImportListener);
+    importListenerRegistry.addListener(dynamicFieldImportListener);
+    importListenerRegistry.addListener(dynamicFieldSlotImportListener);
+    importListenerRegistry.addListener(dynamicFieldTemplateImportListener);
+    importListenerRegistry.addListener(employeeImportListener);
+    importListenerRegistry.addListener(menuImportListener);
+    importListenerRegistry.addListener(userAuthorityImportListener);
+    importListenerRegistry.addListener(userGroupImportListener);
+    importListenerRegistry.addListener(userPermissionImportListener);
+    importListenerRegistry.addListener(userRightImportListener);
+    importListenerRegistry.addListener(siteImportListener);
+    importListenerRegistry.addListener(mediaImportListener);
+    importListenerRegistry.addListener(imexImportListener);
+  }
 
 }

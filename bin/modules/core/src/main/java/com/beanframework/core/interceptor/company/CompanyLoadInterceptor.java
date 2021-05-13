@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Company;
 
 public class CompanyLoadInterceptor extends AbstractLoadInterceptor<Company> {
 
-	@Override
-	public void onLoad(Company model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Company model, InterceptorContext context) throws InterceptorException {}
 
 }

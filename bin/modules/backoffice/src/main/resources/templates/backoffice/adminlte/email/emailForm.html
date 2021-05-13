@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.email}"></title>
-<!-- summernote 
-<link rel="stylesheet" type="text/css" th:href="@{/static/adminlte/plugins/summernote/summernote-bs4.min.css}">-->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -115,7 +112,7 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="html" th:text="#{module.email.html}"></label>
-										<textarea class="form-control" name="html" th:text="*{html}" id="html"></textarea>
+										<textarea class="form-control" name="html" th:text="*{html}" id="editorEmailHtml"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
@@ -147,16 +144,30 @@
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${emailDto.uuid}, deleteUrl=@{${@environment.getProperty('path.email.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
-		<!-- Summernote -->
-		<script th:src="@{/static/adminlte/plugins/summernote/summernote-bs4.min.js}"></script>
+		<!-- Tinymce -->
+		<script th:src="@{/static/backoffice/tinymce/js/tinymce/jquery.tinymce.min.js}"></script>
+		<script th:src="@{/static/backoffice/tinymce/js/tinymce/tinymce.min.js}"></script>
+		
 		<script th:inline="javascript">
 			/*<![CDATA[*/
 				
-			$(document).ready(function () {
-				$(function () {
-					$('#html').summernote();
-				});
+			tinymce.init({
+			    selector: "#editorEmailHtml",theme: "silver", height: 300,
+			    plugins: [
+			         "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+			         "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+			         "table contextmenu directionality emoticons paste textcolor responsivefilemanager code"
+			   ],
+			   toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+			   toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
+			   image_advtab: true ,
+			   
+			   external_filemanager_path:"/static/backoffice/responsive_filemanager/filemanager/",
+			   filemanager_title:"Responsive Filemanager" ,
+			   external_plugins: { "filemanager" : "/static/backoffice/responsive_filemanager/filemanager/plugin.min.js"}
+		 	});
 				
+			$(document).ready(function () {
 				$('#form-save').validate(
 					{
 						rules: {

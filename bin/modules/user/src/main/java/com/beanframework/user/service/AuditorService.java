@@ -6,5 +6,5 @@ import com.beanframework.user.domain.User;
 
 public interface AuditorService {
 
-	Auditor saveEntityByUser(User model) throws BusinessException;
+  Auditor saveEntityByUser(User model) throws BusinessException;
 }

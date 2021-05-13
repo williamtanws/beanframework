@@ -3,9 +3,7 @@ package com.beanframework.backoffice.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants;
 import com.beanframework.backoffice.EmployeeWebConstants.EmployeePreAuthorizeEnum;
@@ -32,66 +29,73 @@ import com.beanframework.user.domain.Employee;
 
 @RestController
 public class EmployeeResource extends AbstractResource {
-	@Autowired
-	private EmployeeFacade employeeFacade;
+  @Autowired
+  private EmployeeFacade employeeFacade;
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(EmployeeWebConstants.Path.Api.EMPLOYEE_CHECKID)
-	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+  @PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
+  @RequestMapping(EmployeeWebConstants.Path.Api.EMPLOYEE_CHECKID)
+  public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams)
+      throws Exception {
 
-		String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
+    String id = requestParams.get(BackofficeWebConstants.Param.ID).toString();
 
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Employee.ID, id);
+    Map<String, Object> properties = new HashMap<String, Object>();
+    properties.put(Employee.ID, id);
 
-		EmployeeDto data = employeeFacade.findOneProperties(properties);
+    EmployeeDto data = employeeFacade.findOneProperties(properties);
 
-		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
-		if (StringUtils.isNotBlank(uuidStr)) {
-			UUID uuid = UUID.fromString(uuidStr);
-			if (data != null && data.getUuid().equals(uuid)) {
-				return true;
-			}
-		}
+    String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
+    if (StringUtils.isNotBlank(uuidStr)) {
+      UUID uuid = UUID.fromString(uuidStr);
+      if (data != null && data.getUuid().equals(uuid)) {
+        return true;
+      }
+    }
 
-		return data != null ? false : true;
-	}
+    return data != null ? false : true;
+  }
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE, method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
+  @PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
+  @RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE, method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseBody
+  public DataTableResponse<DataTableResponseData> page(HttpServletRequest request)
+      throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.prepareDataTableRequest(request);
+    DataTableRequest dataTableRequest = new DataTableRequest();
+    dataTableRequest.prepareDataTableRequest(request);
 
-		Page<EmployeeDto> pagination = employeeFacade.findPage(dataTableRequest);
+    Page<EmployeeDto> pagination = employeeFacade.findPage(dataTableRequest);
 
-		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(employeeFacade.count());
-		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
+    DataTableResponse<DataTableResponseData> dataTableResponse =
+        new DataTableResponse<DataTableResponseData>();
+    dataTableResponse.setDraw(dataTableRequest.getDraw());
+    dataTableResponse.setRecordsTotal(employeeFacade.count());
+    dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
-		for (EmployeeDto dto : pagination.getContent()) {
+    for (EmployeeDto dto : pagination.getContent()) {
 
-			EmployeeDataTableResponseData data = new EmployeeDataTableResponseData();
-			data.setUuid(dto.getUuid().toString());
-			data.setId(StringUtils.stripToEmpty(dto.getId()));
-			data.setName(StringUtils.stripToEmpty(dto.getName()));
-			dataTableResponse.getData().add(data);
-		}
-		return dataTableResponse;
-	}
+      EmployeeDataTableResponseData data = new EmployeeDataTableResponseData();
+      data.setUuid(dto.getUuid().toString());
+      data.setId(StringUtils.stripToEmpty(dto.getId()));
+      data.setName(StringUtils.stripToEmpty(dto.getName()));
+      dataTableResponse.getData().add(data);
+    }
+    return dataTableResponse;
+  }
 
-	@PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE_HISTORY, method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
+  @PreAuthorize(EmployeePreAuthorizeEnum.HAS_READ)
+  @RequestMapping(value = EmployeeWebConstants.Path.Api.EMPLOYEE_HISTORY,
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseBody
+  public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request)
+      throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.prepareDataTableRequest(request);
-		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
+    DataTableRequest dataTableRequest = new DataTableRequest();
+    dataTableRequest.prepareDataTableRequest(request);
+    dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, employeeFacade.findHistory(dataTableRequest), employeeFacade.countHistory(dataTableRequest));
-	}
+    return historyDataTableResponse(dataTableRequest, employeeFacade.findHistory(dataTableRequest),
+        employeeFacade.countHistory(dataTableRequest));
+  }
 }

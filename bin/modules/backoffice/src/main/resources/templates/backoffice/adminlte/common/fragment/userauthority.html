@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+</head>
 <body>
 	<th:block th:fragment="userauthority">
 		<div class="form-group" style="width: 100%;">
@@ -43,9 +45,8 @@
 		<script th:inline="javascript">
 		    /*<![CDATA[*/
 		    			    
-		    $(document).ready(function() {
-
-		        $('#userauthorityTable').DataTable({
+		    	$('#userauthorityTable').DataTable({
+		    		"fixedHeader": true,
 		            "language": {
 		                "decimal": "",
 		                "emptyTable": /*[[#{module.common.datatable.emptyTable}]]*/ ,
@@ -70,7 +71,6 @@
 		                    "sortDescending": /*[[#{module.common.datatable.aria.sortDescending}]]*/
 		                }
 		            },
-		            "order": [ 0, 'asc' ],
 		            'paging': false,
 		            'lengthChange': false,
 		            'searching': false,
@@ -80,8 +80,7 @@
 		            "aoColumnDefs": [
 		                { 'bSortable': false, 'aTargets': ['no-sort'] }
 		            ]
-		        })
-		    });
+		        });
 		    /*]]>*/
 		</script>
 	</th:block>

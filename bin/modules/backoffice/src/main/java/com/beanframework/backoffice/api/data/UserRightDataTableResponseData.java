@@ -4,24 +4,24 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class UserRightDataTableResponseData extends DataTableResponseData {
 
-	private Integer sort;
-	
-	private String name;
+  private Integer sort;
 
-	public String getName() {
-		return name;
-	}
+  private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public Integer getSort() {
-		return sort;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+  public Integer getSort() {
+    return sort;
+  }
+
+  public void setSort(Integer sort) {
+    this.sort = sort;
+  }
 
 }

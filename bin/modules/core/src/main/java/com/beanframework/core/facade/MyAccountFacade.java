@@ -5,8 +5,8 @@ import com.beanframework.core.data.MyAccountDto;
 
 public interface MyAccountFacade {
 
-	MyAccountDto getCurrentUser() throws Exception;
+  MyAccountDto getCurrentUser() throws Exception;
 
-	MyAccountDto update(MyAccountDto user) throws BusinessException;
+  MyAccountDto update(MyAccountDto user) throws BusinessException;
 
 }

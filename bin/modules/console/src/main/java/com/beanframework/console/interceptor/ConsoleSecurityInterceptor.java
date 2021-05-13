@@ -2,10 +2,8 @@ package com.beanframework.console.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
-
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
@@ -25,55 +22,59 @@ import com.beanframework.user.domain.User;
 
 @SuppressWarnings("deprecation")
 public class ConsoleSecurityInterceptor extends HandlerInterceptorAdapter {
-	
-	protected static final Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
 
-	@Autowired
-	private ModelService modelService;
+  protected static final Logger logger = LoggerFactory.getLogger(ConsoleSecurityInterceptor.class);
 
-	@Value(ConsoleWebConstants.Path.LOGIN)
-	private String PATH_LOGIN;
+  @Autowired
+  private ModelService modelService;
 
-	@Value(LicenseWebConstants.Path.LICENSE)
-	private String PATH_LICENSE;
-	
-	@Value("${path.console.login}")
-	private String PATH_CONSOLE_LOGIN;
+  @Value(ConsoleWebConstants.Path.LOGIN)
+  private String PATH_LOGIN;
 
-	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  @Value(LicenseWebConstants.Path.LICENSE)
+  private String PATH_LICENSE;
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+  @Value("${path.console.login}")
+  private String PATH_CONSOLE_LOGIN;
 
-		if (auth != null && auth.getPrincipal() instanceof User) {
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
 
-			String path = new UrlPathHelper().getLookupPathForRequest(request);
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-			if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false && path.equalsIgnoreCase(PATH_LOGIN) == false) {
+    if (auth != null && auth.getPrincipal() instanceof User) {
 
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
+      String path = new UrlPathHelper().getLookupPathForRequest(request);
 
-				Configuration license = modelService.findOneByProperties(properties, Configuration.class);
+      if (path != null && path.equalsIgnoreCase(PATH_LICENSE) == false
+          && path.equalsIgnoreCase(PATH_LOGIN) == false) {
 
-				if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
-					response.sendRedirect(PATH_LICENSE);
-					return false;
-				}
-			}
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
 
-		}
+        Configuration license = modelService.findOneByProperties(properties, Configuration.class);
 
-		return true;
-	}
-	
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        if (license == null || BooleanUtils.parseBoolean(license.getValue()) == false) {
+          response.sendRedirect(PATH_LICENSE);
+          return false;
+        }
+      }
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    }
 
-		if (auth != null && auth.getPrincipal() instanceof User && modelAndView != null) {
-			modelAndView.getModelMap().addAttribute(ConsoleWebConstants.Model.LOGIN_URL, PATH_CONSOLE_LOGIN);
-		}
-	}
+    return true;
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+      ModelAndView modelAndView) throws Exception {
+
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+    if (auth != null && auth.getPrincipal() instanceof User && modelAndView != null) {
+      modelAndView.getModelMap().addAttribute(ConsoleWebConstants.Model.LOGIN_URL,
+          PATH_CONSOLE_LOGIN);
+    }
+  }
 }

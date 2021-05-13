@@ -6,45 +6,45 @@ import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public class GenericCsv {
-	protected String modeType;
-	protected String id;
+  protected String modeType;
+  protected String id;
 
-	public static CellProcessor[] getUpdateProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { //
-				new Optional(new Trim()), // ModeType
-				new NotNull(new Trim()), // ID
-		};
+  public static CellProcessor[] getUpdateProcessors() {
+    final CellProcessor[] processors = new CellProcessor[] { //
+        new Optional(new Trim()), // ModeType
+        new NotNull(new Trim()), // ID
+    };
 
-		return processors;
-	}
+    return processors;
+  }
 
-	public static CellProcessor[] getRemoveProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { //
-				new Optional(new Trim()), // ModeType
-				new NotNull(new Trim()), // ID
-		};
+  public static CellProcessor[] getRemoveProcessors() {
+    final CellProcessor[] processors = new CellProcessor[] { //
+        new Optional(new Trim()), // ModeType
+        new NotNull(new Trim()), // ID
+    };
 
-		return processors;
-	}
+    return processors;
+  }
 
-	public String getModeType() {
-		return modeType;
-	}
+  public String getModeType() {
+    return modeType;
+  }
 
-	public void setModeType(String modeType) {
-		this.modeType = modeType;
-	}
+  public void setModeType(String modeType) {
+    this.modeType = modeType;
+  }
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	@Override
-	public String toString() {
-		return "AbstractCsv [modeType=" + modeType + ", id=" + id + "]";
-	}
+  @Override
+  public String toString() {
+    return "AbstractCsv [modeType=" + modeType + ", id=" + id + "]";
+  }
 }

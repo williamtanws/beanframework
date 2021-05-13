@@ -3,11 +3,9 @@ package com.beanframework.core.converter.entity;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -16,100 +14,108 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
 @Component
-public class DynamicFieldTemplateEntityConverter implements EntityConverter<DynamicFieldTemplateDto, DynamicFieldTemplate> {
+public class DynamicFieldTemplateEntityConverter
+    implements EntityConverter<DynamicFieldTemplateDto, DynamicFieldTemplate> {
 
-	@Autowired
-	private ModelService modelService;
+  @Autowired
+  private ModelService modelService;
 
-	@Override
-	public DynamicFieldTemplate convert(DynamicFieldTemplateDto source) throws ConverterException {
+  @Override
+  public DynamicFieldTemplate convert(DynamicFieldTemplateDto source) throws ConverterException {
 
-		try {
+    try {
 
-			if (source.getUuid() != null) {
-				DynamicFieldTemplate prototype = modelService.findOneByUuid(source.getUuid(), DynamicFieldTemplate.class);
-				
-				if (prototype != null) {
-					return convertToEntity(source, prototype);
-				}
-			}
+      if (source.getUuid() != null) {
+        DynamicFieldTemplate prototype =
+            modelService.findOneByUuid(source.getUuid(), DynamicFieldTemplate.class);
 
-			return convertToEntity(source, modelService.create(DynamicFieldTemplate.class));
+        if (prototype != null) {
+          return convertToEntity(source, prototype);
+        }
+      }
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-	}
+      return convertToEntity(source, modelService.create(DynamicFieldTemplate.class));
 
-	private DynamicFieldTemplate convertToEntity(DynamicFieldTemplateDto source, DynamicFieldTemplate prototype) throws ConverterException {
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+  }
 
-		try {
+  private DynamicFieldTemplate convertToEntity(DynamicFieldTemplateDto source,
+      DynamicFieldTemplate prototype) throws ConverterException {
 
-			Date lastModifiedDate = new Date();
+    try {
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
-				prototype.setId(StringUtils.stripToNull(source.getId()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
+      Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getName()), prototype.getName()) == Boolean.FALSE) {
-				prototype.setName(StringUtils.stripToNull(source.getName()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
+      if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
+          prototype.getId()) == Boolean.FALSE) {
+        prototype.setId(StringUtils.stripToNull(source.getId()));
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
 
-			// DynamicFieldSlots
-			if (source.getSelectedDynamicFieldSlotUuids() != null) {
+      if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
+          prototype.getName()) == Boolean.FALSE) {
+        prototype.setName(StringUtils.stripToNull(source.getName()));
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
 
-				Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator();
-				while (itr.hasNext()) {
-					UUID enitity = itr.next();
+      // DynamicFieldSlots
+      if (source.getSelectedDynamicFieldSlotUuids() != null) {
 
-					boolean remove = true;
-					for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
-						if (enitity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
-							remove = false;
-						}
-					}
-					if (remove) {
-						itr.remove();
-						prototype.setLastModifiedDate(lastModifiedDate);
-					}
-				}
+        Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator();
+        while (itr.hasNext()) {
+          UUID enitity = itr.next();
 
-				for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
+          boolean remove = true;
+          for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
+            if (enitity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
+              remove = false;
+            }
+          }
+          if (remove) {
+            itr.remove();
+            prototype.setLastModifiedDate(lastModifiedDate);
+          }
+        }
 
-					boolean add = true;
-					itr = prototype.getDynamicFieldSlots().iterator();
-					while (itr.hasNext()) {
-						UUID entity = itr.next();
+        for (int i = 0; i < source.getSelectedDynamicFieldSlotUuids().length; i++) {
 
-						if (entity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
-							add = false;
-						}
-					}
+          boolean add = true;
+          itr = prototype.getDynamicFieldSlots().iterator();
+          while (itr.hasNext()) {
+            UUID entity = itr.next();
 
-					if (add) {
-						DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]), DynamicFieldSlot.class);
-						if (DynamicFieldSlot != null) {
-							prototype.getDynamicFieldSlots().add(DynamicFieldSlot.getUuid());
-							prototype.setLastModifiedDate(lastModifiedDate);
-						}
-					}
-				}
-			}
-			else if(prototype.getDynamicFieldSlots() != null && prototype.getDynamicFieldSlots().isEmpty() == false){
-				for (final Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator(); itr.hasNext();) {
-					itr.next();
-				    itr.remove(); 
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-			}
+            if (entity.equals(UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]))) {
+              add = false;
+            }
+          }
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
+          if (add) {
+            DynamicFieldSlot DynamicFieldSlot = modelService.findOneByUuid(
+                UUID.fromString(source.getSelectedDynamicFieldSlotUuids()[i]),
+                DynamicFieldSlot.class);
+            if (DynamicFieldSlot != null) {
+              prototype.getDynamicFieldSlots().add(DynamicFieldSlot.getUuid());
+              prototype.setLastModifiedDate(lastModifiedDate);
+            }
+          }
+        }
+      } else if (prototype.getDynamicFieldSlots() != null
+          && prototype.getDynamicFieldSlots().isEmpty() == false) {
+        for (final Iterator<UUID> itr = prototype.getDynamicFieldSlots().iterator(); itr
+            .hasNext();) {
+          itr.next();
+          itr.remove();
+          prototype.setLastModifiedDate(lastModifiedDate);
+        }
+      }
 
-		return prototype;
-	}
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+
+    return prototype;
+  }
 
 }

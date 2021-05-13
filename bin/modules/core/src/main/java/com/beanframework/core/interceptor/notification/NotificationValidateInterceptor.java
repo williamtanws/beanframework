@@ -7,9 +7,10 @@ import com.beanframework.notification.domain.Notification;
 
 public class NotificationValidateInterceptor extends AbstractValidateInterceptor<Notification> {
 
-	@Override
-	public void onValidate(Notification model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Notification model, InterceptorContext context)
+      throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

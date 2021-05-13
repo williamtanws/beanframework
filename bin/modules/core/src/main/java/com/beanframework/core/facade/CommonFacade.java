@@ -4,6 +4,6 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("rawtypes")
 @Component
-public class CommonFacade extends AbstractFacade{
+public class CommonFacade extends AbstractFacade {
 
 }

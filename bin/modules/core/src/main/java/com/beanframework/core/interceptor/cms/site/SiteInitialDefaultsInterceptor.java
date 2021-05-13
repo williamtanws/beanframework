@@ -7,9 +7,10 @@ import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 
 public class SiteInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Site> {
 
-	@Override
-	public void onInitialDefaults(Site model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Site model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

@@ -7,8 +7,7 @@ import com.beanframework.user.domain.UserAuthority;
 
 public class UserAuthorityLoadInterceptor extends AbstractLoadInterceptor<UserAuthority> {
 
-	@Override
-	public void onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(UserAuthority model, InterceptorContext context) throws InterceptorException {}
 
 }

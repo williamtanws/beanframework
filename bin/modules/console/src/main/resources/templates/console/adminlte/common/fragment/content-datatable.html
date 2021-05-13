@@ -32,7 +32,7 @@
 			<div class="modal-dialog modal-xl">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title"><span  th:text="${title}"></span> : <span id="form-id"></span></h4>
+						<h4 class="modal-title"><span  th:text="${title}"></span><span id="form-id"></span></h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -60,6 +60,7 @@
 			})
 
 		    $("#"+/*[[${tableId}]]*/).DataTable( {
+	    		"fixedHeader": true,
 		    	"language": {
 		           	"decimal":        "",
 		            "emptyTable":     /*[[#{module.common.datatable.emptyTable}]]*/,
@@ -132,6 +133,7 @@
 		                	var tableId = /*[[${tableId}]]*/;
 		                	var formUrl = /*[[${formUrl}]]*/;
 		                	var modalForm = "#modal-form-"+tableId;
+		                	$("#form-id").text('');
 		    				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
 		    		    	$(modalForm).modal('show');
 		                }
@@ -190,7 +192,7 @@
 						        
 		        var formUrl = /*[[${formUrl}]]*/;
 				var modalForm = "#modal-form-"+tableId;
-            	$("#form-id").text(data.id);
+            	$("#form-id").text(': '+data.id);
 				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+data.uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
 		    	$(modalForm).modal('show');
 		    });

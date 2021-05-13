@@ -4,22 +4,22 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class RegionDataTableResponseData extends DataTableResponseData {
 
-	private String name;
-	private Boolean active;
+  private String name;
+  private Boolean active;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public Boolean getActive() {
-		return active;
-	}
+  public Boolean getActive() {
+    return active;
+  }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
 }

@@ -7,8 +7,7 @@ import com.beanframework.menu.domain.Menu;
 
 public class MenuRemoveInterceptor extends AbstractRemoveInterceptor<Menu> {
 
-	@Override
-	public void onRemove(Menu model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Menu model, InterceptorContext context) throws InterceptorException {}
 
 }

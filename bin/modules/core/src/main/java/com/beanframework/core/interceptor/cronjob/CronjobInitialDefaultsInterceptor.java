@@ -7,9 +7,10 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Cronjob> {
 
-	@Override
-	public void onInitialDefaults(Cronjob model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Cronjob model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

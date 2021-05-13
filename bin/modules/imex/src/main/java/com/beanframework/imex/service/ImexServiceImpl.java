@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +36,6 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.ICsvBeanReader;
 import org.supercsv.prefs.CsvPreference;
-
 import com.beanframework.common.converter.ConverterMapping;
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.domain.GenericEntity;
@@ -56,367 +54,382 @@ import com.beanframework.media.service.MediaService;
 @Service
 public class ImexServiceImpl implements ImexService {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(ImexServiceImpl.class);
-
-	@Autowired
-	private ImportListenerRegistry importerRegistry;
-
-	@Autowired
-	private LocaleMessageService localeMessageService;
-
-	@Autowired
-	private ModelService modelService;
-
-	@Autowired
-	private MediaService mediaService;
-
-	@Autowired
-	private List<ConverterMapping> converterMappings;
-
-	@Value(ImexConstants.IMEX_MEDIA_FOLDER)
-	private String IMEX_MEDIA_LOCATION;
-
-	@Value(ImexConstants.IMEX_IMPORT_UPDATE_LOCATIONS)
-	private List<String> IMEX_IMPORT_UPDATE_LOCATIONS;
-
-	@Value(MediaConstants.MEDIA_LOCATION)
-	private String MEDIA_LOCATION;
-
-	@Value(MediaConstants.MEDIA_URL)
-	private String MEDIA_URL;
-
-	private List<Entry<String, ImportListener>> getImportListeners() {
-		// Sort Import Listener
-		Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
-		List<Entry<String, ImportListener>> sortedImportListeners = new LinkedList<Entry<String, ImportListener>>(importListeners);
-		Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
-			@Override
-			public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
-				Integer sort1 = ele1.getValue().getSort();
-				Integer sort2 = ele2.getValue().getSort();
-				return sort1.compareTo(sort2);
-			}
-		});
-
-		return sortedImportListeners;
-	}
-
-	@Override
-	public String[] importByFileSystem(File file) throws Exception {
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
-
-		BufferedReader reader = null;
-		String importName = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			importName = file.getName();
-			importCsv(importName, reader, successMessages, errorMessages);
-		} catch (Exception e) {
-			errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { file.getPath(), e.getMessage() }, Locale.ENGLISH) + "\n\n");
-			LOGGER.error(e.getMessage(), e);
-		} finally {
-			if(reader != null) {
-				reader.close();
-			}
-		}
-
-		String[] messages = new String[2];
-		messages[0] = successMessages.toString();
-		messages[1] = errorMessages.toString();
-
-		return messages;
-	}
-
-	@Override
-	public String[] importByMultipartFiles(MultipartFile[] files) {
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
-
-		for (MultipartFile multipartFile : files) {
-			if (StringUtils.isNotBlank(multipartFile.getOriginalFilename())) {
-
-				String content = null;
-				try {
-					content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
-				} catch (IOException e) {
-					e.printStackTrace();
-					LOGGER.error(e.getMessage(), e);
-				}
-				Reader reader = new StringReader(content);
-
-				importCsv(multipartFile.getOriginalFilename(), reader, successMessages, errorMessages);
-			}
-		}
-
-		String[] messages = new String[2];
-		messages[0] = successMessages.toString();
-		messages[1] = errorMessages.toString();
-
-		return messages;
-	}
-
-	@Override
-	public String[] importByQuery(String importName, String query) {
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
-
-		Reader reader = new StringReader(query);
-		importCsv(importName, reader, successMessages, errorMessages);
-
-		String[] messages = new String[2];
-		messages[0] = successMessages.toString();
-		messages[1] = errorMessages.toString();
-
-		return messages;
-	}
-
-	@Override
-	public String[] importByFoldersByClasspathLocations(TreeMap<String, Set<String>> locationAndFolders) {
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
-
-		for (Map.Entry<String, Set<String>> entry : locationAndFolders.entrySet()) {
-			LOGGER.info("Import location: " + entry.getKey());
-
-			for (String folder : entry.getValue()) {
-
-				Resource[] resources = null;
-				try {
-					PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-					resources = loader.getResources(entry.getKey() + "/" + folder + "/**/*.csv");
-
-					if (resources != null) {
-						importResources(resources, successMessages, errorMessages);
-					}
-				} catch (IOException e) {
-					errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { entry.getKey(), e.getMessage() }, Locale.ENGLISH) + "\n\n");
-					LOGGER.error(e.getMessage(), e);
-				}
-			}
-		}
-
-		String[] messages = new String[2];
-		if (successMessages.length() == 0) {
-			messages[0] = localeMessageService.getMessage("module.common.import.empty");
-		} else {
-			messages[0] = successMessages.toString();
-		}
-		messages[1] = errorMessages.toString();
-
-		return messages;
-	}
-
-	@Override
-	public String[] importByClasspathLocations(List<String> locations) {
-		// Messages
-		StringBuilder successMessages = new StringBuilder();
-		StringBuilder errorMessages = new StringBuilder();
-
-		for (String path : locations) {
-			LOGGER.info("Import location: " + path);
-
-			Resource[] resources = null;
-			try {
-				PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
-				resources = loader.getResources(path);
-
-				if (resources != null) {
-					importResources(resources, successMessages, errorMessages);
-				}
-			} catch (IOException e) {
-				errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { path, e.getMessage() }, Locale.ENGLISH) + "\n\n");
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
-
-		String[] messages = new String[2];
-		if (successMessages.length() == 0) {
-			messages[0] = localeMessageService.getMessage("module.common.import.empty");
-		} else {
-			messages[0] = successMessages.toString();
-		}
-		messages[1] = errorMessages.toString();
-
-		return messages;
-	}
-
-	private void importResources(Resource[] resources, StringBuilder successMessages, StringBuilder errorMessages) throws IOException {
-		for (Resource resource : resources) {
-
-			BufferedReader reader = null;
-			String importName = null;
-			try {
-				InputStream in = resource.getInputStream();
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				IOUtils.copy(in, baos);
-				reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
-				importName = resource.getFilename();
-
-				importCsv(importName, reader, successMessages, errorMessages);
-			} catch (Exception e) {
-				errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { resource.getFile().getPath(), e.getMessage() }, Locale.ENGLISH) + "\n\n");
-				LOGGER.error(e.getMessage(), e);
-			} finally {
-				if(reader != null) {
-					reader.close();
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings({ "resource", "unchecked" })
-	private void importCsv(String importName, Reader reader, StringBuilder successMessages, StringBuilder errorMessages) {
-		try {
-			ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = beanReader.getHeader(true);
-
-			String mode = header[0].trim().replace("  ", " ").split(" ")[0];
-			String type = header[0].trim().replace("  ", " ").split(" ")[1];
-
-			for (Entry<String, ImportListener> entry : getImportListeners()) {
-				ImportListener listener = entry.getValue();
-
-				if (listener.getType().equals(type)) {
-					LOGGER.info("Found import resource: " + importName);
-					LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
-
-					CellProcessor[] processors = null;
-					if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE") || mode.equalsIgnoreCase("INSERT_UPDATE")) {
-						Method method = listener.getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
-						processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
-
-					} else if (mode.equalsIgnoreCase("REMOVE")) {
-						Method method = listener.getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
-						processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
-					}
-
-					if (processors == null) {
-						throw new Exception("Cannot find CellProcessor[] for " + listener.getClassCsv());
-					}
-
-					Object csv;
-					while ((csv = beanReader.read(listener.getClassCsv(), header, processors)) != null) {
-
-						boolean imported = false;
-
-						listener.beforeImport(csv);
-						if (listener.isCustomImport()) {
-							imported = listener.customImport(csv);
-						} else {
-
-							Object entity = null;
-							for (ConverterMapping converterMapping : converterMappings) {
-								if (converterMapping.getConverter() instanceof EntityCsvConverter) {
-									EntityCsvConverter<Object, ?> entityCsvConverter = (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
-									if (converterMapping.getTypeCode().equals(listener.getClassCsv().getSimpleName())) {
-										entity = entityCsvConverter.convert(csv);
-									}
-								}
-							}
-
-							if (entity == null) {
-								throw new Exception("Cannot find EntityCsvConverter bean for " + listener.getClassCsv().getSimpleName());
-							}
-
-							Class<?> classEntity = listener.getClassEntity();
-
-							if (mode.equalsIgnoreCase("INSERT")) {
-								if (((GenericEntity) entity).getUuid() == null) {
-									((GenericEntity) entity).setLastModifiedDate(new Date());
-									modelService.saveEntity(entity);
-									imported = true;
-								}
-
-							} else if (mode.equalsIgnoreCase("UPDATE")) {
-								if (((GenericEntity) entity).getUuid() != null) {
-									((GenericEntity) entity).setLastModifiedDate(new Date());
-									modelService.saveEntity(entity);
-									imported = true;
-								}
-
-							} else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
-								((GenericEntity) entity).setLastModifiedDate(new Date());
-								modelService.saveEntity(entity);
-								imported = true;
-
-							} else if (mode.equalsIgnoreCase("REMOVE")) {
-								GenericEntity genericEntity = (GenericEntity) entity;
-								if (genericEntity.getUuid() != null) {
-									modelService.deleteEntity(genericEntity, classEntity);
-									imported = true;
-								}
-							}
-						}
-						listener.afterImport(csv);
-
-						if (imported) {
-							LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo=" + beanReader.getRowNumber() + ", " + csv);
-						}
-					}
-					successMessages.append(localeMessageService.getMessage("module.common.update.success", new Object[] { importName }, Locale.ENGLISH) + "\n");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error(e.getMessage(), e);
-			errorMessages.append(localeMessageService.getMessage("module.common.import.fail", new Object[] { importName, e.getMessage() }, Locale.ENGLISH) + "\n\n");
-		}
-	}
-
-	@Override
-	public void importExportMedia(Imex model) throws Exception {
-
-		String csv = null;
-		if (model.getType() == ImexType.IMPORT) {
-			String errorMessage = importByQuery(model.getId(), model.getQuery())[1];
-			if (StringUtils.isNotBlank(errorMessage)) {
-				throw new Exception(errorMessage);
-			}
-			csv = model.getQuery();
-		} else if (model.getType() == ImexType.EXPORT) {
-
-			List<?> resultList = modelService.searchByQuery(model.getQuery());
-
-			StringBuilder resultBuilder = CsvUtils.List2Csv(resultList);
-
-			if (StringUtils.isNotBlank(model.getDirectory())) {
-				File directory = new File(model.getDirectory());
-				FileUtils.forceMkdir(directory);
-
-				File file = new File(directory, model.getFileName());
-				FileUtils.write(file.getAbsoluteFile(), resultBuilder.toString(), "UTF-8", false);
-			}
-
-			csv = resultBuilder.toString();
-		}
-
-		if (csv != null) {
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put(Media.ID, model.getId().toString());
-			Media media = modelService.findOneByProperties(properties, Media.class);
-
-			if (media == null) {
-				media = modelService.create(Media.class);
-				media.setId(model.getId().toString());
-			}
-
-			media.setTitle(model.getFileName());
-			media.setFileName(model.getFileName() + ".csv");
-			media.setFileType("text/csv");
-			media.setFolder(IMEX_MEDIA_LOCATION);
-			media = modelService.saveEntity(media);
-			media = mediaService.storeData(media, csv);
-
-			if (model.getMedias().isEmpty()) {
-				model.getMedias().add(media.getUuid());
-				modelService.saveEntityByLegacyMode(model, Imex.class);
-			}
-		}
-
-	}
+  protected static final Logger LOGGER = LoggerFactory.getLogger(ImexServiceImpl.class);
+
+  @Autowired
+  private ImportListenerRegistry importerRegistry;
+
+  @Autowired
+  private LocaleMessageService localeMessageService;
+
+  @Autowired
+  private ModelService modelService;
+
+  @Autowired
+  private MediaService mediaService;
+
+  @Autowired
+  private List<ConverterMapping> converterMappings;
+
+  @Value(ImexConstants.IMEX_MEDIA_FOLDER)
+  private String IMEX_MEDIA_LOCATION;
+
+  @Value(ImexConstants.IMEX_IMPORT_UPDATE_LOCATIONS)
+  private List<String> IMEX_IMPORT_UPDATE_LOCATIONS;
+
+  @Value(MediaConstants.MEDIA_LOCATION)
+  private String MEDIA_LOCATION;
+
+  @Value(MediaConstants.MEDIA_URL)
+  private String MEDIA_URL;
+
+  private List<Entry<String, ImportListener>> getImportListeners() {
+    // Sort Import Listener
+    Set<Entry<String, ImportListener>> importListeners = importerRegistry.getListeners().entrySet();
+    List<Entry<String, ImportListener>> sortedImportListeners =
+        new LinkedList<Entry<String, ImportListener>>(importListeners);
+    Collections.sort(sortedImportListeners, new Comparator<Entry<String, ImportListener>>() {
+      @Override
+      public int compare(Entry<String, ImportListener> ele1, Entry<String, ImportListener> ele2) {
+        Integer sort1 = ele1.getValue().getSort();
+        Integer sort2 = ele2.getValue().getSort();
+        return sort1.compareTo(sort2);
+      }
+    });
+
+    return sortedImportListeners;
+  }
+
+  @Override
+  public String[] importByFileSystem(File file) throws Exception {
+    // Messages
+    StringBuilder successMessages = new StringBuilder();
+    StringBuilder errorMessages = new StringBuilder();
+
+    BufferedReader reader = null;
+    String importName = null;
+    try {
+      reader = new BufferedReader(new FileReader(file));
+      importName = file.getName();
+      importCsv(importName, reader, successMessages, errorMessages);
+    } catch (Exception e) {
+      errorMessages.append(localeMessageService.getMessage("module.common.import.fail",
+          new Object[] {file.getPath(), e.getMessage()}, Locale.ENGLISH) + "\n\n");
+      LOGGER.error(e.getMessage(), e);
+    } finally {
+      if (reader != null) {
+        reader.close();
+      }
+    }
+
+    String[] messages = new String[2];
+    messages[0] = successMessages.toString();
+    messages[1] = errorMessages.toString();
+
+    return messages;
+  }
+
+  @Override
+  public String[] importByMultipartFiles(MultipartFile[] files) {
+    // Messages
+    StringBuilder successMessages = new StringBuilder();
+    StringBuilder errorMessages = new StringBuilder();
+
+    for (MultipartFile multipartFile : files) {
+      if (StringUtils.isNotBlank(multipartFile.getOriginalFilename())) {
+
+        String content = null;
+        try {
+          content = IOUtils.toString(multipartFile.getInputStream(), Charset.defaultCharset());
+        } catch (IOException e) {
+          e.printStackTrace();
+          LOGGER.error(e.getMessage(), e);
+        }
+        Reader reader = new StringReader(content);
+
+        importCsv(multipartFile.getOriginalFilename(), reader, successMessages, errorMessages);
+      }
+    }
+
+    String[] messages = new String[2];
+    messages[0] = successMessages.toString();
+    messages[1] = errorMessages.toString();
+
+    return messages;
+  }
+
+  @Override
+  public String[] importByQuery(String importName, String query) {
+    // Messages
+    StringBuilder successMessages = new StringBuilder();
+    StringBuilder errorMessages = new StringBuilder();
+
+    Reader reader = new StringReader(query);
+    importCsv(importName, reader, successMessages, errorMessages);
+
+    String[] messages = new String[2];
+    messages[0] = successMessages.toString();
+    messages[1] = errorMessages.toString();
+
+    return messages;
+  }
+
+  @Override
+  public String[] importByFoldersByClasspathLocations(
+      TreeMap<String, Set<String>> locationAndFolders) {
+    // Messages
+    StringBuilder successMessages = new StringBuilder();
+    StringBuilder errorMessages = new StringBuilder();
+
+    for (Map.Entry<String, Set<String>> entry : locationAndFolders.entrySet()) {
+      LOGGER.info("Import location: " + entry.getKey());
+
+      for (String folder : entry.getValue()) {
+
+        Resource[] resources = null;
+        try {
+          PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+          resources = loader.getResources(entry.getKey() + "/" + folder + "/**/*.csv");
+
+          if (resources != null) {
+            importResources(resources, successMessages, errorMessages);
+          }
+        } catch (IOException e) {
+          errorMessages.append(localeMessageService.getMessage("module.common.import.fail",
+              new Object[] {entry.getKey(), e.getMessage()}, Locale.ENGLISH) + "\n\n");
+          LOGGER.error(e.getMessage(), e);
+        }
+      }
+    }
+
+    String[] messages = new String[2];
+    if (successMessages.length() == 0) {
+      messages[0] = localeMessageService.getMessage("module.common.import.empty");
+    } else {
+      messages[0] = successMessages.toString();
+    }
+    messages[1] = errorMessages.toString();
+
+    return messages;
+  }
+
+  @Override
+  public String[] importByClasspathLocations(List<String> locations) {
+    // Messages
+    StringBuilder successMessages = new StringBuilder();
+    StringBuilder errorMessages = new StringBuilder();
+
+    for (String path : locations) {
+      LOGGER.info("Import location: " + path);
+
+      Resource[] resources = null;
+      try {
+        PathMatchingResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
+        resources = loader.getResources(path);
+
+        if (resources != null) {
+          importResources(resources, successMessages, errorMessages);
+        }
+      } catch (IOException e) {
+        errorMessages.append(localeMessageService.getMessage("module.common.import.fail",
+            new Object[] {path, e.getMessage()}, Locale.ENGLISH) + "\n\n");
+        LOGGER.error(e.getMessage(), e);
+      }
+    }
+
+    String[] messages = new String[2];
+    if (successMessages.length() == 0) {
+      messages[0] = localeMessageService.getMessage("module.common.import.empty");
+    } else {
+      messages[0] = successMessages.toString();
+    }
+    messages[1] = errorMessages.toString();
+
+    return messages;
+  }
+
+  private void importResources(Resource[] resources, StringBuilder successMessages,
+      StringBuilder errorMessages) throws IOException {
+    for (Resource resource : resources) {
+
+      BufferedReader reader = null;
+      String importName = null;
+      try {
+        InputStream in = resource.getInputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        IOUtils.copy(in, baos);
+        reader = new BufferedReader(new StringReader(new String(baos.toByteArray())));
+        importName = resource.getFilename();
+
+        importCsv(importName, reader, successMessages, errorMessages);
+      } catch (Exception e) {
+        errorMessages.append(localeMessageService.getMessage("module.common.import.fail",
+            new Object[] {resource.getFile().getPath(), e.getMessage()}, Locale.ENGLISH) + "\n\n");
+        LOGGER.error(e.getMessage(), e);
+      } finally {
+        if (reader != null) {
+          reader.close();
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings({"resource", "unchecked"})
+  private void importCsv(String importName, Reader reader, StringBuilder successMessages,
+      StringBuilder errorMessages) {
+    try {
+      ICsvBeanReader beanReader = new CsvBeanReader(reader, CsvPreference.STANDARD_PREFERENCE);
+      final String[] header = beanReader.getHeader(true);
+
+      String mode = header[0].trim().replace("  ", " ").split(" ")[0];
+      String type = header[0].trim().replace("  ", " ").split(" ")[1];
+
+      for (Entry<String, ImportListener> entry : getImportListeners()) {
+        ImportListener listener = entry.getValue();
+
+        if (listener.getType().equals(type)) {
+          LOGGER.info("Found import resource: " + importName);
+          LOGGER.info("Import mode=" + mode.toUpperCase() + ", type=" + type.toUpperCase());
+
+          CellProcessor[] processors = null;
+          if (mode.equalsIgnoreCase("INSERT") || mode.equalsIgnoreCase("UPDATE")
+              || mode.equalsIgnoreCase("INSERT_UPDATE")) {
+            Method method = listener.getClassCsv().getMethod("getUpdateProcessors", new Class[] {});
+            processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
+
+          } else if (mode.equalsIgnoreCase("REMOVE")) {
+            Method method = listener.getClassCsv().getMethod("getRemoveProcessors", new Class[] {});
+            processors = (CellProcessor[]) method.invoke(listener.getClassCsv(), new Object[] {});
+          }
+
+          if (processors == null) {
+            throw new Exception("Cannot find CellProcessor[] for " + listener.getClassCsv());
+          }
+
+          Object csv;
+          while ((csv = beanReader.read(listener.getClassCsv(), header, processors)) != null) {
+
+            boolean imported = false;
+
+            listener.beforeImport(csv);
+            if (listener.isCustomImport()) {
+              imported = listener.customImport(csv);
+            } else {
+
+              Object entity = null;
+              for (ConverterMapping converterMapping : converterMappings) {
+                if (converterMapping.getConverter() instanceof EntityCsvConverter) {
+                  EntityCsvConverter<Object, ?> entityCsvConverter =
+                      (EntityCsvConverter<Object, ?>) converterMapping.getConverter();
+                  if (converterMapping.getTypeCode()
+                      .equals(listener.getClassCsv().getSimpleName())) {
+                    entity = entityCsvConverter.convert(csv);
+                  }
+                }
+              }
+
+              if (entity == null) {
+                throw new Exception("Cannot find EntityCsvConverter bean for "
+                    + listener.getClassCsv().getSimpleName());
+              }
+
+              Class<?> classEntity = listener.getClassEntity();
+
+              if (mode.equalsIgnoreCase("INSERT")) {
+                if (((GenericEntity) entity).getUuid() == null) {
+                  ((GenericEntity) entity).setLastModifiedDate(new Date());
+                  modelService.saveEntity(entity);
+                  imported = true;
+                }
+
+              } else if (mode.equalsIgnoreCase("UPDATE")) {
+                if (((GenericEntity) entity).getUuid() != null) {
+                  ((GenericEntity) entity).setLastModifiedDate(new Date());
+                  modelService.saveEntity(entity);
+                  imported = true;
+                }
+
+              } else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
+                ((GenericEntity) entity).setLastModifiedDate(new Date());
+                modelService.saveEntity(entity);
+                imported = true;
+
+              } else if (mode.equalsIgnoreCase("REMOVE")) {
+                GenericEntity genericEntity = (GenericEntity) entity;
+                if (genericEntity.getUuid() != null) {
+                  modelService.deleteEntity(genericEntity, classEntity);
+                  imported = true;
+                }
+              }
+            }
+            listener.afterImport(csv);
+
+            if (imported) {
+              LOGGER.info("Imported line: lineNo=" + beanReader.getLineNumber() + ", rowNo="
+                  + beanReader.getRowNumber() + ", " + csv);
+            }
+          }
+          successMessages.append(localeMessageService.getMessage("module.common.update.success",
+              new Object[] {importName}, Locale.ENGLISH) + "\n");
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      LOGGER.error(e.getMessage(), e);
+      errorMessages.append(localeMessageService.getMessage("module.common.import.fail",
+          new Object[] {importName, e.getMessage()}, Locale.ENGLISH) + "\n\n");
+    }
+  }
+
+  @Override
+  public void importExportMedia(Imex model) throws Exception {
+
+    String csv = null;
+    if (model.getType() == ImexType.IMPORT) {
+      String errorMessage = importByQuery(model.getId(), model.getQuery())[1];
+      if (StringUtils.isNotBlank(errorMessage)) {
+        throw new Exception(errorMessage);
+      }
+      csv = model.getQuery();
+    } else if (model.getType() == ImexType.EXPORT) {
+
+      List<?> resultList = modelService.searchByQuery(model.getQuery());
+
+      StringBuilder resultBuilder = CsvUtils.List2Csv(resultList);
+
+      if (StringUtils.isNotBlank(model.getDirectory())) {
+        File directory = new File(model.getDirectory());
+        FileUtils.forceMkdir(directory);
+
+        File file = new File(directory, model.getFileName());
+        FileUtils.write(file.getAbsoluteFile(), resultBuilder.toString(), "UTF-8", false);
+      }
+
+      csv = resultBuilder.toString();
+    }
+
+    if (csv != null) {
+      Map<String, Object> properties = new HashMap<String, Object>();
+      properties.put(Media.ID, model.getId().toString());
+      Media media = modelService.findOneByProperties(properties, Media.class);
+
+      if (media == null) {
+        media = modelService.create(Media.class);
+        media.setId(model.getId().toString());
+      }
+
+      media.setTitle(model.getFileName());
+      media.setFileName(model.getFileName() + ".csv");
+      media.setFileType("text/csv");
+      media.setFolder(IMEX_MEDIA_LOCATION);
+      media = modelService.saveEntity(media);
+      media = mediaService.storeData(media, csv);
+
+      if (model.getMedias().isEmpty()) {
+        model.getMedias().add(media.getUuid());
+        modelService.saveEntityByLegacyMode(model, Imex.class);
+      }
+    }
+
+  }
 }

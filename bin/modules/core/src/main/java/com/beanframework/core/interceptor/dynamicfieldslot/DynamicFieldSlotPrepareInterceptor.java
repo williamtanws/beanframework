@@ -5,11 +5,13 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
-public class DynamicFieldSlotPrepareInterceptor extends AbstractPrepareInterceptor<DynamicFieldSlot> {
+public class DynamicFieldSlotPrepareInterceptor
+    extends AbstractPrepareInterceptor<DynamicFieldSlot> {
 
-	@Override
-	public void onPrepare(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(DynamicFieldSlot model, InterceptorContext context)
+      throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

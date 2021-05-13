@@ -7,8 +7,7 @@ import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
 
 public class SiteRemoveInterceptor extends AbstractRemoveInterceptor<Site> {
 
-	@Override
-	public void onRemove(Site model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Site model, InterceptorContext context) throws InterceptorException {}
 
 }

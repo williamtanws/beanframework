@@ -1,25 +1,21 @@
 package com.beanframework.user;
 
 public enum LineOfBusinessType {
-	TRADE("Trade"), 
-	BANK("Bank"), 
-	INDUSTRY("Industry"), 
-	BUILDING("Building"),
-	GOVERMENT("Gorvement"),
-	SERVICE("Service");
-	
-	private String type;
+  TRADE("Trade"), BANK("Bank"), INDUSTRY("Industry"), BUILDING("Building"), GOVERMENT(
+      "Gorvement"), SERVICE("Service");
 
-	LineOfBusinessType(String type) {
-		this.type = type;
-	}
+  private String type;
 
-	public String getType() {
-		return type;
-	}
+  LineOfBusinessType(String type) {
+    this.type = type;
+  }
 
-	@Override
-	public String toString() {
-		return type;
-	}
+  public String getType() {
+    return type;
+  }
+
+  @Override
+  public String toString() {
+    return type;
+  }
 }

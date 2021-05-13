@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Address;
 
 public class AddressLoadInterceptor extends AbstractLoadInterceptor<Address> {
 
-	@Override
-	public void onLoad(Address model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Address model, InterceptorContext context) throws InterceptorException {}
 
 }

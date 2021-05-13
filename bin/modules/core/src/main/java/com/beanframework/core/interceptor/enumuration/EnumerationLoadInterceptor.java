@@ -7,8 +7,7 @@ import com.beanframework.enumuration.domain.Enumeration;
 
 public class EnumerationLoadInterceptor extends AbstractLoadInterceptor<Enumeration> {
 
-	@Override
-	public void onLoad(Enumeration model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Enumeration model, InterceptorContext context) throws InterceptorException {}
 
 }

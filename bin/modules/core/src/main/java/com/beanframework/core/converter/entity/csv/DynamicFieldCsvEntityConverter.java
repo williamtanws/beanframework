@@ -3,13 +3,11 @@ package com.beanframework.core.converter.entity.csv;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,106 +18,110 @@ import com.beanframework.imex.registry.ImportListener;
 import com.beanframework.internationalization.domain.Language;
 
 @Component
-public class DynamicFieldCsvEntityConverter implements EntityCsvConverter<DynamicFieldCsv, DynamicField> {
+public class DynamicFieldCsvEntityConverter
+    implements EntityCsvConverter<DynamicFieldCsv, DynamicField> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldCsvEntityConverter.class);
+  protected static Logger LOGGER = LoggerFactory.getLogger(DynamicFieldCsvEntityConverter.class);
 
-	@Autowired
-	private ModelService modelService;
+  @Autowired
+  private ModelService modelService;
 
-	@Override
-	public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
+  @Override
+  public DynamicField convert(DynamicFieldCsv source) throws ConverterException {
 
-		try {
+    try {
 
-			if (StringUtils.isNotBlank(source.getId())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(DynamicField.ID, source.getId());
+      if (StringUtils.isNotBlank(source.getId())) {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(DynamicField.ID, source.getId());
 
-				DynamicField prototype = modelService.findOneByProperties(properties, DynamicField.class);
+        DynamicField prototype = modelService.findOneByProperties(properties, DynamicField.class);
 
-				if (prototype != null) {
+        if (prototype != null) {
 
-					return convertToEntity(source, prototype);
-				}
-			}
-			return convertToEntity(source, modelService.create(DynamicField.class));
+          return convertToEntity(source, prototype);
+        }
+      }
+      return convertToEntity(source, modelService.create(DynamicField.class));
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-	}
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+  }
 
-	private DynamicField convertToEntity(DynamicFieldCsv source, DynamicField prototype) throws ConverterException {
+  private DynamicField convertToEntity(DynamicFieldCsv source, DynamicField prototype)
+      throws ConverterException {
 
-		try {
-			if (StringUtils.isNotBlank(source.getId()))
-				prototype.setId(source.getId());
+    try {
+      if (StringUtils.isNotBlank(source.getId()))
+        prototype.setId(source.getId());
 
-			if (StringUtils.isNotBlank(source.getName()))
-				prototype.setName(source.getName());
+      if (StringUtils.isNotBlank(source.getName()))
+        prototype.setName(source.getName());
 
-			if (source.getType() != null)
-				prototype.setType(source.getType());
+      if (source.getType() != null)
+        prototype.setType(source.getType());
 
-			if (source.getRequired() != null)
-				prototype.setRequired(source.getRequired());
+      if (source.getRequired() != null)
+        prototype.setRequired(source.getRequired());
 
-			if (StringUtils.isNotBlank(source.getRule()))
-				prototype.setRule(source.getRule());
+      if (StringUtils.isNotBlank(source.getRule()))
+        prototype.setRule(source.getRule());
 
-			if (StringUtils.isNotBlank(source.getLabel()))
-				prototype.setLabel(source.getLabel());
+      if (StringUtils.isNotBlank(source.getLabel()))
+        prototype.setLabel(source.getLabel());
 
-			if (StringUtils.isNotBlank(source.getGrid()))
-				prototype.setGrid(source.getGrid());
+      if (StringUtils.isNotBlank(source.getGrid()))
+        prototype.setGrid(source.getGrid());
 
-			// Language
-			if (StringUtils.isNotBlank(source.getLanguage())) {
-				Map<String, Object> languageProperties = new HashMap<String, Object>();
-				languageProperties.put(Language.ID, source.getLanguage());
-				Language entityLanguage = modelService.findOneByProperties(languageProperties, Language.class);
+      // Language
+      if (StringUtils.isNotBlank(source.getLanguage())) {
+        Map<String, Object> languageProperties = new HashMap<String, Object>();
+        languageProperties.put(Language.ID, source.getLanguage());
+        Language entityLanguage =
+            modelService.findOneByProperties(languageProperties, Language.class);
 
-				if (entityLanguage == null) {
-					LOGGER.error("Enum ID not exists: " + source.getLanguage());
-				} else {
-					prototype.setLanguage(entityLanguage.getUuid());
-				}
-			}
+        if (entityLanguage == null) {
+          LOGGER.error("Enum ID not exists: " + source.getLanguage());
+        } else {
+          prototype.setLanguage(entityLanguage.getUuid());
+        }
+      }
 
-			// Enum Values
-			if (StringUtils.isNotBlank(source.getEnumIds())) {
-				String[] values = source.getEnumIds().split(ImportListener.SPLITTER);
-				for (int i = 0; i < values.length; i++) {
+      // Enum Values
+      if (StringUtils.isNotBlank(source.getEnumIds())) {
+        String[] values = source.getEnumIds().split(ImportListener.SPLITTER);
+        for (int i = 0; i < values.length; i++) {
 
-					boolean add = true;
-					for (UUID prototypeValue : prototype.getEnumerations()) {
-						Enumeration enumeration = modelService.findOneByUuid(prototypeValue, Enumeration.class);
-						if (enumeration.getId().equals(values[i])) {
-							add = false;
-						}
-					}
+          boolean add = true;
+          for (UUID prototypeValue : prototype.getEnumerations()) {
+            Enumeration enumeration = modelService.findOneByUuid(prototypeValue, Enumeration.class);
+            if (enumeration.getId().equals(values[i])) {
+              add = false;
+            }
+          }
 
-					if (add) {
-						Map<String, Object> enumProperties = new HashMap<String, Object>();
-						enumProperties.put(Enumeration.ID, values[i]);
-						Enumeration entityEnum = modelService.findOneByProperties(enumProperties, Enumeration.class);
+          if (add) {
+            Map<String, Object> enumProperties = new HashMap<String, Object>();
+            enumProperties.put(Enumeration.ID, values[i]);
+            Enumeration entityEnum =
+                modelService.findOneByProperties(enumProperties, Enumeration.class);
 
-						if (entityEnum == null) {
-							LOGGER.error("Enum ID not exists: " + values[i]);
-						} else {
-							prototype.getEnumerations().add(entityEnum.getUuid());
-						}
-					}
-				}
-			}
+            if (entityEnum == null) {
+              LOGGER.error("Enum ID not exists: " + values[i]);
+            } else {
+              prototype.getEnumerations().add(entityEnum.getUuid());
+            }
+          }
+        }
+      }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ConverterException(e.getMessage(), e);
-		}
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ConverterException(e.getMessage(), e);
+    }
 
-		return prototype;
-	}
+    return prototype;
+  }
 
 }

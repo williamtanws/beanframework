@@ -1,35 +1,35 @@
 package com.beanframework.common.registry;
 
 public class BeforeSaveEvent {
-	public static final int UPDATE = 1;
-	public static final int CREATE = 2;
+  public static final int UPDATE = 1;
+  public static final int CREATE = 2;
 
-	private final int type;
+  private final int type;
 
-	public BeforeSaveEvent(int type) {
-		if (1 != type && 2 != type) {
-			throw new IllegalArgumentException("wrong operation type");
-		} else {
-			this.type = type;
-		}
-	}
+  public BeforeSaveEvent(int type) {
+    if (1 != type && 2 != type) {
+      throw new IllegalArgumentException("wrong operation type");
+    } else {
+      this.type = type;
+    }
+  }
 
-	public int getType() {
-		return type;
-	}
+  public int getType() {
+    return type;
+  }
 
-	public String toString() {
-		return "AfterSave[type:" + this.getTypeAsString() + "]";
-	}
+  public String toString() {
+    return "AfterSave[type:" + this.getTypeAsString() + "]";
+  }
 
-	private String getTypeAsString() {
-		switch (this.type) {
-		case 1:
-			return "UPDATE";
-		case 2:
-			return "CREATE";
-		default:
-			return "UNKNOWN<" + this.type + ">";
-		}
-	}
+  private String getTypeAsString() {
+    switch (this.type) {
+      case 1:
+        return "UPDATE";
+      case 2:
+        return "CREATE";
+      default:
+        return "UNKNOWN<" + this.type + ">";
+    }
+  }
 }

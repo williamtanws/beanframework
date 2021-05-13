@@ -4,6 +4,6 @@ import com.beanframework.user.domain.UserRight;
 
 public interface UserRightService {
 
-	void generateUserRightAttribute(UserRight model) throws Exception;
+  void generateUserRightAttribute(UserRight model) throws Exception;
 
 }

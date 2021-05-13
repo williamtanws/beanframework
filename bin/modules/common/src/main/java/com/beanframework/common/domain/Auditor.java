@@ -1,50 +1,47 @@
 package com.beanframework.common.domain;
 
 import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.beanframework.common.CommonConstants;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "uuid", "createdDate", "createdBy", "lastModifiedDate", "lastModifiedBy" })
+@JsonIgnoreProperties({"uuid", "createdDate", "createdBy", "lastModifiedDate", "lastModifiedBy"})
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Audited
 @Table(name = CommonConstants.Table.AUDITOR)
 public class Auditor extends GenericEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2180422049651244927L;
-	public static final String NAME = "name";
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 2180422049651244927L;
+  public static final String NAME = "name";
 
-	public Auditor() {
-		super();
-	}
+  public Auditor() {
+    super();
+  }
 
-	public Auditor(UUID uuid, String id, String name) {
-		super();
-		setUuid(uuid);
-		setId(id);
-		setName(name);
-	}
-	
-	@Audited(withModifiedFlag = true)
-	private String name;
+  public Auditor(UUID uuid, String id, String name) {
+    super();
+    setUuid(uuid);
+    setId(id);
+    setName(name);
+  }
 
-	public String getName() {
-		return name;
-	}
+  @Audited(withModifiedFlag = true)
+  private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 
 }

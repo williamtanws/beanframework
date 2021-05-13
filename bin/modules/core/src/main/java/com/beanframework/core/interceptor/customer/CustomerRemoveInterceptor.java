@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Customer;
 
 public class CustomerRemoveInterceptor extends AbstractRemoveInterceptor<Customer> {
 
-	@Override
-	public void onRemove(Customer model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Customer model, InterceptorContext context) throws InterceptorException {}
 
 }

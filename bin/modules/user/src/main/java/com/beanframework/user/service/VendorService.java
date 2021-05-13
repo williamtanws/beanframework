@@ -4,7 +4,7 @@ import com.beanframework.user.domain.Vendor;
 
 public interface VendorService {
 
-	Vendor updatePrincipal(Vendor model);
+  Vendor updatePrincipal(Vendor model);
 
-	Vendor getCurrentUser() throws Exception;
+  Vendor getCurrentUser() throws Exception;
 }

@@ -7,8 +7,7 @@ import com.beanframework.imex.domain.Imex;
 
 public class ImexPrepareInterceptor extends AbstractPrepareInterceptor<Imex> {
 
-	@Override
-	public void onPrepare(Imex model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onPrepare(Imex model, InterceptorContext context) throws InterceptorException {}
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.criteria.AuditCriterion;
@@ -13,7 +12,6 @@ import org.hibernate.envers.query.order.AuditOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.GenericEntity;
@@ -25,96 +23,105 @@ import com.beanframework.user.domain.RevisionsEntity;
 
 public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends GenericDto> {
 
-	@Autowired
-	protected ModelService modelService;
-	
-	@Autowired
-	private RevisionsDtoConverter dtoRevisionsConverter;
+  @Autowired
+  protected ModelService modelService;
 
-	public DTO findOneByUuid(UUID uuid, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
-		return modelService.getDto(modelService.findOneByUuid(uuid, entityClass), dtoClass);
-	}
+  @Autowired
+  private RevisionsDtoConverter dtoRevisionsConverter;
 
-	public DTO findOneProperties(Map<String, Object> properties, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
-		return modelService.getDto(modelService.findOneByProperties(properties, entityClass), dtoClass);
-	}
+  public DTO findOneByUuid(UUID uuid, Class<ENTITY> entityClass, Class<DTO> dtoClass)
+      throws Exception {
+    return modelService.getDto(modelService.findOneByUuid(uuid, entityClass), dtoClass);
+  }
 
-	public Page<DTO> findPage(DataTableRequest dataTableRequest, AbstractSpecification<ENTITY> specification, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
-		Page<ENTITY> page = modelService.findPage(specification, dataTableRequest.getPageable(), entityClass);
+  public DTO findOneProperties(Map<String, Object> properties, Class<ENTITY> entityClass,
+      Class<DTO> dtoClass) throws Exception {
+    return modelService.getDto(modelService.findOneByProperties(properties, entityClass), dtoClass);
+  }
 
-		List<DTO> dtos = modelService.getDtoList(page.getContent(), dtoClass);
-		return new PageImpl<DTO>(dtos, page.getPageable(), page.getTotalElements());
-	}
+  public Page<DTO> findPage(DataTableRequest dataTableRequest,
+      AbstractSpecification<ENTITY> specification, Class<ENTITY> entityClass, Class<DTO> dtoClass)
+      throws Exception {
+    Page<ENTITY> page =
+        modelService.findPage(specification, dataTableRequest.getPageable(), entityClass);
 
-	public int count(Class<ENTITY> entityClass) throws Exception {
-		return modelService.countAll(entityClass);
-	}
+    List<DTO> dtos = modelService.getDtoList(page.getContent(), dtoClass);
+    return new PageImpl<DTO>(dtos, page.getPageable(), page.getTotalElements());
+  }
 
-	@SuppressWarnings("unchecked")
-	public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
+  public int count(Class<ENTITY> entityClass) throws Exception {
+    return modelService.countAll(entityClass);
+  }
 
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+  @SuppressWarnings("unchecked")
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass,
+      Class<DTO> dtoClass) throws Exception {
 
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
+    List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+    if (dataTableRequest.getAuditCriterion() != null)
+      auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-		List<Object[]> entities = modelService.findHistory(false, auditCriterions, auditOrders, dataTableRequest.getStart(), dataTableRequest.getLength(), entityClass);
+    List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+    if (dataTableRequest.getAuditOrder() != null)
+      auditOrders.add(dataTableRequest.getAuditOrder());
 
-		List<Object[]> dtos = new ArrayList<Object[]>();
-		for (Object[] entity : entities) {
-			
-			Object object = entity[0];
-			RevisionsEntity revisionEntity = (RevisionsEntity) entity[1];
-			RevisionType revisionType = (RevisionType) entity[2];
-			Set<String> propertiesChanged = (Set<String>) entity[3];
+    List<Object[]> entities = modelService.findHistory(false, auditCriterions, auditOrders,
+        dataTableRequest.getStart(), dataTableRequest.getLength(), entityClass);
 
-			Object[] dto = new Object[4];
-			dto[0] = modelService.getDto(object, dtoClass);
-			dto[1] = dtoRevisionsConverter.convert(revisionEntity);
-			dto[2] = revisionType;
-			dto[3] = propertiesChanged;
-			dtos.add(dto);
-		}
-		return dtos;
-	}
+    List<Object[]> dtos = new ArrayList<Object[]>();
+    for (Object[] entity : entities) {
 
-	public int findCountHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass) throws Exception {
+      Object object = entity[0];
+      RevisionsEntity revisionEntity = (RevisionsEntity) entity[1];
+      RevisionType revisionType = (RevisionType) entity[2];
+      Set<String> propertiesChanged = (Set<String>) entity[3];
 
-		List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
-		if (dataTableRequest.getAuditCriterion() != null)
-			auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
+      Object[] dto = new Object[4];
+      dto[0] = modelService.getDto(object, dtoClass);
+      dto[1] = dtoRevisionsConverter.convert(revisionEntity);
+      dto[2] = revisionType;
+      dto[3] = propertiesChanged;
+      dtos.add(dto);
+    }
+    return dtos;
+  }
 
-		List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
-		if (dataTableRequest.getAuditOrder() != null)
-			auditOrders.add(dataTableRequest.getAuditOrder());
+  public int findCountHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass)
+      throws Exception {
 
-		return modelService.countHistory(false, auditCriterions, auditOrders, entityClass);
-	}
+    List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
+    if (dataTableRequest.getAuditCriterion() != null)
+      auditCriterions.add(AuditEntity.id().eq(UUID.fromString(dataTableRequest.getUniqueId())));
 
-	public DTO save(DTO dto, Class<ENTITY> entityClass, Class<DTO> dtoClass) throws BusinessException {
-		try {
-			ENTITY entity = modelService.getEntity(dto, entityClass);
-			entity = modelService.saveEntity(entity);
+    List<AuditOrder> auditOrders = new ArrayList<AuditOrder>();
+    if (dataTableRequest.getAuditOrder() != null)
+      auditOrders.add(dataTableRequest.getAuditOrder());
 
-			return modelService.getDto(entity, dtoClass);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
+    return modelService.countHistory(false, auditCriterions, auditOrders, entityClass);
+  }
 
-	public void delete(UUID uuid, Class<ENTITY> entityClass) throws BusinessException {
-		try {
-			modelService.deleteByUuid(uuid, entityClass);
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
+  public DTO save(DTO dto, Class<ENTITY> entityClass, Class<DTO> dtoClass)
+      throws BusinessException {
+    try {
+      ENTITY entity = modelService.getEntity(dto, entityClass);
+      entity = modelService.saveEntity(entity);
 
-	public DTO createDto(Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
-		ENTITY entity = modelService.create(entityClass);
-		return modelService.getDto(entity, dtoClass);
-	}
+      return modelService.getDto(entity, dtoClass);
+    } catch (Exception e) {
+      throw new BusinessException(e.getMessage(), e);
+    }
+  }
+
+  public void delete(UUID uuid, Class<ENTITY> entityClass) throws BusinessException {
+    try {
+      modelService.deleteByUuid(uuid, entityClass);
+    } catch (Exception e) {
+      throw new BusinessException(e.getMessage(), e);
+    }
+  }
+
+  public DTO createDto(Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
+    ENTITY entity = modelService.create(entityClass);
+    return modelService.getDto(entity, dtoClass);
+  }
 }
