@@ -71,5 +71,6 @@ target
 !/bin/custom/README.md
 /config/pom.xml
 /config/src/main/resources/*.properties
+/config/src/main/resources/*.yml
 /config/src/main/resources/*.xml
 !.mvn/wrapper/maven-wrapper.jar

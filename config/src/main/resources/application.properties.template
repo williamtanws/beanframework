@@ -25,3 +25,8 @@ platform.hibernate.javax.cache.uri=classpath:ehcache-${spring.profiles.active}.x
 # = LOGGING
 # ===============================
 logging.config=classpath:logback-${spring.profiles.active}.xml
+
+# ===============================
+# = CKFINDER
+# ===============================
+ckfinder.classpath=/ckfinder-${spring.profiles.active}.yml

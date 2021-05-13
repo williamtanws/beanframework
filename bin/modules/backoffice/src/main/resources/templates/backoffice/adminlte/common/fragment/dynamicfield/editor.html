@@ -5,12 +5,30 @@
 		<textarea th:id="'editor'+${uuid}" rows="10" cols="80" class="form-control" th:name="${name}" th:text="${value}" th:required="${required}"></textarea>
 		<script th:inline="javascript">
 			/*<![CDATA[*/
+			
 			var editorId = /*[[${uuid}]]*/;
 			editorId = 'editor'+ editorId;
-							
-			CKEDITOR.replace(editorId, {
-				customConfig: '/static/backoffice/ckeditor/config.js'
-			});
+			
+			if ( typeof ClassicEditor !== 'undefined' ) {
+				ClassicEditor
+					.create( document.querySelector( '#editor1' ), {
+						ckfinder: {
+							// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
+							uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Files&responseType=json'
+						},
+						toolbar: [ 'ckfinder', 'imageUpload', '|', 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo' ]
+		
+					} )
+					.then( function( editor ) {
+						// console.log( editor );
+					} )
+					.catch( function( error ) {
+						console.error( error );
+					} );
+			} else {
+				document.getElementById( 'editor1' ).innerHTML =
+					'<div class="tip-a tip-a-alert">This sample requires working Internet connection to load CKEditor 5 from CDN.</div>'
+			}
 			/*]]>*/
 		</script>
 	</th:block>

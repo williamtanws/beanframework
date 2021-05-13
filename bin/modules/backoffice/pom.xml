@@ -39,6 +39,12 @@
 			<artifactId>boxable</artifactId>
 			<version>1.5</version>
 		</dependency> -->
+		
+        <dependency>
+            <groupId>com.cksource</groupId>
+            <artifactId>ckfinder3</artifactId>
+            <version>3.5.1.1</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

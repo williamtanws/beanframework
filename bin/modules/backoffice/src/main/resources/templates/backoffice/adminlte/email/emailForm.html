@@ -2,6 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.email}"></title>
+<style>
+.ck-editor__editable_inline {
+    min-height: 200px;
+}
+</style>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -112,7 +117,7 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="html" th:text="#{module.email.html}"></label>
-										<textarea class="form-control" name="html" th:text="*{html}" id="editorEmailHtml"></textarea>
+										<textarea class="form-control" name="html" th:text="*{html}" id="editor1"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
@@ -144,28 +149,30 @@
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${emailDto.uuid}, deleteUrl=@{${@environment.getProperty('path.email.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
-		<!-- Tinymce -->
-		<script th:src="@{/static/backoffice/tinymce/js/tinymce/jquery.tinymce.min.js}"></script>
-		<script th:src="@{/static/backoffice/tinymce/js/tinymce/tinymce.min.js}"></script>
-		
+
 		<script th:inline="javascript">
 			/*<![CDATA[*/
 				
-			tinymce.init({
-			    selector: "#editorEmailHtml",theme: "silver", height: 300,
-			    plugins: [
-			         "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-			         "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-			         "table contextmenu directionality emoticons paste textcolor responsivefilemanager code"
-			   ],
-			   toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
-			   toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
-			   image_advtab: true ,
-			   
-			   external_filemanager_path:"/static/backoffice/responsive_filemanager/filemanager/",
-			   filemanager_title:"Responsive Filemanager" ,
-			   external_plugins: { "filemanager" : "/static/backoffice/responsive_filemanager/filemanager/plugin.min.js"}
-		 	});
+			if ( typeof ClassicEditor !== 'undefined' ) {
+				ClassicEditor
+					.create( document.querySelector( '#editor1' ), {
+						ckfinder: {
+							// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
+							uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Files&responseType=json'
+						},
+						toolbar: [ 'ckfinder', 'imageUpload', '|', 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo' ]
+		
+					} )
+					.then( function( editor ) {
+						// console.log( editor );
+					} )
+					.catch( function( error ) {
+						console.error( error );
+					} );
+			} else {
+				document.getElementById( 'editor1' ).innerHTML =
+					'<div class="tip-a tip-a-alert">This sample requires working Internet connection to load CKEditor 5 from CDN.</div>'
+			}
 				
 			$(document).ready(function () {
 				$('#form-save').validate(
