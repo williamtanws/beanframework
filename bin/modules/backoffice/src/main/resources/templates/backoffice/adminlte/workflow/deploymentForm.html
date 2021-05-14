@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
+
+<head>
+<title th:utext="#{module.deployment}"></title>
+</head>
+
+<body>
+	<th:block layout:fragment="content">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-refresh :: action}"></th:block>
+				</div>
+				<!-- /.col -->
+			</div>
+		</div>
+		<div class="card card-primary card-outline card-outline-tabs consistent-height">
+			<div class="card-header p-0 border-bottom-0">
+				<ul class="nav nav-tabs" id="custom-tabs-tab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="custom-tabs-general-tab" data-toggle="pill" href="#custom-tabs-general" role="tab" aria-controls="custom-tabs-general" aria-selected="true" th:text="#{module.common.general}"></a>
+					</li>
+				</ul>
+			</div>
+			<div class="card-body">
+				<div class="tab-content" id="custom-tabs-tabContent">
+					<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
+						<dl class="row">
+							<dt class="col-sm-2" th:text="#{module.deployment.id}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.id}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.name}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.name}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.deploymentTime}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.deploymentTime}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.category}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.category}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.key}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.key}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.derivedFrom}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.derivedFrom}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.derivedFromRoot}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.derivedFromRoot}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.tenantId}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.tenantId}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.engineVersion}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.engineVersion}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.isNew}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.isNew}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.resources}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.resources}"></dd>
+							
+							<dt class="col-sm-2" th:text="#{module.deployment.parentDeploymentId}+':'"></dt>
+							<dd class="col-sm-4" th:text="${deploymentDto.parentDeploymentId}"></dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<!-- /.card -->
+		</div>
+	</th:block>
+	<th:block layout:fragment="js">
+	</th:block>
+</body>
+
+</html>
