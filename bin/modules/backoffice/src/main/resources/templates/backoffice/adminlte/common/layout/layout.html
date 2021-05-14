@@ -90,15 +90,10 @@ table .selected {
 .consistent-height .tab-content>.active {
 	visibility: visible;
 }
+
+
+div.ck-editor__editable { min-height: 200px;}
 </style>
-
-
-		
-<!-- Ckeditor -->
-<script src="https://cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
-<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
-<script th:src="@{/static/backoffice/ckfinder/ckfinder.js}"></script>
 
 </head>
 <body class="layout-top-nav" style="height: auto;">
@@ -140,7 +135,7 @@ table .selected {
 	<script th:src="@{/static/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
-	<script th:src="@{/static/adminlte/plugins/datatables-fixedheader/js/dataTables.fixedHeader.min.js}"></script>	
+	<script th:src="@{/static/adminlte/plugins/datatables-fixedheader/js/dataTables.fixedHeader.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/jszip/jszip.min.js}"></script>
@@ -148,32 +143,78 @@ table .selected {
 	<script th:src="@{/static/adminlte/plugins/pdfmake/vfs_fonts.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
-	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>	
+	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 
+	<!-- Ckeditor -->
+	<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+	<script th:src="@{/static/backoffice/ckfinder/ckfinder.js}"></script>
+
+	<!-- toastr -->
 	<th:block layout:fragment="toastr">
 		<th:block th:insert="/backoffice/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>
+
 	<th:block layout:fragment="js"></th:block>
+
 	<script th:inline="javascript">
 		$(document).ready(function() {
-			
+
 			var spin = document.getElementById("form-save-button-spin");
-			if(spin !== null){
+			if (spin !== null) {
 				if (spin.style.display === "none") {
 					spin.style.display = "block";
 				} else {
 					spin.style.display = "none";
 				}
 			}
-			
+
 			var btn = document.getElementById("form-save-button");
-			if(spin !== null){
+			if (spin !== null) {
 				if (btn.style.display === "none") {
 					btn.style.display = "block";
 				} else {
 					btn.style.display = "none";
 				}
 			}
+			
+
+
+			$(function() {
+				var allEditors = document.querySelectorAll('.editor');
+				for (var i = 0; i < allEditors.length; ++i) {
+				  ClassicEditor.create(allEditors[i], {
+						ckfinder: {
+							// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
+							uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Files&responseType=json'
+						},
+						toolbar: {
+						    items: [
+						        'ckfinder', '|',
+						        'heading', '|',
+						        'fontfamily', 'fontsize', '|',
+						        'alignment', '|',
+						        'fontColor', 'fontBackgroundColor', '|',
+						        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+						        'link', '|',
+						        'outdent', 'indent', '|',
+						        'bulletedList', 'numberedList', 'todoList', '|',
+						        'code', 'codeBlock', '|',
+						        'insertTable', '|',
+						        'uploadImage', 'blockQuote', '|',
+						        'undo', 'redo'
+						    ],
+						    shouldNotGroupWhenFull: true
+						}
+		
+					} )
+					.then( function( editor ) {
+						// console.log( editor );
+					} )
+					.catch( function( error ) {
+						console.error( error );
+					} );
+				}
+			});
 		});
 	</script>
 </body>

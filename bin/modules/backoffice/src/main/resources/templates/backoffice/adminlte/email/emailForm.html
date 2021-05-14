@@ -2,11 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.email}"></title>
-<style>
-.ck-editor__editable_inline {
-    min-height: 200px;
-}
-</style>
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -110,14 +105,14 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="text" th:text="#{module.email.text}"></label>
-										<textarea class="form-control" name="text" th:text="*{text}"></textarea>
+										<textarea class="form-control editor" name="text" th:text="*{text}"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="html" th:text="#{module.email.html}"></label>
-										<textarea class="form-control" name="html" th:text="*{html}" id="editor1"></textarea>
+										<textarea class="form-control editor" name="html" th:text="*{html}"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
@@ -152,31 +147,10 @@
 
 		<script th:inline="javascript">
 			/*<![CDATA[*/
-				
-			if ( typeof ClassicEditor !== 'undefined' ) {
-				ClassicEditor
-					.create( document.querySelector( '#editor1' ), {
-						ckfinder: {
-							// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
-							uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Files&responseType=json'
-						},
-						toolbar: [ 'ckfinder', 'imageUpload', '|', 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo' ]
-		
-					} )
-					.then( function( editor ) {
-						// console.log( editor );
-					} )
-					.catch( function( error ) {
-						console.error( error );
-					} );
-			} else {
-				document.getElementById( 'editor1' ).innerHTML =
-					'<div class="tip-a tip-a-alert">This sample requires working Internet connection to load CKEditor 5 from CDN.</div>'
-			}
-				
 			$(document).ready(function () {
 				$('#form-save').validate(
 					{
+						ignore: ":hidden, [contenteditable='true']:not([name])",
 						rules: {
 							id: {
 								required: true,

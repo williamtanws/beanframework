@@ -44,20 +44,10 @@
 											editUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.edit')}]]*/,
 											compressUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.compress')}]]*/,
 											extractUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.extract')}]]*/,
-											pickCallback : function(item) {
-												var msg = 'Picked %s "%s" for external use'
-														.replace('%s',
-																item.type)
-														.replace('%s',
-																item.fullPath());
-												window.alert(msg);
-											},
-
 											allowedActions : angular
 													.extend(
 															defaults.allowedActions,
 															{
-																
 																download: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
 																downloadMultiple: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
 																preview: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,

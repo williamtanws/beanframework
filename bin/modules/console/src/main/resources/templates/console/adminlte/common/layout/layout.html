@@ -149,10 +149,13 @@ table .selected {
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/static/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 
+	<!-- toastr -->
 	<th:block layout:fragment="toastr">
 		<th:block th:insert="/console/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>
+	
 	<th:block layout:fragment="js"></th:block>
+	
 	<script th:inline="javascript">
 		$(document).ready(function() {
 			
