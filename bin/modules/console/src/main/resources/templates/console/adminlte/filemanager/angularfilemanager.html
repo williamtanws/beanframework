@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-ng-app="FileManagerApp">
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<title th:utext="#{module.filemanager}"></title>
+
+<!-- third party -->
+<script th:src="@{/static/angular-filemanager/bower_components/angular/angular.min.js}"></script>
+<script th:src="@{/static/angular-filemanager/bower_components/angular-translate/angular-translate.min.js}"></script>
+<script th:src="@{/static/angular-filemanager/bower_components/ng-file-upload/ng-file-upload.min.js}"></script>
+<script th:src="@{/static/angular-filemanager/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/static/angular-filemanager/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<link rel="stylesheet" th:href="@{/static/angular-filemanager/bower_components/bootswatch/paper/bootstrap.min.css}" />
+
+<!-- angular-filemanager -->
+<script th:src="@{/static/angular-filemanager/dist/angular-filemanager.min.js}"></script>
+<link th:href="@{/static/angular-filemanager/dist/angular-filemanager.min.css}" rel="stylesheet">
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	// Config
+	angular
+			.module('FileManagerApp')
+			.config(
+					[
+							'fileManagerConfigProvider',
+							function(config) {
+								var defaults = config.$get();
+								config
+										.set({
+											appName : '',
+											multiLang: true,
+											listUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.list')}]]*/,
+											uploadUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.upload')}]]*/,
+											downloadFileUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.preview')}]]*/,
+											createFolderUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.createFolder')}]]*/,
+											permissionsUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.changePermissions')}]]*/,
+											copyUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.copy')}]]*/,
+											moveUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.move')}]]*/,
+											removeUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.remove')}]]*/,
+											renameUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.rename')}]]*/,
+											getContentUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.getContent')}]]*/,
+											editUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.edit')}]]*/,
+											compressUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.compress')}]]*/,
+											extractUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.extract')}]]*/,
+											allowedActions : angular
+													.extend(
+															defaults.allowedActions,
+															{
+																download: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																downloadMultiple: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																preview: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																rename: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																move: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																copy: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																edit: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																changePermissions: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')') and Windows == false}]]*/,
+																compress: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																extract: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																remove: /*[[${#authorization.expression('hasAuthority(''filemanager_delete'')')}]]*/,
+																createFolder: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																compressChooseName: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																upload: /*[[${#authorization.expression('hasAuthority(''filemanager_create'')')}]]*/
+																
+															}),
+											tplPath : /*[[${@environment.getProperty('path.filemanager.angularfilemanager.page')}]]*/
+										});
+							} ]);
+	/*]]>*/
+</script>
+</head>
+<body class="ng-cloak">
+	<angular-filemanager [language]="'fr'"></angular-filemanager>
+</body>
+</html>

@@ -32,9 +32,7 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,customer				,Customer				,70	,fas fa-user		,/backoffice/customer				,,true,user			,employeegroup				,menu_name_en=Customer;menu_name_cn=顾客
 ,vendor					,Vendor					,80	,fas fa-user		,/backoffice/vendor					,,true,user			,employeegroup				,menu_name_en=Vendor;menu_name_cn=供应商
 ,multimedia				,Multimedia				,40	,fas fa-photo-video	,									,,true,				,employeegroup				,menu_name_en=Multimedia;menu_name_cn=多媒体
-,filemanager			,File Manager			,10	,fas fa-folder		,/backoffice/filemanager			,,true,multimedia	,employeegroup				,menu_name_en=File Manager;menu_name_cn=文件管理器
 ,media					,Media					,20	,fas fa-file-image	,/backoffice/media					,,true,multimedia	,employeegroup				,menu_name_en=Media;menu_name_cn=媒体
 ,cms					,CMS					,50	,fas fa-home		,									,,true,				,employeegroup				,menu_name_en=CMS;menu_name_cn=内容管理系统
 ,site					,Site					,10	,fas fa-globe		,/backoffice/site					,,true,cms			,employeegroup				,menu_name_en=Site;menu_name_cn=网站
 ,comment				,Comment				,20	,fas fa-comments	,/backoffice/comment				,,true,cms			,employeegroup				,menu_name_en=Comment;menu_name_cn=留言
-,documentation			,Documentation			,200,fas fa-file		,/documentation						,BLANK,true,		,employeegroup				,menu_name_en=Documentation;menu_name_cn=文献资料;menu_header_en=Miscellaneous;menu_header_cn=杂项

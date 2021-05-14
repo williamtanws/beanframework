@@ -64,6 +64,9 @@
 							</ul>
 						</li>
 						<li class="nav-item">
+							<a th:href="@{${@environment.getProperty('path.filemanager')}}" class="nav-link" th:text="#{module.filemanager}"></a>
+						</li>
+						<li class="nav-item">
 							<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();" th:text="#{module.common.documentation}"> </a>
 						</li>
 						<li class="nav-item">
