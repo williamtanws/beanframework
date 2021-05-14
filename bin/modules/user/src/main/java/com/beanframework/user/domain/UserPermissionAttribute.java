@@ -1,7 +1,6 @@
 package com.beanframework.user.domain;
 
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -9,10 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.user.UserPermissionConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,49 +19,49 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Audited
 @Table(name = UserPermissionConstants.Table.USER_PERMISSION_ATTRIBUTE)
 public class UserPermissionAttribute extends GenericEntity {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4279536635924738476L;
-	public static final String LANGUAGE = "language";
-	public static final String USER_PERMISSION = "userPermission";
-	public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
-	
-	@JsonIgnore
-	@Audited(withModifiedFlag = true)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userPermission_uuid")
-	private UserPermission userPermission;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -4279536635924738476L;
+  public static final String LANGUAGE = "language";
+  public static final String USER_PERMISSION = "userPermission";
+  public static final String DYNAMIC_FIELD_SLOT = "dynamicFieldSlot";
 
-	@Audited(withModifiedFlag = true)
-	@Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
-	private UUID dynamicFieldSlot;
+  @JsonIgnore
+  @Audited(withModifiedFlag = true)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "userPermission_uuid")
+  private UserPermission userPermission;
 
-	@Audited(withModifiedFlag = true)
-	private String value;
+  @Audited(withModifiedFlag = true)
+  @Column(name = "dynamicfieldslot_uuid", columnDefinition = "BINARY(16)")
+  private UUID dynamicFieldSlot;
 
-	public UserPermission getUserPermission() {
-		return userPermission;
-	}
+  @Audited(withModifiedFlag = true)
+  private String value;
 
-	public void setUserPermission(UserPermission userPermission) {
-		this.userPermission = userPermission;
-	}
+  public UserPermission getUserPermission() {
+    return userPermission;
+  }
 
-	public UUID getDynamicFieldSlot() {
-		return dynamicFieldSlot;
-	}
+  public void setUserPermission(UserPermission userPermission) {
+    this.userPermission = userPermission;
+  }
 
-	public void setDynamicFieldSlot(UUID dynamicFieldSlot) {
-		this.dynamicFieldSlot = dynamicFieldSlot;
-	}
+  public UUID getDynamicFieldSlot() {
+    return dynamicFieldSlot;
+  }
 
-	public String getValue() {
-		return value;
-	}
+  public void setDynamicFieldSlot(UUID dynamicFieldSlot) {
+    this.dynamicFieldSlot = dynamicFieldSlot;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
 
 }

@@ -7,9 +7,9 @@ import com.beanframework.imex.domain.Imex;
 
 public class ImexValidateInterceptor extends AbstractValidateInterceptor<Imex> {
 
-	@Override
-	public void onValidate(Imex model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Imex model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

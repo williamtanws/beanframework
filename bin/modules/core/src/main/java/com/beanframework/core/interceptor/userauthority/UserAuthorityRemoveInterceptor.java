@@ -7,8 +7,8 @@ import com.beanframework.user.domain.UserAuthority;
 
 public class UserAuthorityRemoveInterceptor extends AbstractRemoveInterceptor<UserAuthority> {
 
-	@Override
-	public void onRemove(UserAuthority model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(UserAuthority model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

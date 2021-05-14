@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Employee;
 
 public class EmployeeRemoveInterceptor extends AbstractRemoveInterceptor<Employee> {
 
-	@Override
-	public void onRemove(Employee model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Employee model, InterceptorContext context) throws InterceptorException {}
 
 }

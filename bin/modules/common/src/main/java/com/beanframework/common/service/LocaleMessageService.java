@@ -4,13 +4,13 @@ import java.util.Locale;
 
 public interface LocaleMessageService {
 
-	public String getMessage(String code);
+  public String getMessage(String code);
 
-	public String getMessage(String code, Object[] args);
+  public String getMessage(String code, Object[] args);
 
-	public String getMessageByLocale(String code, Locale locale);
+  public String getMessageByLocale(String code, Locale locale);
 
-	public String getMessage(String code, Object[] args, Locale locale);
+  public String getMessage(String code, Object[] args, Locale locale);
 
-	public String getMessage(String code, String defaultMessage);
+  public String getMessage(String code, String defaultMessage);
 }

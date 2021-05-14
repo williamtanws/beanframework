@@ -7,9 +7,10 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DynamicFieldValidateInterceptor extends AbstractValidateInterceptor<DynamicField> {
 
-	@Override
-	public void onValidate(DynamicField model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(DynamicField model, InterceptorContext context)
+      throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

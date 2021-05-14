@@ -7,8 +7,9 @@ import com.beanframework.user.domain.UserPermission;
 
 public class UserPermissionRemoveInterceptor extends AbstractRemoveInterceptor<UserPermission> {
 
-	@Override
-	public void onRemove(UserPermission model, InterceptorContext context) throws InterceptorException {
+  @Override
+  public void onRemove(UserPermission model, InterceptorContext context)
+      throws InterceptorException {
 
-	}
+  }
 }

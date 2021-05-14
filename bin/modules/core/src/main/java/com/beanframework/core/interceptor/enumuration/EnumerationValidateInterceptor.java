@@ -7,9 +7,10 @@ import com.beanframework.enumuration.domain.Enumeration;
 
 public class EnumerationValidateInterceptor extends AbstractValidateInterceptor<Enumeration> {
 
-	@Override
-	public void onValidate(Enumeration model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Enumeration model, InterceptorContext context)
+      throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

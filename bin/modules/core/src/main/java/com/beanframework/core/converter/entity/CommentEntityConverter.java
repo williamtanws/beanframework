@@ -1,11 +1,9 @@
 package com.beanframework.core.converter.entity;
 
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.cms.domain.Comment;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
@@ -17,72 +15,73 @@ import com.beanframework.user.service.UserService;
 @Component
 public class CommentEntityConverter implements EntityConverter<CommentDto, Comment> {
 
-	@Autowired
-	private ModelService modelService;
-	
-	@Autowired
-	private UserService userService;
+  @Autowired
+  private ModelService modelService;
 
-	@Override
-	public Comment convert(CommentDto source) throws ConverterException {
+  @Autowired
+  private UserService userService;
 
-		try {
+  @Override
+  public Comment convert(CommentDto source) throws ConverterException {
 
-			if (source.getUuid() != null) {
-				Comment prototype = modelService.findOneByUuid(source.getUuid(), Comment.class);
+    try {
 
-				if (prototype != null) {
-					return convertToEntity(source, prototype);
-				}
-			}
+      if (source.getUuid() != null) {
+        Comment prototype = modelService.findOneByUuid(source.getUuid(), Comment.class);
 
-			return convertToEntity(source, modelService.create(Comment.class));
+        if (prototype != null) {
+          return convertToEntity(source, prototype);
+        }
+      }
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-	}
+      return convertToEntity(source, modelService.create(Comment.class));
 
-	private Comment convertToEntity(CommentDto source, Comment prototype) throws ConverterException {
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+  }
 
-		try {
-			Date lastModifiedDate = new Date();
+  private Comment convertToEntity(CommentDto source, Comment prototype) throws ConverterException {
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
-				prototype.setId(StringUtils.stripToNull(source.getId()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
+    try {
+      Date lastModifiedDate = new Date();
 
-			if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()), prototype.getHtml()) == Boolean.FALSE) {
-				prototype.setHtml(StringUtils.stripToNull(source.getHtml()));
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
+      if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
+          prototype.getId()) == Boolean.FALSE) {
+        prototype.setId(StringUtils.stripToNull(source.getId()));
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
 
-			if (prototype.getVisibled() == source.getVisibled() == Boolean.FALSE) {
-				prototype.setVisibled(source.getVisibled());
-				prototype.setLastModifiedDate(lastModifiedDate);
-			}
+      if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()),
+          prototype.getHtml()) == Boolean.FALSE) {
+        prototype.setHtml(StringUtils.stripToNull(source.getHtml()));
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
 
-			if (prototype.getUser() == null && source.getUser() == null) {
-				prototype.setUser(userService.getCurrentUser().getUuid());
-				prototype.setLastModifiedDate(lastModifiedDate);
-			} else if (prototype.getUser().equals(source.getUser().getUuid()) == Boolean.FALSE) {
-				User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);
-				
-				if(entityUser != null) {
-					prototype.setUser(entityUser.getUuid());
-					prototype.setLastModifiedDate(lastModifiedDate);
-				}
-				else {
-					throw new ConverterException("User UUID not found: " + source.getUser().getUuid());
-				}
-			}
+      if (prototype.getVisibled() == source.getVisibled() == Boolean.FALSE) {
+        prototype.setVisibled(source.getVisibled());
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
+      if (prototype.getUser() == null && source.getUser() == null) {
+        prototype.setUser(userService.getCurrentUser().getUuid());
+        prototype.setLastModifiedDate(lastModifiedDate);
+      } else if (prototype.getUser().equals(source.getUser().getUuid()) == Boolean.FALSE) {
+        User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);
 
-		return prototype;
-	}
+        if (entityUser != null) {
+          prototype.setUser(entityUser.getUuid());
+          prototype.setLastModifiedDate(lastModifiedDate);
+        } else {
+          throw new ConverterException("User UUID not found: " + source.getUser().getUuid());
+        }
+      }
+
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+
+    return prototype;
+  }
 
 }

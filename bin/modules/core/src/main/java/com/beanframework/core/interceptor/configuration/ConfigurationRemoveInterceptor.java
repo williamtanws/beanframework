@@ -7,8 +7,8 @@ import com.beanframework.configuration.domain.Configuration;
 
 public class ConfigurationRemoveInterceptor extends AbstractRemoveInterceptor<Configuration> {
 
-	@Override
-	public void onRemove(Configuration model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Configuration model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

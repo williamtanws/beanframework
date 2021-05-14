@@ -7,9 +7,9 @@ import com.beanframework.user.domain.UserRight;
 
 public class UserRightValidateInterceptor extends AbstractValidateInterceptor<UserRight> {
 
-	@Override
-	public void onValidate(UserRight model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
-	}
+  @Override
+  public void onValidate(UserRight model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
+  }
 
 }

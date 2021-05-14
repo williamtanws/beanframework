@@ -7,9 +7,10 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 
 public class DynamicFieldPrepareInterceptor extends AbstractPrepareInterceptor<DynamicField> {
 
-	@Override
-	public void onPrepare(DynamicField model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(DynamicField model, InterceptorContext context)
+      throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

@@ -7,9 +7,9 @@ import com.beanframework.user.domain.Company;
 
 public class CompanyPrepareInterceptor extends AbstractPrepareInterceptor<Company> {
 
-	@Override
-	public void onPrepare(Company model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Company model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

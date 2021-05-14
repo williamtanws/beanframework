@@ -3,33 +3,33 @@ package com.beanframework.backoffice.api.data;
 import com.beanframework.core.data.DataTableResponseData;
 
 public class LanguageDataTableResponseData extends DataTableResponseData {
-	
-	private String name;
-	private Boolean active;
-	private Integer sort;
 
-	public String getName() {
-		return name;
-	}
+  private String name;
+  private Boolean active;
+  private Integer sort;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public Boolean getActive() {
-		return active;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
+  public Boolean getActive() {
+    return active;
+  }
 
-	public Integer getSort() {
-		return sort;
-	}
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+  public Integer getSort() {
+    return sort;
+  }
+
+  public void setSort(Integer sort) {
+    this.sort = sort;
+  }
 
 }

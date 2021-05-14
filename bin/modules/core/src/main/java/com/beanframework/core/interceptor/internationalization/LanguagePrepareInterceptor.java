@@ -7,9 +7,9 @@ import com.beanframework.internationalization.domain.Language;
 
 public class LanguagePrepareInterceptor extends AbstractPrepareInterceptor<Language> {
 
-	@Override
-	public void onPrepare(Language model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Language model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

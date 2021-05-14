@@ -7,8 +7,8 @@ import com.beanframework.notification.domain.Notification;
 
 public class NotificationRemoveInterceptor extends AbstractRemoveInterceptor<Notification> {
 
-	@Override
-	public void onRemove(Notification model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Notification model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

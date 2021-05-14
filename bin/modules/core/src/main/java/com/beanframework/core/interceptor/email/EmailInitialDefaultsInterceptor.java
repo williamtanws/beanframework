@@ -8,10 +8,11 @@ import com.beanframework.email.domain.EmailEnum;
 
 public class EmailInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Email> {
 
-	@Override
-	public void onInitialDefaults(Email model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-		model.setStatus(EmailEnum.Status.DRAFT);
-	}
+  @Override
+  public void onInitialDefaults(Email model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+    model.setStatus(EmailEnum.Status.DRAFT);
+  }
 
 }

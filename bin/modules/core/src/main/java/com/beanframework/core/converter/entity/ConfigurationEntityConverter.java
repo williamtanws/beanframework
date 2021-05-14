@@ -1,11 +1,9 @@
 package com.beanframework.core.converter.entity;
 
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -13,47 +11,50 @@ import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.core.data.ConfigurationDto;
 
 @Component
-public class ConfigurationEntityConverter implements EntityConverter<ConfigurationDto, Configuration> {
+public class ConfigurationEntityConverter
+    implements EntityConverter<ConfigurationDto, Configuration> {
 
-	@Autowired
-	private ModelService modelService;
+  @Autowired
+  private ModelService modelService;
 
-	@Override
-	public Configuration convert(ConfigurationDto source) throws ConverterException {
+  @Override
+  public Configuration convert(ConfigurationDto source) throws ConverterException {
 
-		try {
+    try {
 
-			if (source.getUuid() != null) {
-				Configuration prototype = modelService.findOneByUuid(source.getUuid(), Configuration.class);
+      if (source.getUuid() != null) {
+        Configuration prototype = modelService.findOneByUuid(source.getUuid(), Configuration.class);
 
-				if (prototype != null) {
-					return convertToEntity(source, prototype);
-				}
-			}
+        if (prototype != null) {
+          return convertToEntity(source, prototype);
+        }
+      }
 
-			return convertToEntity(source, modelService.create(Configuration.class));
+      return convertToEntity(source, modelService.create(Configuration.class));
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
 
-	}
+  }
 
-	private Configuration convertToEntity(ConfigurationDto source, Configuration prototype) {
+  private Configuration convertToEntity(ConfigurationDto source, Configuration prototype) {
 
-		Date lastModifiedDate = new Date();
+    Date lastModifiedDate = new Date();
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getId()), prototype.getId()) == Boolean.FALSE) {
-			prototype.setId(StringUtils.stripToNull(source.getId()));
-			prototype.setLastModifiedDate(lastModifiedDate);
-		}
+    if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
+        prototype.getId()) == Boolean.FALSE) {
+      prototype.setId(StringUtils.stripToNull(source.getId()));
+      prototype.setLastModifiedDate(lastModifiedDate);
+    }
 
-		if (StringUtils.equals(StringUtils.stripToNull(source.getValue()), prototype.getValue()) == Boolean.FALSE) {
-			prototype.setValue(StringUtils.stripToNull(source.getValue()));
-			prototype.setLastModifiedDate(lastModifiedDate);
-		}
+    if (StringUtils.equals(StringUtils.stripToNull(source.getValue()),
+        prototype.getValue()) == Boolean.FALSE) {
+      prototype.setValue(StringUtils.stripToNull(source.getValue()));
+      prototype.setLastModifiedDate(lastModifiedDate);
+    }
 
-		return prototype;
-	}
+    return prototype;
+  }
 
 }

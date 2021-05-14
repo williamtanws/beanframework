@@ -1,15 +1,12 @@
 package com.beanframework.dynamicfield.domain;
 
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.dynamicfield.DynamicFieldSlotConstants;
 
@@ -19,57 +16,57 @@ import com.beanframework.dynamicfield.DynamicFieldSlotConstants;
 @Table(name = DynamicFieldSlotConstants.Table.DYNAMIC_FIELD_SLOT)
 public class DynamicFieldSlot extends GenericEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9103174021745051522L;
-	public static final String NAME = "name";
-	public static final String SORT = "sort";
-	public static final String DYNAMIC_FIELD = "dynamicField";
-	
-	public DynamicFieldSlot() {
-		super();
-	}
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -9103174021745051522L;
+  public static final String NAME = "name";
+  public static final String SORT = "sort";
+  public static final String DYNAMIC_FIELD = "dynamicField";
 
-	public DynamicFieldSlot(UUID uuid, String id, String name, Integer sort) {
-		super();
-		setUuid(uuid);
-		setId(id);
-		setName(name);
-		setSort(sort);
-	}
+  public DynamicFieldSlot() {
+    super();
+  }
 
-	@Audited(withModifiedFlag = true)
-	private String name;
+  public DynamicFieldSlot(UUID uuid, String id, String name, Integer sort) {
+    super();
+    setUuid(uuid);
+    setId(id);
+    setName(name);
+    setSort(sort);
+  }
 
-	@Audited(withModifiedFlag = true)
-	private Integer sort;
+  @Audited(withModifiedFlag = true)
+  private String name;
 
-	@Audited(withModifiedFlag = true)
-	@Column(name = "dynamicfield_uuid", columnDefinition = "BINARY(16)")
-	private UUID dynamicField;
+  @Audited(withModifiedFlag = true)
+  private Integer sort;
 
-	public String getName() {
-		return name;
-	}
+  @Audited(withModifiedFlag = true)
+  @Column(name = "dynamicfield_uuid", columnDefinition = "BINARY(16)")
+  private UUID dynamicField;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public Integer getSort() {
-		return sort;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+  public Integer getSort() {
+    return sort;
+  }
 
-	public UUID getDynamicField() {
-		return dynamicField;
-	}
+  public void setSort(Integer sort) {
+    this.sort = sort;
+  }
 
-	public void setDynamicField(UUID dynamicField) {
-		this.dynamicField = dynamicField;
-	}
+  public UUID getDynamicField() {
+    return dynamicField;
+  }
+
+  public void setDynamicField(UUID dynamicField) {
+    this.dynamicField = dynamicField;
+  }
 }

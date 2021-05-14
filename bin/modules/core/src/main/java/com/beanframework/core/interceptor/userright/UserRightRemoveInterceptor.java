@@ -7,8 +7,7 @@ import com.beanframework.user.domain.UserRight;
 
 public class UserRightRemoveInterceptor extends AbstractRemoveInterceptor<UserRight> {
 
-	@Override
-	public void onRemove(UserRight model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(UserRight model, InterceptorContext context) throws InterceptorException {}
 
 }

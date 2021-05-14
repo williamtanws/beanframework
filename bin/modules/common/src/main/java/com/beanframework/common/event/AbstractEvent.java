@@ -2,52 +2,51 @@ package com.beanframework.common.event;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.context.ApplicationEvent;
 
 public abstract class AbstractEvent extends ApplicationEvent {
-	
-	public AbstractEvent(Object source, String message) {
-        super(source);
-        this.message = message;
-	}
-	
-	private static final long serialVersionUID = -2778412558080940884L;
-	private String icon;
-	private String message;
-	private String type;
-	Map<String, String> parameters = new HashMap<String, String>();
 
-	public String getIcon() {
-		return icon;
-	}
+  public AbstractEvent(Object source, String message) {
+    super(source);
+    this.message = message;
+  }
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+  private static final long serialVersionUID = -2778412558080940884L;
+  private String icon;
+  private String message;
+  private String type;
+  Map<String, String> parameters = new HashMap<String, String>();
 
-	public String getMessage() {
-		return message;
-	}
+  public String getIcon() {
+    return icon;
+  }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getMessage() {
+    return message;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public Map<String, String> getParameters() {
+    return parameters;
+  }
+
+  public void setParameters(Map<String, String> parameters) {
+    this.parameters = parameters;
+  }
 
 }

@@ -5,11 +5,13 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractInitialDefaultsInterceptor;
 import com.beanframework.configuration.domain.Configuration;
 
-public class ConfigurationInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Configuration> {
+public class ConfigurationInitialDefaultsInterceptor
+    extends AbstractInitialDefaultsInterceptor<Configuration> {
 
-	@Override
-	public void onInitialDefaults(Configuration model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Configuration model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

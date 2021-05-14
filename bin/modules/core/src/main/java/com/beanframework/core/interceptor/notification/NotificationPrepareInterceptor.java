@@ -7,9 +7,10 @@ import com.beanframework.notification.domain.Notification;
 
 public class NotificationPrepareInterceptor extends AbstractPrepareInterceptor<Notification> {
 
-	@Override
-	public void onPrepare(Notification model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Notification model, InterceptorContext context)
+      throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

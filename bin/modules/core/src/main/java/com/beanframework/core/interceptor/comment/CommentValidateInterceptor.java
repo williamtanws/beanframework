@@ -7,9 +7,9 @@ import com.beanframework.common.interceptor.AbstractValidateInterceptor;
 
 public class CommentValidateInterceptor extends AbstractValidateInterceptor<Comment> {
 
-	@Override
-	public void onValidate(Comment model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Comment model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

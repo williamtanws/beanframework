@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Vendor;
 
 public class VendorRemoveInterceptor extends AbstractRemoveInterceptor<Vendor> {
 
-	@Override
-	public void onRemove(Vendor model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Vendor model, InterceptorContext context) throws InterceptorException {}
 
 }

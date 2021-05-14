@@ -33,7 +33,8 @@
 						</h3>
 						
 						<p th:text="${message}"></p>
-						<p th:text="${exception}"></p>
+						<p th:text="${exception}"></p><br>
+						<a class="btn btn-primary" th:text="#{module.common.home}" th:if="${fullpage}" th:href="${homeurl}"></a>
 					</div>
 					<!-- /.error-content -->
 				</div>

@@ -7,8 +7,7 @@ import com.beanframework.common.interceptor.AbstractRemoveInterceptor;
 
 public class CommentRemoveInterceptor extends AbstractRemoveInterceptor<Comment> {
 
-	@Override
-	public void onRemove(Comment model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Comment model, InterceptorContext context) throws InterceptorException {}
 
 }

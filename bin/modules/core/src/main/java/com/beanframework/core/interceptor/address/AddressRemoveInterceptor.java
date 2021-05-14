@@ -7,8 +7,7 @@ import com.beanframework.user.domain.Address;
 
 public class AddressRemoveInterceptor extends AbstractRemoveInterceptor<Address> {
 
-	@Override
-	public void onRemove(Address model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Address model, InterceptorContext context) throws InterceptorException {}
 
 }

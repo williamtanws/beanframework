@@ -2,16 +2,16 @@ package com.beanframework.console;
 
 public class CacheWebConstants {
 
-	public interface Path {
-		public static final String CACHE = "${path.cache}";
-		public static final String CACHE_CLEARALL = "${path.cache.clearall}";
-	}
+  public interface Path {
+    public static final String CACHE = "${path.cache}";
+    public static final String CACHE_CLEARALL = "${path.cache.clearall}";
+  }
 
-	public interface View {
-		public static final String CACHE = "${view.cache}";
-	}
+  public interface View {
+    public static final String CACHE = "${view.cache}";
+  }
 
-	public interface Locale {
-		public static final String CACHE_CLEARALL_SUCCESS = "module.cache.clearall.success";
-	}
+  public interface Locale {
+    public static final String CACHE_CLEARALL_SUCCESS = "module.cache.clearall.success";
+  }
 }

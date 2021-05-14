@@ -7,8 +7,8 @@ import com.beanframework.common.interceptor.AbstractPrepareInterceptor;
 
 public class AuditorPrepareInterceptor extends AbstractPrepareInterceptor<Auditor> {
 
-	@Override
-	public void onPrepare(Auditor model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Auditor model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 }

@@ -2,7 +2,6 @@ package com.beanframework.core.config.interceptor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.dynamicfield.DynamicFieldInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.dynamicfield.DynamicFieldLoadInterceptor;
@@ -14,93 +13,93 @@ import com.beanframework.dynamicfield.domain.DynamicField;
 @Configuration
 public class DynamicFieldInterceptorConfig {
 
-	//////////////////////////////////
-	// Initial Defaults Interceptor //
-	//////////////////////////////////
+  //////////////////////////////////
+  // Initial Defaults Interceptor //
+  //////////////////////////////////
 
-	@Bean
-	public DynamicFieldInitialDefaultsInterceptor dynamicFieldInitialDefaultsInterceptor() {
-		return new DynamicFieldInitialDefaultsInterceptor();
-	}
+  @Bean
+  public DynamicFieldInitialDefaultsInterceptor dynamicFieldInitialDefaultsInterceptor() {
+    return new DynamicFieldInitialDefaultsInterceptor();
+  }
 
-	@Bean
-	public InterceptorMapping dynamicFieldInitialDefaultsInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldInitialDefaultsInterceptor());
-		mapping.setTypeCode(DynamicField.class.getSimpleName());
+  @Bean
+  public InterceptorMapping dynamicFieldInitialDefaultsInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(dynamicFieldInitialDefaultsInterceptor());
+    mapping.setTypeCode(DynamicField.class.getSimpleName());
 
-		return mapping;
-	}
+    return mapping;
+  }
 
-	//////////////////////
-	// Load Interceptor //
-	//////////////////////
+  //////////////////////
+  // Load Interceptor //
+  //////////////////////
 
-	@Bean
-	public DynamicFieldLoadInterceptor dynamicFieldLoadInterceptor() {
-		return new DynamicFieldLoadInterceptor();
-	}
+  @Bean
+  public DynamicFieldLoadInterceptor dynamicFieldLoadInterceptor() {
+    return new DynamicFieldLoadInterceptor();
+  }
 
-	@Bean
-	public InterceptorMapping dynamicFieldLoadInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldLoadInterceptor());
-		mapping.setTypeCode(DynamicField.class.getSimpleName());
+  @Bean
+  public InterceptorMapping dynamicFieldLoadInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(dynamicFieldLoadInterceptor());
+    mapping.setTypeCode(DynamicField.class.getSimpleName());
 
-		return mapping;
-	}
+    return mapping;
+  }
 
-	/////////////////////////
-	// Prepare Interceptor //
-	/////////////////////////
+  /////////////////////////
+  // Prepare Interceptor //
+  /////////////////////////
 
-	@Bean
-	public DynamicFieldPrepareInterceptor dynamicFieldPrepareInterceptor() {
-		return new DynamicFieldPrepareInterceptor();
-	}
+  @Bean
+  public DynamicFieldPrepareInterceptor dynamicFieldPrepareInterceptor() {
+    return new DynamicFieldPrepareInterceptor();
+  }
 
-	@Bean
-	public InterceptorMapping dynamicFieldPrepareInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldPrepareInterceptor());
-		mapping.setTypeCode(DynamicField.class.getSimpleName());
+  @Bean
+  public InterceptorMapping dynamicFieldPrepareInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(dynamicFieldPrepareInterceptor());
+    mapping.setTypeCode(DynamicField.class.getSimpleName());
 
-		return mapping;
-	}
+    return mapping;
+  }
 
-	//////////////////////////
-	// Validate Interceptor //
-	//////////////////////////
+  //////////////////////////
+  // Validate Interceptor //
+  //////////////////////////
 
-	@Bean
-	public DynamicFieldValidateInterceptor dynamicFieldValidateInterceptor() {
-		return new DynamicFieldValidateInterceptor();
-	}
+  @Bean
+  public DynamicFieldValidateInterceptor dynamicFieldValidateInterceptor() {
+    return new DynamicFieldValidateInterceptor();
+  }
 
-	@Bean
-	public InterceptorMapping dynamicFieldValidateInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldValidateInterceptor());
-		mapping.setTypeCode(DynamicField.class.getSimpleName());
+  @Bean
+  public InterceptorMapping dynamicFieldValidateInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(dynamicFieldValidateInterceptor());
+    mapping.setTypeCode(DynamicField.class.getSimpleName());
 
-		return mapping;
-	}
+    return mapping;
+  }
 
-	////////////////////////
-	// Remove Interceptor //
-	////////////////////////
+  ////////////////////////
+  // Remove Interceptor //
+  ////////////////////////
 
-	@Bean
-	public DynamicFieldRemoveInterceptor dynamicFieldRemoveInterceptor() {
-		return new DynamicFieldRemoveInterceptor();
-	}
+  @Bean
+  public DynamicFieldRemoveInterceptor dynamicFieldRemoveInterceptor() {
+    return new DynamicFieldRemoveInterceptor();
+  }
 
-	@Bean
-	public InterceptorMapping dynamicFieldRemoveInterceptorMapping() {
-		InterceptorMapping mapping = new InterceptorMapping();
-		mapping.setInterceptor(dynamicFieldRemoveInterceptor());
-		mapping.setTypeCode(DynamicField.class.getSimpleName());
+  @Bean
+  public InterceptorMapping dynamicFieldRemoveInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(dynamicFieldRemoveInterceptor());
+    mapping.setTypeCode(DynamicField.class.getSimpleName());
 
-		return mapping;
-	}
+    return mapping;
+  }
 }

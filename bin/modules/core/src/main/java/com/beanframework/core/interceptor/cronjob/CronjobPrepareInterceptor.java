@@ -7,10 +7,10 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobPrepareInterceptor extends AbstractPrepareInterceptor<Cronjob> {
 
-	@Override
-	public void onPrepare(Cronjob model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
+  @Override
+  public void onPrepare(Cronjob model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
 
-	}
+  }
 
 }

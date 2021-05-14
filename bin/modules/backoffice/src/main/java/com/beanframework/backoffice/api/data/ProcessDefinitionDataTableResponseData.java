@@ -3,23 +3,23 @@ package com.beanframework.backoffice.api.data;
 import com.beanframework.core.data.DataTableResponseData;
 
 public class ProcessDefinitionDataTableResponseData extends DataTableResponseData {
-	
-	private String name;
-	private String deploymentId;
 
-	public String getName() {
-		return name;
-	}
+  private String name;
+  private String deploymentId;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getDeploymentId() {
-		return deploymentId;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setDeploymentId(String deploymentId) {
-		this.deploymentId = deploymentId;
-	}
+  public String getDeploymentId() {
+    return deploymentId;
+  }
+
+  public void setDeploymentId(String deploymentId) {
+    this.deploymentId = deploymentId;
+  }
 }

@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.MenuWebConstants.MenuPreAuthorizeEnum;
@@ -41,166 +38,177 @@ import com.beanframework.menu.domain.Menu;
 @RestController
 public class MenuResource extends AbstractResource {
 
-	@Autowired
-	private MenuFacade menuFacade;
+  @Autowired
+  private MenuFacade menuFacade;
 
-	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKID)
-	public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKID)
+  public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams)
+      throws Exception {
 
-		String id = (String) requestParams.get(BackofficeWebConstants.Param.ID);
+    String id = (String) requestParams.get(BackofficeWebConstants.Param.ID);
 
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Menu.ID, id);
-		MenuDto data = menuFacade.findOneProperties(properties);
+    Map<String, Object> properties = new HashMap<String, Object>();
+    properties.put(Menu.ID, id);
+    MenuDto data = menuFacade.findOneProperties(properties);
 
-		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
-		if (StringUtils.isNotBlank(uuidStr)) {
-			UUID uuid = UUID.fromString(uuidStr);
-			if (data != null && data.getUuid().equals(uuid)) {
-				return true;
-			}
-		}
+    String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
+    if (StringUtils.isNotBlank(uuidStr)) {
+      UUID uuid = UUID.fromString(uuidStr);
+      if (data != null && data.getUuid().equals(uuid)) {
+        return true;
+      }
+    }
 
-		return data != null ? false : true;
-	}
+    return data != null ? false : true;
+  }
 
-	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKPATH)
-	public boolean checkPath(Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(MenuWebConstants.Path.Api.MENU_CHECKPATH)
+  public boolean checkPath(Model model, @RequestParam Map<String, Object> requestParams)
+      throws Exception {
 
-		if (requestParams.get("path") == null || StringUtils.isBlank((String) requestParams.get("path"))) {
-			return true;
-		}
+    if (requestParams.get("path") == null
+        || StringUtils.isBlank((String) requestParams.get("path"))) {
+      return true;
+    }
 
-		String path = (String) requestParams.get("path");
+    String path = (String) requestParams.get("path");
 
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(Menu.PATH, path);
-		MenuDto data = menuFacade.findOneProperties(properties);
+    Map<String, Object> properties = new HashMap<String, Object>();
+    properties.put(Menu.PATH, path);
+    MenuDto data = menuFacade.findOneProperties(properties);
 
-		String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
-		if (StringUtils.isNotBlank(uuidStr)) {
-			UUID uuid = UUID.fromString(uuidStr);
-			if (data != null && data.getUuid().equals(uuid)) {
-				return true;
-			}
-		}
+    String uuidStr = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
+    if (StringUtils.isNotBlank(uuidStr)) {
+      UUID uuid = UUID.fromString(uuidStr);
+      if (data != null && data.getUuid().equals(uuid)) {
+        return true;
+      }
+    }
 
-		return data != null ? false : true;
-	}
+    return data != null ? false : true;
+  }
 
-	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(MenuWebConstants.Path.Api.MENU_TREE)
-	public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
-		String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
+  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(MenuWebConstants.Path.Api.MENU_TREE)
+  public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams)
+      throws BusinessException {
+    String uuid = (String) requestParams.get(BackofficeWebConstants.Param.UUID);
 
-		List<MenuDto> rootMenu = menuFacade.findMenuTree();
-		List<TreeJson> data = new ArrayList<TreeJson>();
+    List<MenuDto> rootMenu = menuFacade.findMenuTree();
+    List<TreeJson> data = new ArrayList<TreeJson>();
 
-		for (MenuDto menu : rootMenu) {
-			if (StringUtils.isNotBlank(uuid)) {
-				data.add(convertToJson(menu, UUID.fromString(uuid)));
-			} else {
-				data.add(convertToJson(menu, null));
-			}
-		}
+    for (MenuDto menu : rootMenu) {
+      if (StringUtils.isNotBlank(uuid)) {
+        data.add(convertToJson(menu, UUID.fromString(uuid)));
+      } else {
+        data.add(convertToJson(menu, null));
+      }
+    }
 
-		return data;
-	}
+    return data;
+  }
 
-	public TreeJson convertToJson(MenuDto menu, UUID selectedUuid) {
+  public TreeJson convertToJson(MenuDto menu, UUID selectedUuid) {
 
-		TreeJson parent = new TreeJson();
+    TreeJson parent = new TreeJson();
 
-		parent.setId(menu.getUuid().toString());
-		parent.setText(convertName(menu));
-		parent.setIcon(menu.getIcon());
+    parent.setId(menu.getUuid().toString());
+    parent.setText(convertName(menu));
+    parent.setIcon(menu.getIcon());
 
-		if (selectedUuid != null && selectedUuid.equals(menu.getUuid())) {
-			parent.setState(new TreeJsonState(true));
-		} else {
-			parent.setState(new TreeJsonState(false));
-		}
+    if (selectedUuid != null && selectedUuid.equals(menu.getUuid())) {
+      parent.setState(new TreeJsonState(true));
+    } else {
+      parent.setState(new TreeJsonState(false));
+    }
 
-		List<TreeJson> children = new ArrayList<TreeJson>();
-		if (menu.getChilds() != null && menu.getChilds().isEmpty() == false) {
+    List<TreeJson> children = new ArrayList<TreeJson>();
+    if (menu.getChilds() != null && menu.getChilds().isEmpty() == false) {
 
-			for (MenuDto child : menu.getChilds()) {
-				children.add(convertToJson(child, selectedUuid));
-			}
-		}
-		parent.setChildren(children);
+      for (MenuDto child : menu.getChilds()) {
+        children.add(convertToJson(child, selectedUuid));
+      }
+    }
+    parent.setChildren(children);
 
-		return parent;
-	}
+    return parent;
+  }
 
-	public String convertName(MenuDto menu) {
+  public String convertName(MenuDto menu) {
 
-		Locale locale = LocaleContextHolder.getLocale();
+    Locale locale = LocaleContextHolder.getLocale();
 
-		for (MenuAttributeDto menuField : menu.getAttributes()) {
-			if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage() != null) {
-				if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage().getId().equals(locale.toString())) {
+    for (MenuAttributeDto menuField : menu.getAttributes()) {
+      if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage() != null) {
+        if (menuField.getDynamicFieldSlot().getDynamicField().getLanguage().getId()
+            .equals(locale.toString())) {
 
-					String name = menuField.getValue();
+          String name = menuField.getValue();
 
-					if (StringUtils.isBlank(name)) {
-						name = "[" + menu.getId() + "]";
-					}
+          if (StringUtils.isBlank(name)) {
+            name = "[" + menu.getId() + "]";
+          }
 
-					if (menu.getEnabled() == false) {
-						name = "<span class=\"text-muted\">" + name + "</span>";
-					}
+          if (menu.getEnabled() == false) {
+            name = "<span class=\"text-muted\">" + name + "</span>";
+          }
 
-					return name;
-				}
-			}
-		}
+          return name;
+        }
+      }
+    }
 
-		if (StringUtils.isNotBlank(menu.getName())) {
-			return menu.getName();
-		}
+    if (StringUtils.isNotBlank(menu.getName())) {
+      return menu.getName();
+    }
 
-		return "[" + menu.getId() + "]";
-	}
+    return "[" + menu.getId() + "]";
+  }
 
-	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = MenuWebConstants.Path.Api.MENU, method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public DataTableResponse<DataTableResponseData> page(HttpServletRequest request) throws Exception {
+  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(value = MenuWebConstants.Path.Api.MENU, method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseBody
+  public DataTableResponse<DataTableResponseData> page(HttpServletRequest request)
+      throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.prepareDataTableRequest(request);
+    DataTableRequest dataTableRequest = new DataTableRequest();
+    dataTableRequest.prepareDataTableRequest(request);
 
-		Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
+    Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
 
-		DataTableResponse<DataTableResponseData> dataTableResponse = new DataTableResponse<DataTableResponseData>();
-		dataTableResponse.setDraw(dataTableRequest.getDraw());
-		dataTableResponse.setRecordsTotal(menuFacade.count());
-		dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
+    DataTableResponse<DataTableResponseData> dataTableResponse =
+        new DataTableResponse<DataTableResponseData>();
+    dataTableResponse.setDraw(dataTableRequest.getDraw());
+    dataTableResponse.setRecordsTotal(menuFacade.count());
+    dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
-		for (MenuDto dto : pagination.getContent()) {
+    for (MenuDto dto : pagination.getContent()) {
 
-			MenuDataTableResponseData data = new MenuDataTableResponseData();
-			data.setUuid(dto.getUuid().toString());
-			data.setId(StringUtils.stripToEmpty(dto.getId()));
-			data.setName(StringUtils.stripToEmpty(dto.getName()));
-			data.setSort(dto.getSort());
-			dataTableResponse.getData().add(data);
-		}
-		return dataTableResponse;
-	}
+      MenuDataTableResponseData data = new MenuDataTableResponseData();
+      data.setUuid(dto.getUuid().toString());
+      data.setId(StringUtils.stripToEmpty(dto.getId()));
+      data.setName(StringUtils.stripToEmpty(dto.getName()));
+      data.setSort(dto.getSort());
+      dataTableResponse.getData().add(data);
+    }
+    return dataTableResponse;
+  }
 
-	@PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-	@RequestMapping(value = MenuWebConstants.Path.Api.MENU_HISTORY, method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request) throws Exception {
+  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(value = MenuWebConstants.Path.Api.MENU_HISTORY, method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseBody
+  public DataTableResponse<HistoryDataTableResponseData> history(HttpServletRequest request)
+      throws Exception {
 
-		DataTableRequest dataTableRequest = new DataTableRequest();
-		dataTableRequest.prepareDataTableRequest(request);
-		dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
+    DataTableRequest dataTableRequest = new DataTableRequest();
+    dataTableRequest.prepareDataTableRequest(request);
+    dataTableRequest.setUniqueId((String) request.getParameter("uuid"));
 
-		return historyDataTableResponse(dataTableRequest, menuFacade.findHistory(dataTableRequest), menuFacade.countHistory(dataTableRequest));
-	}
+    return historyDataTableResponse(dataTableRequest, menuFacade.findHistory(dataTableRequest),
+        menuFacade.countHistory(dataTableRequest));
+  }
 }

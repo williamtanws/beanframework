@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.core.facade.NotificationFacade;
 import com.beanframework.cronjob.service.QuartzManager;
 
@@ -17,42 +16,44 @@ import com.beanframework.cronjob.service.QuartzManager;
 @DisallowConcurrentExecution
 public class NotificationJob implements Job {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(NotificationJob.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(NotificationJob.class);
 
-	public static final String HOURS = "hours";
+  public static final String HOURS = "hours";
 
-	@Autowired
-	private NotificationFacade notificationFacade;
+  @Autowired
+  private NotificationFacade notificationFacade;
 
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+  @Override
+  public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		try {
-			int count = 0;
-			if (context.getMergedJobDataMap().get(HOURS) == null || context.getMergedJobDataMap().get(HOURS) == "0") {
+    try {
+      int count = 0;
+      if (context.getMergedJobDataMap().get(HOURS) == null
+          || context.getMergedJobDataMap().get(HOURS) == "0") {
 
-				count = notificationFacade.removeAllNotification();
+        count = notificationFacade.removeAllNotification();
 
-				context.setResult("Removed all " + count + " old notifications");
+        context.setResult("Removed all " + count + " old notifications");
 
-			} else {
+      } else {
 
-				String hours = (String) context.getMergedJobDataMap().get(HOURS);
+        String hours = (String) context.getMergedJobDataMap().get(HOURS);
 
-				DateTime date = new DateTime();
-				date.minusHours(Integer.valueOf(hours));
+        DateTime date = new DateTime();
+        date.minusHours(Integer.valueOf(hours));
 
-				count = notificationFacade.removeOldNotificationByToDate(date.toDate());
+        count = notificationFacade.removeOldNotificationByToDate(date.toDate());
 
-				context.setResult("Removed " + count + " old notifications more than " + hours + " hour(s)");
-			}
-			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+        context
+            .setResult("Removed " + count + " old notifications more than " + hours + " hour(s)");
+      }
+      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 
-		} catch (Exception e) {
-			context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
-			LOGGER.error(e.getMessage(), e);
-			throw new JobExecutionException(e.getMessage(), e);
-		}
-	}
+    } catch (Exception e) {
+      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      LOGGER.error(e.getMessage(), e);
+      throw new JobExecutionException(e.getMessage(), e);
+    }
+  }
 
 }

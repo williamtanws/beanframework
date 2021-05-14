@@ -7,8 +7,8 @@ import com.beanframework.dynamicfield.domain.DynamicFieldSlot;
 
 public class DynamicFieldSlotLoadInterceptor extends AbstractLoadInterceptor<DynamicFieldSlot> {
 
-	@Override
-	public void onLoad(DynamicFieldSlot model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(DynamicFieldSlot model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

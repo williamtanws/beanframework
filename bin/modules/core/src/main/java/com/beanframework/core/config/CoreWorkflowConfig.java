@@ -12,17 +12,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CoreWorkflowConfig {
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(CoreWorkflowConfig.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(CoreWorkflowConfig.class);
 
-	@Bean
-	public CommandLineRunner init(final RepositoryService repositoryService, final RuntimeService runtimeService, final TaskService taskService) {
+  @Bean
+  public CommandLineRunner init(final RepositoryService repositoryService,
+      final RuntimeService runtimeService, final TaskService taskService) {
 
-		return new CommandLineRunner() {
-			@Override
-			public void run(String... strings) throws Exception {
-				LOGGER.info("Number of process definitions : " + repositoryService.createProcessDefinitionQuery().count());
-				LOGGER.info("Number of tasks : " + taskService.createTaskQuery().count());
-			}
-		};
-	}
+    return new CommandLineRunner() {
+      @Override
+      public void run(String... strings) throws Exception {
+        LOGGER.info("Number of process definitions : "
+            + repositoryService.createProcessDefinitionQuery().count());
+        LOGGER.info("Number of tasks : " + taskService.createTaskQuery().count());
+      }
+    };
+  }
 }

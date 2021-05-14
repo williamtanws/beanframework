@@ -145,6 +145,26 @@
 		<th:block
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-multiple (tableId='selectedUserGroupDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.usergroup')}}, selectedItemDto=${usergroupDto.userGroups}, selectedItemUuidName='selectedUserGroupUuids' )}"></th:block>
 		<th:block th:if="${usergroupDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.usergroup.history')}(uuid=${usergroupDto.uuid})})}"></th:block>
+	
+		<script th:inline="javascript">
+		    /*<![CDATA[*/
+		    	
+		    /*[# th:if="${usergroupDto.uuid != null}"]*/
+		    	$('#userauthorityTable').DataTable().fixedHeader.disable();
+		
+			    $('#custom-tabs-tab').on("shown.bs.tab", function (e) {
+				    	
+					$('#userauthorityTable').DataTable().fixedHeader.disable();
+				    	
+					if (e.target.id == 'custom-tabs-userauthority-tab'){
+						$('#userauthorityTable').DataTable().fixedHeader.enable();
+					}
+				});
+		    /*[/]*/
+		    
+		    /*]]>*/
+		</script>
+	
 	</th:block>
 </body>
 

@@ -11,16 +11,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class GlobalBindingInitializer {
 
-	/*
-	 * Initialize a global InitBinder for dates instead of cloning its code in every
-	 * Controller
-	 */
+  /*
+   * Initialize a global InitBinder for dates instead of cloning its code in every Controller
+   */
 
-	@InitBinder /* Converts empty strings into null when a form is submitted */
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-		binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(true));
-		binder.registerCustomEditor(Integer.class, new StringTrimmerEditor(true));
-		binder.registerCustomEditor(Long.class, new StringTrimmerEditor(true));
-	}
+  @InitBinder /* Converts empty strings into null when a form is submitted */
+  public void initBinder(WebDataBinder binder) {
+    binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(true));
+    binder.registerCustomEditor(Integer.class, new StringTrimmerEditor(true));
+    binder.registerCustomEditor(Long.class, new StringTrimmerEditor(true));
+  }
 }

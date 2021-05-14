@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -13,9 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
-
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.notification.NotificationConstants;
 
@@ -24,53 +21,54 @@ import com.beanframework.notification.NotificationConstants;
 @Table(name = NotificationConstants.Table.NOTIFICATION)
 public class Notification extends GenericEntity {
 
-	private static final long serialVersionUID = 5992760081038782486L;
-	public static final String TYPE = "type";
-	public static final String MESSAGE = "message";
+  private static final long serialVersionUID = 5992760081038782486L;
+  public static final String TYPE = "type";
+  public static final String MESSAGE = "message";
 
-	private String type;
-	private String message;
+  private String type;
+  private String message;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@MapKeyColumn(name = "name")
-	@Column(name = "value")
-	@CollectionTable(name = NotificationConstants.Table.NOTIFICATION_PARAMETER, joinColumns = @JoinColumn(name = "notification_uuid"))
-	Map<String, String> parameters = new HashMap<String, String>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  @MapKeyColumn(name = "name")
+  @Column(name = "value")
+  @CollectionTable(name = NotificationConstants.Table.NOTIFICATION_PARAMETER,
+      joinColumns = @JoinColumn(name = "notification_uuid"))
+  Map<String, String> parameters = new HashMap<String, String>();
 
-	public Notification() {
-		super();
-	}
+  public Notification() {
+    super();
+  }
 
-	public Notification(UUID uuid, String type, String message, Date createdDate) {
-		super();
-		setUuid(uuid);
-		this.type = type;
-		this.message = message;
-		setCreatedDate(createdDate);
-	}
+  public Notification(UUID uuid, String type, String message, Date createdDate) {
+    super();
+    setUuid(uuid);
+    this.type = type;
+    this.message = message;
+    setCreatedDate(createdDate);
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
 
-	public String getMessage() {
-		return message;
-	}
+  public String getMessage() {
+    return message;
+  }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
+  public Map<String, String> getParameters() {
+    return parameters;
+  }
 
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
+  public void setParameters(Map<String, String> parameters) {
+    this.parameters = parameters;
+  }
 
 }

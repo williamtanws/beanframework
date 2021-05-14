@@ -7,8 +7,7 @@ import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 
 public class CommentLoadInterceptor extends AbstractLoadInterceptor<Comment> {
 
-	@Override
-	public void onLoad(Comment model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Comment model, InterceptorContext context) throws InterceptorException {}
 
 }

@@ -4,23 +4,23 @@ import com.beanframework.core.data.DataTableResponseData;
 
 public class UserPermissionDataTableResponseData extends DataTableResponseData {
 
-	private Integer sort;
-	private String name;
+  private Integer sort;
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public Integer getSort() {
-		return sort;
-	}
+  public Integer getSort() {
+    return sort;
+  }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+  public void setSort(Integer sort) {
+    this.sort = sort;
+  }
 
 }

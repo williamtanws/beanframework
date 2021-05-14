@@ -7,8 +7,7 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobRemoveInterceptor extends AbstractRemoveInterceptor<Cronjob> {
 
-	@Override
-	public void onRemove(Cronjob model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Cronjob model, InterceptorContext context) throws InterceptorException {}
 
 }

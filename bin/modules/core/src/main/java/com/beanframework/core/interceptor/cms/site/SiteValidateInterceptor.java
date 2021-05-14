@@ -7,9 +7,9 @@ import com.beanframework.common.interceptor.AbstractValidateInterceptor;
 
 public class SiteValidateInterceptor extends AbstractValidateInterceptor<Site> {
 
-	@Override
-	public void onValidate(Site model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Site model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

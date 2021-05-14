@@ -7,10 +7,11 @@ import com.beanframework.user.domain.UserAuthority;
 
 public class UserAuthorityValidateInterceptor extends AbstractValidateInterceptor<UserAuthority> {
 
-	@Override
-	public void onValidate(UserAuthority model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(UserAuthority model, InterceptorContext context)
+      throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 
 }

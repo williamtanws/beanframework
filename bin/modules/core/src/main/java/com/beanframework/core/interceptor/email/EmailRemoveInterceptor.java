@@ -7,9 +7,9 @@ import com.beanframework.email.domain.Email;
 
 public class EmailRemoveInterceptor extends AbstractRemoveInterceptor<Email> {
 
-	@Override
-	public void onRemove(Email model, InterceptorContext context) throws InterceptorException {
+  @Override
+  public void onRemove(Email model, InterceptorContext context) throws InterceptorException {
 
-	}
+  }
 
 }

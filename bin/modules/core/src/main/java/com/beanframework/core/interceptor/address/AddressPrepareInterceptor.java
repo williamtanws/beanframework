@@ -7,9 +7,9 @@ import com.beanframework.user.domain.Address;
 
 public class AddressPrepareInterceptor extends AbstractPrepareInterceptor<Address> {
 
-	@Override
-	public void onPrepare(Address model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Address model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

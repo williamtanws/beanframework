@@ -7,8 +7,7 @@ import com.beanframework.imex.domain.Imex;
 
 public class ImexLoadInterceptor extends AbstractLoadInterceptor<Imex> {
 
-	@Override
-	public void onLoad(Imex model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Imex model, InterceptorContext context) throws InterceptorException {}
 
 }

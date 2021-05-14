@@ -7,8 +7,7 @@ import com.beanframework.notification.domain.Notification;
 
 public class NotificationLoadInterceptor extends AbstractLoadInterceptor<Notification> {
 
-	@Override
-	public void onLoad(Notification model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Notification model, InterceptorContext context) throws InterceptorException {}
 
 }

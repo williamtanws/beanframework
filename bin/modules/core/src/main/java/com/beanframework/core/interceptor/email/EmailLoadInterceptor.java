@@ -7,8 +7,7 @@ import com.beanframework.email.domain.Email;
 
 public class EmailLoadInterceptor extends AbstractLoadInterceptor<Email> {
 
-	@Override
-	public void onLoad(Email model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(Email model, InterceptorContext context) throws InterceptorException {}
 
 }

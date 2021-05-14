@@ -7,10 +7,11 @@ import com.beanframework.configuration.domain.Configuration;
 
 public class ConfigurationPrepareInterceptor extends AbstractPrepareInterceptor<Configuration> {
 
-	@Override
-	public void onPrepare(Configuration model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
+  @Override
+  public void onPrepare(Configuration model, InterceptorContext context)
+      throws InterceptorException {
+    super.onPrepare(model, context);
 
-	}
+  }
 
 }

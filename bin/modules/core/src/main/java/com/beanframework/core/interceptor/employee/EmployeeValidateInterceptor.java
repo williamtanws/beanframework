@@ -7,10 +7,10 @@ import com.beanframework.user.domain.Employee;
 
 public class EmployeeValidateInterceptor extends AbstractValidateInterceptor<Employee> {
 
-	@Override
-	public void onValidate(Employee model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Employee model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 
 }

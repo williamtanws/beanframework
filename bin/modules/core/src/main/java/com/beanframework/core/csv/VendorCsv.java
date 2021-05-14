@@ -5,136 +5,138 @@ import org.supercsv.cellprocessor.ParseBool;
 import org.supercsv.cellprocessor.Trim;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-
 import com.beanframework.common.data.GenericCsv;
 
 public class VendorCsv extends GenericCsv {
 
-	private String name;
-	private String password;
-	private Boolean accountNonExpired;
-	private Boolean accountNonLocked;
-	private Boolean credentialsNonExpired;
-	private Boolean enabled;
-	private String userGroupIds;
-	private String companyIds;
-	private String addressIds;
-	private String dynamicFieldSlotIds;
-	private String profilePicture;
+  private String name;
+  private String password;
+  private Boolean accountNonExpired;
+  private Boolean accountNonLocked;
+  private Boolean credentialsNonExpired;
+  private Boolean enabled;
+  private String userGroupIds;
+  private String companyIds;
+  private String addressIds;
+  private String dynamicFieldSlotIds;
+  private String profilePicture;
 
-	public static CellProcessor[] getUpdateProcessors() {
-		final CellProcessor[] processors = new CellProcessor[] { //
-				new Optional(new Trim()), // ModeType
-				new NotNull(new Trim()), // id
-				new Optional(new Trim()), // name
-				new Optional(new Trim()), // password
-				new Optional(new Trim(new ParseBool())), // accountNonExpired
-				new Optional(new Trim(new ParseBool())), // accountNonLocked
-				new Optional(new Trim(new ParseBool())), // credentialsNonExpired
-				new Optional(new Trim(new ParseBool())), // enabled
-				new Optional(new Trim()), // userGroupIds
-				new Optional(new Trim()), // companyIds
-				new Optional(new Trim()), // addressIds
-				new Optional(new Trim()), // dynamicFieldSlotIds
-				new Optional(new Trim()) // profilePicture
-		};
+  public static CellProcessor[] getUpdateProcessors() {
+    final CellProcessor[] processors = new CellProcessor[] { //
+        new Optional(new Trim()), // ModeType
+        new NotNull(new Trim()), // id
+        new Optional(new Trim()), // name
+        new Optional(new Trim()), // password
+        new Optional(new Trim(new ParseBool())), // accountNonExpired
+        new Optional(new Trim(new ParseBool())), // accountNonLocked
+        new Optional(new Trim(new ParseBool())), // credentialsNonExpired
+        new Optional(new Trim(new ParseBool())), // enabled
+        new Optional(new Trim()), // userGroupIds
+        new Optional(new Trim()), // companyIds
+        new Optional(new Trim()), // addressIds
+        new Optional(new Trim()), // dynamicFieldSlotIds
+        new Optional(new Trim()) // profilePicture
+    };
 
-		return processors;
-	}
+    return processors;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getPassword() {
-		return password;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public Boolean getAccountNonExpired() {
-		return accountNonExpired;
-	}
+  public Boolean getAccountNonExpired() {
+    return accountNonExpired;
+  }
 
-	public void setAccountNonExpired(Boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
+  public void setAccountNonExpired(Boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
 
-	public Boolean getAccountNonLocked() {
-		return accountNonLocked;
-	}
+  public Boolean getAccountNonLocked() {
+    return accountNonLocked;
+  }
 
-	public void setAccountNonLocked(Boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
+  public void setAccountNonLocked(Boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
 
-	public Boolean getCredentialsNonExpired() {
-		return credentialsNonExpired;
-	}
+  public Boolean getCredentialsNonExpired() {
+    return credentialsNonExpired;
+  }
 
-	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
-	}
+  public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+  public Boolean getEnabled() {
+    return enabled;
+  }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 
-	public String getUserGroupIds() {
-		return userGroupIds;
-	}
+  public String getUserGroupIds() {
+    return userGroupIds;
+  }
 
-	public void setUserGroupIds(String userGroupIds) {
-		this.userGroupIds = userGroupIds;
-	}
+  public void setUserGroupIds(String userGroupIds) {
+    this.userGroupIds = userGroupIds;
+  }
 
-	public String getCompanyIds() {
-		return companyIds;
-	}
+  public String getCompanyIds() {
+    return companyIds;
+  }
 
-	public void setCompanyIds(String companyIds) {
-		this.companyIds = companyIds;
-	}
+  public void setCompanyIds(String companyIds) {
+    this.companyIds = companyIds;
+  }
 
-	public String getAddressIds() {
-		return addressIds;
-	}
+  public String getAddressIds() {
+    return addressIds;
+  }
 
-	public void setAddressIds(String addressIds) {
-		this.addressIds = addressIds;
-	}
+  public void setAddressIds(String addressIds) {
+    this.addressIds = addressIds;
+  }
 
-	public String getDynamicFieldSlotIds() {
-		return dynamicFieldSlotIds;
-	}
+  public String getDynamicFieldSlotIds() {
+    return dynamicFieldSlotIds;
+  }
 
-	public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
-		this.dynamicFieldSlotIds = dynamicFieldSlotIds;
-	}
+  public void setDynamicFieldSlotIds(String dynamicFieldSlotIds) {
+    this.dynamicFieldSlotIds = dynamicFieldSlotIds;
+  }
 
-	public String getProfilePicture() {
-		return profilePicture;
-	}
+  public String getProfilePicture() {
+    return profilePicture;
+  }
 
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
-	}
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
+  }
 
-	@Override
-	public String toString() {
-		return "EmployeeCsv [id=" + id + ", name=" + name + ", password=" + password + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired="
-				+ credentialsNonExpired + ", enabled=" + enabled + ", userGroupIds=" + userGroupIds + ", companyIds=" + companyIds + ", addressIds=" + addressIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds
-				+ ", profilePicture=" + profilePicture + "]";
-	}
+  @Override
+  public String toString() {
+    return "EmployeeCsv [id=" + id + ", name=" + name + ", password=" + password
+        + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked=" + accountNonLocked
+        + ", credentialsNonExpired=" + credentialsNonExpired + ", enabled=" + enabled
+        + ", userGroupIds=" + userGroupIds + ", companyIds=" + companyIds + ", addressIds="
+        + addressIds + ", dynamicFieldSlotIds=" + dynamicFieldSlotIds + ", profilePicture="
+        + profilePicture + "]";
+  }
 
 }

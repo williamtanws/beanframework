@@ -1,9 +1,7 @@
 package com.beanframework.core.converter.populator;
 
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.GenericDto;
 import com.beanframework.common.domain.Auditor;
@@ -31,303 +29,304 @@ import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserGroup;
 
 public abstract class AbstractPopulator<T extends GenericEntity, E extends GenericDto> {
-	
-	@Autowired
-	protected ModelService modelService;
 
-	protected void populateGeneric(T source, E target) throws PopulatorException {
-		try {
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+  @Autowired
+  protected ModelService modelService;
 
-	protected AuditorDto populateAuditor(Auditor source) {
-		if(source == null)
-			return null;
-		
-		AuditorDto target = new AuditorDto();
-		target.setUuid(source.getUuid());
-		target.setId(source.getId());
-		target.setName(source.getName());
+  protected void populateGeneric(T source, E target) throws PopulatorException {
+    try {
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-		return target;
-	}
-	
-	public UserDto populateUser(UUID uuid) throws PopulatorException {
-		if(uuid == null)
-			return null;
-		
-		try {
-			User source = modelService.findOneByUuid(uuid, User.class);
-			if(source == null) {
-				return null;
-			}
-			
-			UserDto target = new UserDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setName(source.getName());
+  protected AuditorDto populateAuditor(Auditor source) {
+    if (source == null)
+      return null;
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
-	
-	public UserGroupDto populateUserGroup(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+    AuditorDto target = new AuditorDto();
+    target.setUuid(source.getUuid());
+    target.setId(source.getId());
+    target.setName(source.getName());
 
-		try {
-			UserGroup source = modelService.findOneByUuid(uuid, UserGroup.class);
-			if(source == null) {
-				return null;
-			}
-			
-			UserGroupDto target = new UserGroupDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
-			target.setName(source.getName());
+    return target;
+  }
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
-	
-	public UserGroupDto populateUserGroup(UserGroup source) throws PopulatorException {
-		if (source == null)
-			return null;
+  public UserDto populateUser(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-		try {
-			UserGroupDto target = new UserGroupDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+    try {
+      User source = modelService.findOneByUuid(uuid, User.class);
+      if (source == null) {
+        return null;
+      }
 
-			target.setName(source.getName());
-			
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+      UserDto target = new UserDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setName(source.getName());
 
-	public CompanyDto populateCompany(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-		try {
-			Company source = modelService.findOneByUuid(uuid, Company.class);
-			if(source == null) {
-				return null;
-			}
-			
-			CompanyDto target = new CompanyDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
-			target.setName(source.getName());
+  public UserGroupDto populateUserGroup(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+    try {
+      UserGroup source = modelService.findOneByUuid(uuid, UserGroup.class);
+      if (source == null) {
+        return null;
+      }
 
-	public AddressDto populateAddress(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+      UserGroupDto target = new UserGroupDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+      target.setName(source.getName());
 
-		try {
-			Address source = modelService.findOneByUuid(uuid, Address.class);
-			if(source == null) {
-				return null;
-			}
-			
-			AddressDto target = new AddressDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
-			target.setStreetName(source.getStreetName());
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
-	
-	public DynamicFieldSlotDto populateDynamicFieldSlot(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+  public UserGroupDto populateUserGroup(UserGroup source) throws PopulatorException {
+    if (source == null)
+      return null;
 
-		try {
-			DynamicFieldSlot source = modelService.findOneByUuid(uuid, DynamicFieldSlot.class);
-			if(source == null) {
-				return null;
-			}
-			
-			DynamicFieldSlotDto target = new DynamicFieldSlotDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+    try {
+      UserGroupDto target = new UserGroupDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
 
-			target.setName(source.getName());
-			target.setSort(source.getSort());
-			target.setDynamicField(populateDynamicField(source.getDynamicField()));
+      target.setName(source.getName());
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-	public DynamicFieldDto populateDynamicField(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+  public CompanyDto populateCompany(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-		try {
-			DynamicField source = modelService.findOneByUuid(uuid, DynamicField.class);
-			if(source == null) {
-				return null;
-			}
-			
-			DynamicFieldDto target = new DynamicFieldDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+    try {
+      Company source = modelService.findOneByUuid(uuid, Company.class);
+      if (source == null) {
+        return null;
+      }
 
-			target.setName(source.getName());
-			target.setRequired(source.getRequired());
-			target.setRule(source.getRule());
-			target.setType(source.getType());
-			target.setLabel(source.getLabel());
-			target.setGrid(source.getGrid());
+      CompanyDto target = new CompanyDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+      target.setName(source.getName());
 
-			target.setLanguage(populateLanguage(source.getLanguage()));
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-			for (UUID uuid1 : source.getEnumerations()) {
-				target.getEnumerations().add(populateEnumeration(uuid1));
-			}
+  public AddressDto populateAddress(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+    try {
+      Address source = modelService.findOneByUuid(uuid, Address.class);
+      if (source == null) {
+        return null;
+      }
 
-	public LanguageDto populateLanguage(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+      AddressDto target = new AddressDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+      target.setStreetName(source.getStreetName());
 
-		try {
-			Language source = modelService.findOneByUuid(uuid, Language.class);
-			if(source == null) {
-				return null;
-			}
-			
-			LanguageDto target = new LanguageDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-			target.setName(source.getName());
-			target.setSort(source.getSort());
-			target.setActive(source.getActive());
+  public DynamicFieldSlotDto populateDynamicFieldSlot(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+    try {
+      DynamicFieldSlot source = modelService.findOneByUuid(uuid, DynamicFieldSlot.class);
+      if (source == null) {
+        return null;
+      }
 
-	public EnumerationDto populateEnumeration(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+      DynamicFieldSlotDto target = new DynamicFieldSlotDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
 
-		try {
-			Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
-			if(source == null) {
-				return null;
-			}
-			
-			EnumerationDto target = new EnumerationDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+      target.setName(source.getName());
+      target.setSort(source.getSort());
+      target.setDynamicField(populateDynamicField(source.getDynamicField()));
 
-			target.setName(source.getName());
-			target.setSort(source.getSort());
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
-	
-	public MediaDto populateMedia(UUID uuid) throws PopulatorException {
-		if (uuid == null)
-			return null;
+  public DynamicFieldDto populateDynamicField(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
 
-		try {
-			Media source = modelService.findOneByUuid(uuid, Media.class);
-			if(source == null) {
-				return null;
-			}
-			
-			MediaDto target = new MediaDto();
-			target.setUuid(source.getUuid());
-			target.setId(source.getId());
-			target.setCreatedDate(source.getCreatedDate());
-			target.setLastModifiedDate(source.getLastModifiedDate());
-			target.setCreatedBy(populateAuditor(source.getCreatedBy()));
-			target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+    try {
+      DynamicField source = modelService.findOneByUuid(uuid, DynamicField.class);
+      if (source == null) {
+        return null;
+      }
 
-			target.setFileName(source.getFileName());
-			target.setFileType(source.getFileType());
-			target.setFileSize(source.getFileSize() == null ? null : SizeUtils.humanReadableByteCount(source.getFileSize(), true));
-			target.setTitle(source.getTitle());
-			target.setCaption(source.getCaption());
-			target.setAltText(source.getAltText());
-			target.setDescription(source.getDescription());
-			target.setUrl(source.getUrl());
-			target.setFolder(source.getFolder());
+      DynamicFieldDto target = new DynamicFieldDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
 
-			return target;
-		} catch (Exception e) {
-			throw new PopulatorException(e.getMessage(), e);
-		}
-	}
+      target.setName(source.getName());
+      target.setRequired(source.getRequired());
+      target.setRule(source.getRule());
+      target.setType(source.getType());
+      target.setLabel(source.getLabel());
+      target.setGrid(source.getGrid());
+
+      target.setLanguage(populateLanguage(source.getLanguage()));
+
+      for (UUID uuid1 : source.getEnumerations()) {
+        target.getEnumerations().add(populateEnumeration(uuid1));
+      }
+
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
+
+  public LanguageDto populateLanguage(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
+
+    try {
+      Language source = modelService.findOneByUuid(uuid, Language.class);
+      if (source == null) {
+        return null;
+      }
+
+      LanguageDto target = new LanguageDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+
+      target.setName(source.getName());
+      target.setSort(source.getSort());
+      target.setActive(source.getActive());
+
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
+
+  public EnumerationDto populateEnumeration(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
+
+    try {
+      Enumeration source = modelService.findOneByUuid(uuid, Enumeration.class);
+      if (source == null) {
+        return null;
+      }
+
+      EnumerationDto target = new EnumerationDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+
+      target.setName(source.getName());
+      target.setSort(source.getSort());
+
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
+
+  public MediaDto populateMedia(UUID uuid) throws PopulatorException {
+    if (uuid == null)
+      return null;
+
+    try {
+      Media source = modelService.findOneByUuid(uuid, Media.class);
+      if (source == null) {
+        return null;
+      }
+
+      MediaDto target = new MediaDto();
+      target.setUuid(source.getUuid());
+      target.setId(source.getId());
+      target.setCreatedDate(source.getCreatedDate());
+      target.setLastModifiedDate(source.getLastModifiedDate());
+      target.setCreatedBy(populateAuditor(source.getCreatedBy()));
+      target.setLastModifiedBy(populateAuditor(source.getLastModifiedBy()));
+
+      target.setFileName(source.getFileName());
+      target.setFileType(source.getFileType());
+      target.setFileSize(source.getFileSize() == null ? null
+          : SizeUtils.humanReadableByteCount(source.getFileSize(), true));
+      target.setTitle(source.getTitle());
+      target.setCaption(source.getCaption());
+      target.setAltText(source.getAltText());
+      target.setDescription(source.getDescription());
+      target.setUrl(source.getUrl());
+      target.setFolder(source.getFolder());
+
+      return target;
+    } catch (Exception e) {
+      throw new PopulatorException(e.getMessage(), e);
+    }
+  }
 }

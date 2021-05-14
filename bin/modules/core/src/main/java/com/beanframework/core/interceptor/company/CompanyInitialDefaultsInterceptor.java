@@ -7,9 +7,10 @@ import com.beanframework.user.domain.Company;
 
 public class CompanyInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Company> {
 
-	@Override
-	public void onInitialDefaults(Company model, InterceptorContext context) throws InterceptorException {
-		super.onInitialDefaults(model, context);
-	}
+  @Override
+  public void onInitialDefaults(Company model, InterceptorContext context)
+      throws InterceptorException {
+    super.onInitialDefaults(model, context);
+  }
 
 }

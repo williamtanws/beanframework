@@ -5,10 +5,11 @@ import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.interceptor.AbstractLoadInterceptor;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 
-public class DynamicFieldTemplateLoadInterceptor extends AbstractLoadInterceptor<DynamicFieldTemplate> {
+public class DynamicFieldTemplateLoadInterceptor
+    extends AbstractLoadInterceptor<DynamicFieldTemplate> {
 
-	@Override
-	public void onLoad(DynamicFieldTemplate model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onLoad(DynamicFieldTemplate model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

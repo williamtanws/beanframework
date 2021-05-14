@@ -7,9 +7,9 @@ import com.beanframework.internationalization.domain.Language;
 
 public class LanguageValidateInterceptor extends AbstractValidateInterceptor<Language> {
 
-	@Override
-	public void onValidate(Language model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Language model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 }

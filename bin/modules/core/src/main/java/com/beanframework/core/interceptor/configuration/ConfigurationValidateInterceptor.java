@@ -7,10 +7,11 @@ import com.beanframework.configuration.domain.Configuration;
 
 public class ConfigurationValidateInterceptor extends AbstractValidateInterceptor<Configuration> {
 
-	@Override
-	public void onValidate(Configuration model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Configuration model, InterceptorContext context)
+      throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 
 }

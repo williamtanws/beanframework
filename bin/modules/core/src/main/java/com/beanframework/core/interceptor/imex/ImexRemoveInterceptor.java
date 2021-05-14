@@ -7,8 +7,7 @@ import com.beanframework.imex.domain.Imex;
 
 public class ImexRemoveInterceptor extends AbstractRemoveInterceptor<Imex> {
 
-	@Override
-	public void onRemove(Imex model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onRemove(Imex model, InterceptorContext context) throws InterceptorException {}
 
 }

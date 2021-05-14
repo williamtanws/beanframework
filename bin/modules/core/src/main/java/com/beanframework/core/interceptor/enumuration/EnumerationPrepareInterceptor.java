@@ -7,9 +7,9 @@ import com.beanframework.enumuration.domain.Enumeration;
 
 public class EnumerationPrepareInterceptor extends AbstractPrepareInterceptor<Enumeration> {
 
-	@Override
-	public void onPrepare(Enumeration model, InterceptorContext context) throws InterceptorException {
-		super.onPrepare(model, context);
-	}
+  @Override
+  public void onPrepare(Enumeration model, InterceptorContext context) throws InterceptorException {
+    super.onPrepare(model, context);
+  }
 
 }

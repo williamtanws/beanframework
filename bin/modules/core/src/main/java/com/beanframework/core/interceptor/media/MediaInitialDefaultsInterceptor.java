@@ -7,8 +7,8 @@ import com.beanframework.media.domain.Media;
 
 public class MediaInitialDefaultsInterceptor extends AbstractInitialDefaultsInterceptor<Media> {
 
-	@Override
-	public void onInitialDefaults(Media model, InterceptorContext context) throws InterceptorException {
-	}
+  @Override
+  public void onInitialDefaults(Media model, InterceptorContext context)
+      throws InterceptorException {}
 
 }

@@ -29,7 +29,7 @@
 								var defaults = config.$get();
 								config
 										.set({
-											appName : '/',
+											appName : '',
 											multiLang: true,
 											listUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.list')}]]*/,
 											uploadUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.upload')}]]*/,
@@ -44,23 +44,25 @@
 											editUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.edit')}]]*/,
 											compressUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.compress')}]]*/,
 											extractUrl : /*[[${@environment.getProperty('path.api.filemanager.angularfilemanager.extract')}]]*/,
-											pickCallback : function(item) {
-												var msg = 'Picked %s "%s" for external use'
-														.replace('%s',
-																item.type)
-														.replace('%s',
-																item.fullPath());
-												window.alert(msg);
-											},
-
 											allowedActions : angular
 													.extend(
 															defaults.allowedActions,
 															{
-																pickFiles : false,
-																pickFolders : false,
-																downloadMultiple : false,
-																changePermissions : true
+																download: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																downloadMultiple: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																preview: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
+																rename: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																move: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																copy: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																edit: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																changePermissions: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')') and Windows == false}]]*/,
+																compress: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																extract: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																remove: /*[[${#authorization.expression('hasAuthority(''filemanager_delete'')')}]]*/,
+																createFolder: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																compressChooseName: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
+																upload: /*[[${#authorization.expression('hasAuthority(''filemanager_create'')')}]]*/
+																
 															}),
 											tplPath : /*[[${@environment.getProperty('path.filemanager.angularfilemanager.page')}]]*/
 										});
@@ -69,6 +71,6 @@
 </script>
 </head>
 <body class="ng-cloak">
-	<angular-filemanager></angular-filemanager>
+	<angular-filemanager [language]="'fr'"></angular-filemanager>
 </body>
 </html>

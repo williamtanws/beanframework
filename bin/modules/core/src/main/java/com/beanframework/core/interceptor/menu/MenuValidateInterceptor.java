@@ -7,10 +7,10 @@ import com.beanframework.menu.domain.Menu;
 
 public class MenuValidateInterceptor extends AbstractValidateInterceptor<Menu> {
 
-	@Override
-	public void onValidate(Menu model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Menu model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 
 }

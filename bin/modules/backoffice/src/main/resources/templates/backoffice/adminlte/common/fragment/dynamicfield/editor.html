@@ -2,17 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body>
 	<th:block th:fragment="input (name, value, required)">
-		<textarea th:id="'editor'+${uuid}" rows="10" cols="80" class="form-control" th:name="${name}" th:text="${value}" th:required="${required}"></textarea>
-		<script th:inline="javascript">
-			/*<![CDATA[*/
-			var editorId = /*[[${uuid}]]*/;
-			editorId = 'editor'+ editorId;
-							
-			CKEDITOR.replace(editorId, {
-				customConfig: '/static/backoffice/ckeditor/config.js'
-			});
-			/*]]>*/
-		</script>
+		<textarea th:id="'editor'+${uuid}" rows="10" cols="80" class="form-control editor" th:name="${name}" th:text="${value}" th:required="${required}"></textarea>
 	</th:block>
 	<th:block th:fragment="output (name, value, required)">
 		<br>

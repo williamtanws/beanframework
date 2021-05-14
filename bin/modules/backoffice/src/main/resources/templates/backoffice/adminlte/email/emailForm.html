@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{backoffice/adminlte/common/layout/layout}">
 <head>
 <title th:utext="#{module.email}"></title>
-<!-- summernote 
-<link rel="stylesheet" type="text/css" th:href="@{/static/adminlte/plugins/summernote/summernote-bs4.min.css}">-->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 </head>
 <body>
 	<th:block layout:fragment="content">
@@ -108,14 +105,14 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="text" th:text="#{module.email.text}"></label>
-										<textarea class="form-control" name="text" th:text="*{text}"></textarea>
+										<textarea class="form-control editor" name="text" th:text="*{text}"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="html" th:text="#{module.email.html}"></label>
-										<textarea class="form-control" name="html" th:text="*{html}" id="html"></textarea>
+										<textarea class="form-control editor" name="html" th:text="*{html}"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
@@ -147,18 +144,13 @@
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${emailDto.uuid}, deleteUrl=@{${@environment.getProperty('path.email.form')}} )}"></th:block>
 	</th:block>
 	<th:block layout:fragment="js">
-		<!-- Summernote -->
-		<script th:src="@{/static/adminlte/plugins/summernote/summernote-bs4.min.js}"></script>
+
 		<script th:inline="javascript">
 			/*<![CDATA[*/
-				
 			$(document).ready(function () {
-				$(function () {
-					$('#html').summernote();
-				});
-				
 				$('#form-save').validate(
 					{
+						ignore: ":hidden, [contenteditable='true']:not([name])",
 						rules: {
 							id: {
 								required: true,

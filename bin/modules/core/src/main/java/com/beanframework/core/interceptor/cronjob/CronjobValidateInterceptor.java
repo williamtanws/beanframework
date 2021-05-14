@@ -7,10 +7,10 @@ import com.beanframework.cronjob.domain.Cronjob;
 
 public class CronjobValidateInterceptor extends AbstractValidateInterceptor<Cronjob> {
 
-	@Override
-	public void onValidate(Cronjob model, InterceptorContext context) throws InterceptorException {
-		super.onValidate(model, context);
+  @Override
+  public void onValidate(Cronjob model, InterceptorContext context) throws InterceptorException {
+    super.onValidate(model, context);
 
-	}
+  }
 
 }

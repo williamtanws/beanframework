@@ -2,13 +2,11 @@ package com.beanframework.core.converter.entity.csv;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.beanframework.common.converter.EntityCsvConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
@@ -20,77 +18,81 @@ import com.beanframework.user.domain.UserRight;
 @Component
 public class UserRightCsvEntityConverter implements EntityCsvConverter<UserRightCsv, UserRight> {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger(UserRightCsvEntityConverter.class);
+  protected static Logger LOGGER = LoggerFactory.getLogger(UserRightCsvEntityConverter.class);
 
-	@Autowired
-	private ModelService modelService;
+  @Autowired
+  private ModelService modelService;
 
-	@Override
-	public UserRight convert(UserRightCsv source) throws ConverterException {
+  @Override
+  public UserRight convert(UserRightCsv source) throws ConverterException {
 
-		try {
+    try {
 
-			if (StringUtils.isNotBlank(source.getId())) {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(UserRight.ID, source.getId());
+      if (StringUtils.isNotBlank(source.getId())) {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(UserRight.ID, source.getId());
 
-				UserRight prototype = modelService.findOneByProperties(properties, UserRight.class);
+        UserRight prototype = modelService.findOneByProperties(properties, UserRight.class);
 
-				if (prototype != null) {
+        if (prototype != null) {
 
-					return convert(source, prototype);
-				}
-			}
-			return convert(source, modelService.create(UserRight.class));
+          return convert(source, prototype);
+        }
+      }
+      return convert(source, modelService.create(UserRight.class));
 
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage(), e);
-		}
-	}
+    } catch (Exception e) {
+      throw new ConverterException(e.getMessage(), e);
+    }
+  }
 
-	private UserRight convert(UserRightCsv source, UserRight prototype) throws ConverterException {
+  private UserRight convert(UserRightCsv source, UserRight prototype) throws ConverterException {
 
-		try {
-			if (StringUtils.isNotBlank(source.getId()))
-				prototype.setId(source.getId());
+    try {
+      if (StringUtils.isNotBlank(source.getId()))
+        prototype.setId(source.getId());
 
-			if (StringUtils.isNotBlank(source.getName()))
-				prototype.setName(source.getName());
+      if (StringUtils.isNotBlank(source.getName()))
+        prototype.setName(source.getName());
 
-			if (source.getSort() != null)
-				prototype.setSort(source.getSort());
+      if (source.getSort() != null)
+        prototype.setSort(source.getSort());
 
-			// Attributes
-			if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
-				String[] dynamicFieldSlots = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
+      // Attributes
+      if (StringUtils.isNotBlank(source.getDynamicFieldSlotIds())) {
+        String[] dynamicFieldSlots = source.getDynamicFieldSlotIds().split(ImportListener.SPLITTER);
 
-				if (dynamicFieldSlots != null) {
-					for (int i = 0; i < prototype.getAttributes().size(); i++) {
+        if (dynamicFieldSlots != null) {
+          for (int i = 0; i < prototype.getAttributes().size(); i++) {
 
-						for (String dynamicFieldSlot : dynamicFieldSlots) {
-							String dynamicFieldSlotId = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[0]);
-							String value = StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
+            for (String dynamicFieldSlot : dynamicFieldSlots) {
+              String dynamicFieldSlotId =
+                  StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[0]);
+              String value =
+                  StringUtils.stripToNull(dynamicFieldSlot.split(ImportListener.EQUALS)[1]);
 
-							Map<String, Object> properties = new HashMap<String, Object>();
-							properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
-							DynamicFieldSlot slot = modelService.findOneByProperties(properties, DynamicFieldSlot.class);
+              Map<String, Object> properties = new HashMap<String, Object>();
+              properties.put(DynamicFieldSlot.ID, dynamicFieldSlotId);
+              DynamicFieldSlot slot =
+                  modelService.findOneByProperties(properties, DynamicFieldSlot.class);
 
-							if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(slot.getUuid())) {
-								if (StringUtils.equals(StringUtils.stripToNull(value), prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
-									prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
-								}
-							}
-						}
-					}
-				}
-			}
+              if (prototype.getAttributes().get(i).getDynamicFieldSlot().equals(slot.getUuid())) {
+                if (StringUtils.equals(StringUtils.stripToNull(value),
+                    prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
+                  prototype.getAttributes().get(i).setValue(StringUtils.stripToNull(value));
+                }
+              }
+            }
+          }
+        }
+      }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ConverterException(e.getMessage(), e);
-		}
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ConverterException(e.getMessage(), e);
+    }
 
-		return prototype;
-	}
+    return prototype;
+  }
 
 }
