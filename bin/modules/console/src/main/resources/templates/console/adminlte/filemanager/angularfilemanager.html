@@ -48,20 +48,20 @@
 													.extend(
 															defaults.allowedActions,
 															{
-																download: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
-																downloadMultiple: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
-																preview: /*[[${#authorization.expression('hasAuthority(''filemanager_read'')')}]]*/,
-																rename: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																move: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																copy: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																edit: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																changePermissions: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')') and Windows == false}]]*/,
-																compress: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																extract: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																remove: /*[[${#authorization.expression('hasAuthority(''filemanager_delete'')')}]]*/,
-																createFolder: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																compressChooseName: /*[[${#authorization.expression('hasAuthority(''filemanager_update'')')}]]*/,
-																upload: /*[[${#authorization.expression('hasAuthority(''filemanager_create'')')}]]*/
+																download: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																downloadMultiple: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																preview: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																rename: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																move: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																copy: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																edit: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																changePermissions: /*[[${#authorization.expression('hasAuthority(''console_read'')') and Windows == false}]]*/,
+																compress: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																extract: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																remove: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																createFolder: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																compressChooseName: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/,
+																upload: /*[[${#authorization.expression('hasAuthority(''console_read'')')}]]*/
 																
 															}),
 											tplPath : /*[[${@environment.getProperty('path.filemanager.angularfilemanager.page')}]]*/

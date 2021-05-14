@@ -1,4 +1,4 @@
-package com.beanframework.backoffice;
+package com.beanframework.console;
 
 public class FilemanagerWebConstants {
 
@@ -46,18 +46,4 @@ public class FilemanagerWebConstants {
   }
 
   public static final String FILE_MANAGER_LOCATION = "${module.filemanager.location}";
-
-
-
-  public static interface FilemanagerPreAuthorizeEnum {
-    public static final String AUTHORITY_READ = "filemanager_read";
-    public static final String AUTHORITY_CREATE = "filemanager_create";
-    public static final String AUTHORITY_UPDATE = "filemanager_update";
-    public static final String AUTHORITY_DELETE = "filemanager_delete";
-
-    public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
-    public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
-    public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
-    public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
-  }
 }

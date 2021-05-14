@@ -24,7 +24,6 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,customer				,+,+,+,+
 ,employeegroup,vendor				,+,+,+,+
 ,employeegroup,auditor				,+,+,+,+
-,employeegroup,filemanager			,+,+,+,+
 ,employeegroup,email				,+,+,+,+
 ,employeegroup,media				,+,+,+,+
 ,employeegroup,site					,+,+,+,+
@@ -34,4 +33,3 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,imex					,+,+,+,+
 ,employeegroup,task					,+,+,+,+
 ,employeegroup,comment				,+,+,+,+
-,employeegroup,documentation		,,+,,
