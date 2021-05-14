@@ -30,8 +30,8 @@ import com.beanframework.common.data.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.api.AbstractResource;
 import com.beanframework.core.data.DataTableResponseData;
-import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuAttributeDto;
+import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.facade.MenuFacade;
 import com.beanframework.menu.domain.Menu;
 

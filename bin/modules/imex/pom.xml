@@ -29,10 +29,5 @@
 			<artifactId>media</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.beanframework</groupId>
-			<artifactId>cronjob</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 </project>

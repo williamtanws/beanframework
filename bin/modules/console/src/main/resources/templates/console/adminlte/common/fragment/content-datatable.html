@@ -193,8 +193,13 @@
 		        var formUrl = /*[[${formUrl}]]*/;
 				var modalForm = "#modal-form-"+tableId;
             	$("#form-id").text(': '+data.id);
-				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+data.uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
-		    	$(modalForm).modal('show');
+            	if(data.uuid != null){
+    				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?uuid="+data.uuid+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
+            	}
+            	else if(data.id != null){
+    				$(modalForm+' .modal-body').html("<iframe src='"+formUrl+"?id="+data.id+"' id='modal-form-iframe-"+tableId+"' height='100%' width='100%' scrolling='yes' frameborder='0'></iframe>");
+            	}
+            	$(modalForm).modal('show');
 		    });
 
 		    /*[/]*/

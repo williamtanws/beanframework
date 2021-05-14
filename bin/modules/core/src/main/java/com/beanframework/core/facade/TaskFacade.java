@@ -1,15 +1,15 @@
 package com.beanframework.core.facade;
 
-import org.flowable.task.api.Task;
 import org.springframework.data.domain.Page;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
+import com.beanframework.core.config.dto.TaskDto;
 
 public interface TaskFacade {
 
-  Task findOneById(String id) throws BusinessException;
+  TaskDto findOneById(String id) throws BusinessException;
 
-  Page<Task> findPage(DataTableRequest dataTableRequest);
+  Page<TaskDto> findPage(DataTableRequest dataTableRequest);
 
   int count();
 }

@@ -18,7 +18,7 @@
 
 	</th:block>
 	<th:block layout:fragment="js">
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='processdefinitionTable', columns=${#strings.arraySplit('id,name,deploymentId', ',')}, pageUrl=@{${@environment.getProperty('path.api.processdefinition')}}, formUrl=@{${@environment.getProperty('path.processdefinition.form')}}, addAuthority=false, selectAuthority=false )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='processdefinitionTable', columns=${#strings.arraySplit('id,name,deploymentId', ',')}, pageUrl=@{${@environment.getProperty('path.api.processdefinition')}}, formUrl=@{${@environment.getProperty('path.processdefinition.form')}}, addAuthority=false, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

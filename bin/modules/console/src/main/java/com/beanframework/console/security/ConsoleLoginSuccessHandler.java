@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.beanframework.console.ConsoleWebConstants;
 
 @Component
-public class ConsoleSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+public class ConsoleLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
   @Value(ConsoleWebConstants.Path.CONSOLE)
   private String PATH_CONSOLE;

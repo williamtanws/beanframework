@@ -33,3 +33,4 @@ INSERT_UPDATE UserAuthority,userGroupId,userPermissionId,create,read,update,dele
 ,employeegroup,imex					,+,+,+,+
 ,employeegroup,task					,+,+,+,+
 ,employeegroup,comment				,+,+,+,+
+,employeegroup,logentry				,+,+,+,+

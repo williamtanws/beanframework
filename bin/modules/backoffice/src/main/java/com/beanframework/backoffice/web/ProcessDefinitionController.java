@@ -2,7 +2,6 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 import javax.validation.Valid;
-import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.ProcessDefinitionWebConstants;
 import com.beanframework.backoffice.ProcessDefinitionWebConstants.ProcessDefinitionPreAuthorizeEnum;
+import com.beanframework.core.config.dto.ProcessDefinitionDto;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.ProcessDefinitionFacade;
 
@@ -31,7 +31,7 @@ public class ProcessDefinitionController extends AbstractController {
   @PreAuthorize(ProcessDefinitionPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = ProcessDefinitionWebConstants.Path.PROCESSDEFINITION)
   public String page(
-      @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinition processdefinition,
+      @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinitionDto processdefinition,
       Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
     return VIEW_PROCESSDEFINITION;
   }
@@ -39,7 +39,7 @@ public class ProcessDefinitionController extends AbstractController {
   @PreAuthorize(ProcessDefinitionPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = ProcessDefinitionWebConstants.Path.PROCESSDEFINITION_FORM)
   public String form(
-      @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinition processdefinition,
+      @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinitionDto processdefinition,
       Model model) throws Exception {
 
     processdefinition = processdefinitionFacade.findOneById(processdefinition.getId());

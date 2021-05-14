@@ -2,7 +2,6 @@ package com.beanframework.backoffice.web;
 
 import java.util.Map;
 import javax.validation.Valid;
-import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.TaskWebConstants;
 import com.beanframework.backoffice.TaskWebConstants.TaskPreAuthorizeEnum;
+import com.beanframework.core.config.dto.TaskDto;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.TaskFacade;
 
@@ -30,14 +30,14 @@ public class TaskController extends AbstractController {
 
   @PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = TaskWebConstants.Path.TASK)
-  public String page(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) Task task,
+  public String page(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) TaskDto task,
       Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
     return VIEW_TASK;
   }
 
   @PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = TaskWebConstants.Path.TASK_FORM)
-  public String form(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) Task task,
+  public String form(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) TaskDto task,
       Model model) throws Exception {
 
     task = taskFacade.findOneById(task.getId());

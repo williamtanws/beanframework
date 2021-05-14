@@ -12,10 +12,10 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.event.CronjobEvent;
 
 @Component
-public class CoreNotificationEventListener implements ApplicationListener<AbstractEvent> {
+public class NotificationEventListener implements ApplicationListener<AbstractEvent> {
 
   protected static final Logger LOGGER =
-      LoggerFactory.getLogger(CoreNotificationEventListener.class);
+      LoggerFactory.getLogger(NotificationEventListener.class);
 
   @Autowired
   private NotificationFacade notificationFacade;
@@ -25,9 +25,11 @@ public class CoreNotificationEventListener implements ApplicationListener<Abstra
 
     try {
       if (event instanceof CronjobEvent) {
+        CronjobEvent cronjobEvent = (CronjobEvent) event;
         NotificationDto dto = notificationFacade.createDto();
-        dto.setMessage(event.getMessage());
+        dto.setMessage(cronjobEvent.getMessage());
         dto.setType(Cronjob.class.getSimpleName());
+        dto.setParameters(cronjobEvent.getParameters());
         notificationFacade.create(dto);
       }
     } catch (Exception e) {

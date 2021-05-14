@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
-import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.data.MenuAttributeDto;
+import com.beanframework.core.data.MenuDto;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.domain.MenuAttribute;
 

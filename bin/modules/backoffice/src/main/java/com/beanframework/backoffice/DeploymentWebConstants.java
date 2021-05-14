@@ -20,7 +20,7 @@ public interface DeploymentWebConstants {
   }
 
   public interface ModelAttribute {
-    public static final String DEPLOYMENT = "deployment";
+    public static final String DEPLOYMENT = "deploymentDto";
   }
 
   public interface DeploymentPreAuthorizeEnum {

@@ -12,18 +12,9 @@ public abstract class AbstractEvent extends ApplicationEvent {
   }
 
   private static final long serialVersionUID = -2778412558080940884L;
-  private String icon;
+
   private String message;
-  private String type;
   Map<String, String> parameters = new HashMap<String, String>();
-
-  public String getIcon() {
-    return icon;
-  }
-
-  public void setIcon(String icon) {
-    this.icon = icon;
-  }
 
   public String getMessage() {
     return message;
@@ -31,14 +22,6 @@ public abstract class AbstractEvent extends ApplicationEvent {
 
   public void setMessage(String message) {
     this.message = message;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
   }
 
   public Map<String, String> getParameters() {

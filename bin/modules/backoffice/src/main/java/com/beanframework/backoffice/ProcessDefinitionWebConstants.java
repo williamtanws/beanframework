@@ -22,7 +22,7 @@ public interface ProcessDefinitionWebConstants {
   }
 
   public interface ModelAttribute {
-    public static final String PROCESSDEFINITION = "processdefinition";
+    public static final String PROCESSDEFINITION = "processdefinitionDto";
   }
 
   public interface ProcessDefinitionPreAuthorizeEnum {

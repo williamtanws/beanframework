@@ -6,7 +6,7 @@
 <body>
 	<th:block layout:fragment="content">
 		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper" th:with="id=#{module.common.id},name=#{module.deployment.name}">
+		<div class="content-wrapper" th:with="id=#{module.deployment.id},name=#{module.deployment.name}">
 
 			<!-- Header -->
 			<th:block th:insert="~{backoffice/adminlte/common/fragment/content-header :: title-menubreadcrumbs(title=#{module.deployment}) }"></th:block>
@@ -18,7 +18,7 @@
 
 	</th:block>
 	<th:block layout:fragment="js">
-		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='deploymentTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.deployment')}}, formUrl=@{${@environment.getProperty('path.deployment.form')}}, addAuthority=false, selectAuthority=false )}"></th:block>
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable :: js (tableId='deploymentTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.deployment')}}, formUrl=@{${@environment.getProperty('path.deployment.form')}}, addAuthority=false, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

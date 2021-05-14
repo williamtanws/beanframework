@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
-import com.beanframework.core.data.UserDto;
 import com.beanframework.core.data.UserAttributeDto;
+import com.beanframework.core.data.UserDto;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAttribute;
 

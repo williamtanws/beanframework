@@ -1,7 +1,6 @@
 package com.beanframework.backoffice.api;
 
 import javax.servlet.http.HttpServletRequest;
-import org.flowable.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +14,7 @@ import com.beanframework.backoffice.api.data.DeploymentDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.core.api.AbstractResource;
+import com.beanframework.core.config.dto.DeploymentDto;
 import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.facade.DeploymentFacade;
 
@@ -34,7 +34,7 @@ public class DeploymentResource extends AbstractResource {
     DataTableRequest dataTableRequest = new DataTableRequest();
     dataTableRequest.prepareDataTableRequest(request);
 
-    Page<Deployment> pagination = deploymentFacade.findPage(dataTableRequest);
+    Page<DeploymentDto> pagination = deploymentFacade.findPage(dataTableRequest);
 
     DataTableResponse<DataTableResponseData> dataTableResponse =
         new DataTableResponse<DataTableResponseData>();
@@ -42,7 +42,7 @@ public class DeploymentResource extends AbstractResource {
     dataTableResponse.setRecordsTotal(deploymentFacade.count());
     dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
 
-    for (Deployment dto : pagination.getContent()) {
+    for (DeploymentDto dto : pagination.getContent()) {
       DeploymentDataTableResponseData data = new DeploymentDataTableResponseData();
       data.setId(dto.getId());
       data.setName(dto.getName());

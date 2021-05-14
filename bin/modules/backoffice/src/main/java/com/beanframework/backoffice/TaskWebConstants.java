@@ -20,7 +20,7 @@ public interface TaskWebConstants {
   }
 
   public interface ModelAttribute {
-    public static final String TASK = "task";
+    public static final String TASK = "taskDto";
   }
 
   public interface TaskPreAuthorizeEnum {

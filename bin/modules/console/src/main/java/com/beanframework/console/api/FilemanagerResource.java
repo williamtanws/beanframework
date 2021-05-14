@@ -45,6 +45,8 @@ public class FilemanagerResource extends AbstractResource {
   @Value(FilemanagerWebConstants.FILE_MANAGER_LOCATION)
   public String STORAGE;
 
+  private static final SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
   private void checkDirectoryTraversalSecuirty(String parent, String child) throws Exception {
     File file = new File(parent, child);
     if (file.getCanonicalPath().startsWith(new File(parent).getCanonicalPath()) == false) {
@@ -69,8 +71,6 @@ public class FilemanagerResource extends AbstractResource {
       try (DirectoryStream<Path> directoryStream =
           Files.newDirectoryStream(Paths.get(STORAGE, path))) {
 
-        String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat dt = new SimpleDateFormat(DATE_FORMAT);
         for (Path pathObj : directoryStream) {
           // Retrieves file attribute
           BasicFileAttributes attrs = Files.readAttributes(pathObj, BasicFileAttributes.class);
