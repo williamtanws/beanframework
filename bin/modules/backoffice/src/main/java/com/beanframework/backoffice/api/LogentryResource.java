@@ -1,5 +1,6 @@
 package com.beanframework.backoffice.api;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -31,6 +32,8 @@ public class LogentryResource extends AbstractResource {
 
   @Autowired
   private LogentryFacade logentryFacade;
+
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, hh:mma");
 
   @PreAuthorize(LogentryPreAuthorizeEnum.HAS_READ)
   @RequestMapping(LogentryWebConstants.Path.Api.LOGENTRY_CHECKID)
@@ -79,6 +82,7 @@ public class LogentryResource extends AbstractResource {
       data.setUuid(dto.getUuid().toString());
       data.setType(dto.getType());
       data.setMessage(StringUtils.stripToEmpty(dto.getMessage()));
+      data.setCreatedDate(dto.getCreatedDate() != null ? sdf.format(dto.getCreatedDate()) : null);
       dataTableResponse.getData().add(data);
     }
     return dataTableResponse;

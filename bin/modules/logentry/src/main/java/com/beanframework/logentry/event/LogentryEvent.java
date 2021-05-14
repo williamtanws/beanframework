@@ -17,6 +17,11 @@ public class LogentryEvent extends AbstractEvent {
     setType(type);
   }
 
+  public LogentryEvent(Object source, LogentryType type, String message) {
+    super(source, message);
+    setType(type);
+  }
+
   public LogentryType getType() {
     return type;
   }

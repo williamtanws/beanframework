@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -44,12 +45,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
+import com.beanframework.logentry.LogentryType;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
-import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserAttribute;
+import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.event.AuthenticationEvent;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -89,6 +92,9 @@ public class UserServiceImpl implements UserService {
   @Value(UserConstants.Access.BACKOFFICE)
   private String ACCESS_BACKOFFICE;
 
+  @Autowired
+  private ApplicationEventPublisher applicationEventPublisher;
+
   @Transactional
   @Override
   public UsernamePasswordAuthenticationToken findAuthenticate(String id, String password)
@@ -105,10 +111,14 @@ public class UserServiceImpl implements UserService {
 
     // If account not exists in database
     if (user == null) {
+      applicationEventPublisher.publishEvent(
+          new AuthenticationEvent(user, LogentryType.LOGIN, "Not found for ID=" + id));
       throw new BadCredentialsException("Bad Credentials");
     }
 
     if (passwordEncoder.matches(password, user.getPassword()) == Boolean.FALSE) {
+      applicationEventPublisher.publishEvent(
+          new AuthenticationEvent(user, LogentryType.LOGIN, "Wrong password for ID=" + id));
       throw new BadCredentialsException("Bad Credentials");
     }
 

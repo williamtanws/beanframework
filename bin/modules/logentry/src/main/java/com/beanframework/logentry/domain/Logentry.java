@@ -1,5 +1,6 @@
 package com.beanframework.logentry.domain;
 
+import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -24,9 +25,10 @@ public class Logentry extends GenericEntity {
     super();
   }
 
-  public Logentry(UUID uuid, LogentryType type, String message) {
+  public Logentry(UUID uuid, Date createdDate, LogentryType type, String message) {
     super();
     setUuid(uuid);
+    setCreatedDate(createdDate);
     setType(type);
     setMessage(message);
   }

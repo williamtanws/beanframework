@@ -1,7 +1,8 @@
 package com.beanframework.logentry;
 
 public enum LogentryType {
-  CREATE("Create"), READ("Read"), UPDATE("Update"), DELETE("Delete"), AUTH("Auth");
+  CREATE("Create"), READ("Read"), UPDATE("Update"), DELETE("Delete"), LOGIN("Login"), LOGOUT(
+      "Logout");
 
   private String type;
 

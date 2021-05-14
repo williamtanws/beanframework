@@ -17,7 +17,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.security.ConsoleCsrfHeaderFilter;
 import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
-import com.beanframework.console.security.ConsoleSuccessHandler;
+import com.beanframework.console.security.ConsoleLoginSuccessHandler;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.security.UserAuthProvider;
 
@@ -60,7 +60,7 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
   private UserAuthProvider authProvider;
 
   @Autowired
-  private ConsoleSuccessHandler successHandler;
+  private ConsoleLoginSuccessHandler loginSuccessHandler;
 
   @Autowired
   private SessionRegistry sessionRegistry;
@@ -75,7 +75,7 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(MODULE_CONSOLE_PATH + "/**").hasAnyAuthority(ACCESS_CONSOLE).and()
         .addFilterAfter(csrfHeaderFilter(MODULE_CONSOLE_PATH), CsrfFilter.class).csrf()
         .csrfTokenRepository(csrfTokenRepository()).and().formLogin().loginPage(PATH_CONSOLE_LOGIN)
-        .successHandler(successHandler).failureUrl(PATH_CONSOLE_LOGIN + "?error")
+        .successHandler(loginSuccessHandler).failureUrl(PATH_CONSOLE_LOGIN + "?error")
         .usernameParameter(HTTP_USERNAME_PARAM).passwordParameter(HTTP_PASSWORD_PARAM).permitAll()
         .and().logout().logoutUrl(PATH_CONSOLE_LOGOUT)
         .logoutSuccessUrl(PATH_CONSOLE_LOGIN + "?logout").invalidateHttpSession(true)

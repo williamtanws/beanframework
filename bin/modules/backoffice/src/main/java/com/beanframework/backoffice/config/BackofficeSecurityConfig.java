@@ -16,8 +16,9 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.security.BackofficeCsrfHeaderFilter;
+import com.beanframework.backoffice.security.BackofficeLoginSuccessHandler;
+import com.beanframework.backoffice.security.BackofficeLogoutHandler;
 import com.beanframework.backoffice.security.BackofficeSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
-import com.beanframework.backoffice.security.BackofficeSuccessHandler;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.security.UserAuthProvider;
 
@@ -66,7 +67,10 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
   private UserAuthProvider authProvider;
 
   @Autowired
-  private BackofficeSuccessHandler successHandler;
+  private BackofficeLoginSuccessHandler loginSuccessHandler;
+
+  @Autowired
+  private BackofficeLogoutHandler logoutHandler;
 
   @Autowired
   private SessionRegistry sessionRegistry;
@@ -81,12 +85,13 @@ public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
         .hasAnyAuthority(ACCESS_BACKOFFICE).and()
         .addFilterAfter(csrfHeaderFilter(PATH_BACKOFFICE), CsrfFilter.class).csrf()
         .csrfTokenRepository(csrfTokenRepository()).and().formLogin()
-        .loginPage(PATH_BACKOFFICE_LOGIN).successHandler(successHandler)
+        .loginPage(PATH_BACKOFFICE_LOGIN).successHandler(loginSuccessHandler)
         .failureUrl(PATH_BACKOFFICE_LOGIN + "?error").usernameParameter(HTTP_USERNAME_PARAM)
         .passwordParameter(HTTP_PASSWORD_PARAM).permitAll().and().logout()
         .logoutUrl(PATH_BACKOFFICE_LOGOUT).logoutSuccessUrl(PATH_BACKOFFICE_LOGIN + "?logout")
-        .invalidateHttpSession(true).deleteCookies(BackofficeWebConstants.Cookie.REMEMBER_ME)
-        .permitAll().and().exceptionHandling().accessDeniedPage(PATH_BACKOFFICE_LOGIN + "?denied")
+        .addLogoutHandler(logoutHandler).invalidateHttpSession(true)
+        .deleteCookies(BackofficeWebConstants.Cookie.REMEMBER_ME).permitAll().and()
+        .exceptionHandling().accessDeniedPage(PATH_BACKOFFICE_LOGIN + "?denied")
         .authenticationEntryPoint(backofficeAuthenticationEntryPoint()).and().rememberMe()
         .rememberMeParameter(HTTP_REMEMBERME_PARAM).rememberMeCookieName(HTTP_REMEMBERME_COOKIENAME)
         .tokenValiditySeconds(HTTP_REMEMBERME_TOKENVALIDITYSECONDS).and().sessionManagement()

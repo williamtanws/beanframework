@@ -8,11 +8,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import org.apache.commons.lang3.StringUtils;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.common.specification.CommonSpecification;
 import com.beanframework.logentry.domain.Logentry;
+import com.beanframework.notification.domain.Notification;
 
 public class LogentrySpecification extends CommonSpecification {
   public static <T> AbstractSpecification<T> getPageSpecification(
@@ -22,7 +24,21 @@ public class LogentrySpecification extends CommonSpecification {
 
       @Override
       public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        return getPredicate(dataTableRequest, root, query, cb);
+        List<Predicate> predicates = new ArrayList<Predicate>();
+
+        String search = clean(dataTableRequest.getSearch());
+
+        if (StringUtils.isNotBlank(search)) {
+          predicates.add(cb.or(cb.like(root.get(Notification.TYPE), convertToLikePattern(search))));
+          predicates
+              .add(cb.or(cb.like(root.get(Notification.MESSAGE), convertToLikePattern(search))));
+        }
+
+        if (predicates.isEmpty()) {
+          return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        } else {
+          return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+        }
       }
 
       public String toString() {
@@ -33,6 +49,7 @@ public class LogentrySpecification extends CommonSpecification {
       public List<Selection<?>> toSelection(Root<T> root) {
         List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
         multiselect.add(root.get(Logentry.UUID));
+        multiselect.add(root.get(Logentry.CREATED_DATE));
         multiselect.add(root.get(Logentry.TYPE));
         multiselect.add(root.get(Logentry.MESSAGE));
         return multiselect;
