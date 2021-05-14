@@ -13,6 +13,7 @@ import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.domain.GenericEntity;
 import com.beanframework.common.specification.AbstractSpecification;
 import com.beanframework.common.specification.CommonSpecification;
+import com.beanframework.logentry.LogentryType;
 import com.beanframework.logentry.domain.Logentry;
 import com.beanframework.notification.domain.Notification;
 
@@ -29,7 +30,11 @@ public class LogentrySpecification extends CommonSpecification {
         String search = clean(dataTableRequest.getSearch());
 
         if (StringUtils.isNotBlank(search)) {
-          predicates.add(cb.or(cb.like(root.get(Notification.TYPE), convertToLikePattern(search))));
+          try {
+            predicates.add(cb.and(root.get(Logentry.TYPE).in(LogentryType.valueOf(search))));
+          } catch (Exception e) {
+            // Do nothing
+          }
           predicates
               .add(cb.or(cb.like(root.get(Notification.MESSAGE), convertToLikePattern(search))));
         }

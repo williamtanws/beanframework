@@ -1,5 +1,6 @@
 package com.beanframework.cronjob.listener;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.EntityManager;
@@ -152,8 +153,9 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
       jobException.addSuppressed(e);
     } finally {
       if (context.get(QuartzManager.CRONJOB_NOTIFICATION) == Boolean.TRUE) {
-        applicationEventPublisher.publishEvent(new CronjobEvent(cronjob, cronjob.getName() + ": "
-            + status.toString() + " with " + result.toString() + ". " + message.toString()));
+        applicationEventPublisher.publishEvent(new CronjobEvent(cronjob,
+            MessageFormat.format("{0}: status={1}, result={2}, message={3}", cronjob.getName(),
+                status.toString(), result.toString(), message.toString())));
       }
     }
   }
