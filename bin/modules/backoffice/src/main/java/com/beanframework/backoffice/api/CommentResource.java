@@ -34,6 +34,8 @@ public class CommentResource extends AbstractResource {
   @Autowired
   private CommentFacade commentFacade;
 
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy, hh:mma");
+
   @PreAuthorize(CommentPreAuthorizeEnum.HAS_READ)
   @RequestMapping(CommentWebConstants.Path.Api.COMMENT_CHECKID)
   public boolean checkId(Model model, @RequestParam Map<String, Object> requestParams)
@@ -92,8 +94,7 @@ public class CommentResource extends AbstractResource {
       }
 
       if (lastUpdatedDate != null)
-        data.setLastUpdatedDate(
-            new SimpleDateFormat("dd MMMM yyyy, hh:mma").format(lastUpdatedDate));
+        data.setLastUpdatedDate(sdf.format(lastUpdatedDate));
 
       dataTableResponse.getData().add(data);
     }

@@ -1,5 +1,6 @@
 package com.beanframework.cronjob.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,6 +16,8 @@ public class CronUtil {
   private String mDaysOfMonth;
   private String mMonths;
   private String mYears;
+
+  private SimpleDateFormat sdf = new SimpleDateFormat("MM");
 
   public CronUtil(Date pDate) {
     this.mDate = pDate;
@@ -34,7 +37,7 @@ public class CronUtil {
     String days = String.valueOf(mCal.get(Calendar.DAY_OF_MONTH));
     this.mDaysOfMonth = days;
 
-    String months = new java.text.SimpleDateFormat("MM").format(mCal.getTime());
+    String months = sdf.format(mCal.getTime());
     this.mMonths = months;
 
     String years = String.valueOf(mCal.get(Calendar.YEAR));

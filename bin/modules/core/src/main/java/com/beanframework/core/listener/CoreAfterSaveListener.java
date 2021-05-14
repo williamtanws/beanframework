@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.exception.ListenerException;
@@ -16,6 +17,8 @@ import com.beanframework.core.facade.NotificationFacade;
 import com.beanframework.core.facade.UserFacade;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
+import com.beanframework.logentry.LogentryType;
+import com.beanframework.logentry.event.LogentryEvent;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.notification.NotificationConstants;
 import com.beanframework.user.domain.User;
@@ -41,8 +44,13 @@ public class CoreAfterSaveListener implements AfterSaveListener {
   @Autowired
   private NotificationFacade notificationFacade;
 
+  @Autowired
+  private ApplicationEventPublisher applicationEventPublisher;
+
   @Override
   public void afterSave(final Object model, final AfterSaveEvent event) throws ListenerException {
+    applicationEventPublisher.publishEvent(new LogentryEvent(model,
+        event.getType() == AfterSaveEvent.CREATE ? LogentryType.CREATE : LogentryType.UPDATE));
 
     try {
       if (model instanceof User) {

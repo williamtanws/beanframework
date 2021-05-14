@@ -16,6 +16,8 @@ public abstract class AbstractResource {
   @Autowired
   private LocaleMessageService localeMessageService;
 
+  private static final SimpleDateFormat dt = new SimpleDateFormat("dd MMM yy, HH:mm:ss");
+
   @SuppressWarnings("unchecked")
   public DataTableResponse<HistoryDataTableResponseData> historyDataTableResponse(
       DataTableRequest dataTableRequest, List<Object[]> history, int recordsTotal)
@@ -36,8 +38,7 @@ public abstract class AbstractResource {
       HistoryDataTableResponseData data = new HistoryDataTableResponseData();
       data.setEntity(object[0]);
       data.setRevisionId(String.valueOf(revisionDto.getId()));
-      data.setRevisionDate(
-          new SimpleDateFormat("dd MMM yy, HH:mm:ss").format(revisionDto.getRevisionDate()));
+      data.setRevisionDate(dt.format(revisionDto.getRevisionDate()));
       data.setRevisionType(revisionType.name());
       data.setRevisionTypeLocale(
           localeMessageService.getMessage("revision." + revisionType.name()));

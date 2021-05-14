@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.Populator;
 import com.beanframework.common.exception.PopulatorException;
-import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserPermissionAttributeDto;
+import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.user.domain.UserPermission;
 import com.beanframework.user.domain.UserPermissionAttribute;
 

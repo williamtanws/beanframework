@@ -17,6 +17,7 @@ INSERT_UPDATE Menu,id,name,sort,icon,path,target,enabled,parent,userGroupIds,dyn
 ,processdefinition		,Process Definition		,20,fas fa-stream		,/backoffice/workflow/processdefinition	,,true,workflow	,employeegroup				,menu_name_en=Process Definition;menu_name_cn=流程定义
 ,task					,Task					,30,fas fa-tasks		,/backoffice/workflow/task				,,true,workflow	,employeegroup				,menu_name_en=Task;menu_name_cn=任务
 ,imex					,Import Export			,110,fas fa-file-import	,/backoffice/imex					,,true,system		,employeegroup				,menu_name_en=Import Export;menu_name_cn=导入导出
+,logentry				,Log Entry				,120,fas fa-record-vinyl,/backoffice/logentry				,,true,system		,employeegroup				,menu_name_en=Log Entry;menu_name_cn=日志输入
 ,internationalization	,Internationalization	,20	,fas fa-globe		,									,,true,				,employeegroup				,menu_name_en=Internationalization;menu_name_cn=国际化
 ,language				,Language				,10	,fas fa-language	,/backoffice/language				,,true,internationalization		,employeegroup	,menu_name_en=Language;menu_name_cn=语言
 ,currency				,Currency				,20	,fas fa-money-bill-alt,/backoffice/currency				,,true,internationalization		,employeegroup	,menu_name_en=Currency;menu_name_cn=货币

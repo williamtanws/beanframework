@@ -2,13 +2,13 @@ package com.beanframework.core.config.interceptor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.beanframework.notification.domain.Notification;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.notification.NotificationInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.notification.NotificationLoadInterceptor;
 import com.beanframework.core.interceptor.notification.NotificationPrepareInterceptor;
 import com.beanframework.core.interceptor.notification.NotificationRemoveInterceptor;
 import com.beanframework.core.interceptor.notification.NotificationValidateInterceptor;
+import com.beanframework.notification.domain.Notification;
 
 @Configuration
 public class NotificationInterceptorConfig {

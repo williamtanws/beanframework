@@ -25,9 +25,11 @@ public class CoreNotificationEventListener implements ApplicationListener<Abstra
 
     try {
       if (event instanceof CronjobEvent) {
+        CronjobEvent cronjobEvent = (CronjobEvent) event;
         NotificationDto dto = notificationFacade.createDto();
-        dto.setMessage(event.getMessage());
+        dto.setMessage(cronjobEvent.getMessage());
         dto.setType(Cronjob.class.getSimpleName());
+        dto.setParameters(cronjobEvent.getParameters());
         notificationFacade.create(dto);
       }
     } catch (Exception e) {

@@ -19,6 +19,7 @@ public class NotificationJob implements Job {
   protected static final Logger LOGGER = LoggerFactory.getLogger(NotificationJob.class);
 
   public static final String HOURS = "hours";
+  public static final String DAYS = "days";
 
   @Autowired
   private NotificationFacade notificationFacade;
@@ -29,7 +30,7 @@ public class NotificationJob implements Job {
     try {
       int count = 0;
       if (context.getMergedJobDataMap().get(HOURS) == null
-          || context.getMergedJobDataMap().get(HOURS) == "0") {
+          && context.getMergedJobDataMap().get(DAYS) == null) {
 
         count = notificationFacade.removeAllNotification();
 
@@ -37,15 +38,21 @@ public class NotificationJob implements Job {
 
       } else {
 
-        String hours = (String) context.getMergedJobDataMap().get(HOURS);
-
         DateTime date = new DateTime();
-        date.minusHours(Integer.valueOf(hours));
+        if (context.getMergedJobDataMap().get(HOURS) != null) {
+          String hours = (String) context.getMergedJobDataMap().get(HOURS);
+          date.minusHours(Integer.valueOf(hours));
+          count = notificationFacade.removeOldNotificationByToDate(date.toDate());
+          context
+              .setResult("Removed " + count + " old notifications more than " + hours + " hour(s)");
+        } else if (context.getMergedJobDataMap().get(DAYS) != null) {
+          String days = (String) context.getMergedJobDataMap().get(DAYS);
+          date.minusDays(Integer.valueOf(days));
+          count = notificationFacade.removeOldNotificationByToDate(date.toDate());
+          context
+              .setResult("Removed " + count + " old notifications more than " + days + " day(s)");
+        }
 
-        count = notificationFacade.removeOldNotificationByToDate(date.toDate());
-
-        context
-            .setResult("Removed " + count + " old notifications more than " + hours + " hour(s)");
       }
       context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 

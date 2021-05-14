@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import com.beanframework.common.converter.EntityConverter;
 import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.core.data.UserPermissionAttributeDto;
+import com.beanframework.core.data.UserPermissionDto;
 import com.beanframework.user.domain.UserPermission;
 
 @Component

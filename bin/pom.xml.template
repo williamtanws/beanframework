@@ -30,6 +30,7 @@
         <module>modules/workflow</module>
         <module>modules/imex</module>
         <module>modules/notification</module>
+        <module>modules/logentry</module>
         <module>modules/core</module>
 		<module>modules/adminlte</module>
         <module>modules/console</module>
