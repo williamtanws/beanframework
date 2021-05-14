@@ -177,7 +177,14 @@ div.ck-editor__editable { min-height: 200px;}
 				}
 			}
 			
-
+		    $('.datetimepicker').daterangepicker({
+			      singleDatePicker: true,
+			      timePicker: true,
+			      timePickerIncrement: 30,
+			      locale: {
+			        format: 'MM/DD/YYYY hh:mm A'
+			      }
+			});
 
 			$(function() {
 				var allEditors = document.querySelectorAll('.editor');
