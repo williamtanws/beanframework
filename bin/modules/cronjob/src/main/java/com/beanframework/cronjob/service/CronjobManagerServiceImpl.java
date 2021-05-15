@@ -68,8 +68,21 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
 
   @Override
   public void updateJobAndSaveTrigger(Cronjob cronjob) throws Exception {
-    if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)
-        || cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.START)) {
+    if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.RUN_ONCE)) {
+      try {
+        quartzManager.deleteJob(cronjob);
+        quartzManager.startOrUpdateJob(cronjob);
+        cronjob.setStatus(CronjobEnum.Status.RUNNING);
+        cronjob.setResult(null);
+        cronjob.setMessage(null);
+
+      } catch (Exception e) {
+        cronjob.setStatus(CronjobEnum.Status.ABORTED);
+        cronjob.setResult(CronjobEnum.Result.ERROR);
+        cronjob.setMessage(e.toString());
+      }
+
+    } else if (cronjob.getJobTrigger().equals(CronjobEnum.JobTrigger.START)) {
       try {
         quartzManager.startOrUpdateJob(cronjob);
         cronjob.setStatus(CronjobEnum.Status.RUNNING);
