@@ -23,7 +23,7 @@ public class CronjobManagerServiceImpl implements CronjobManagerService {
   private ModelService modelService;
 
   @Autowired
-  private QuartzManager quartzManager;
+  private CronjobQuartzManager quartzManager;
 
   @Autowired
   private CronjobService cronjobService;

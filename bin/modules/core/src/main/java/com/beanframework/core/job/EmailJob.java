@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.beanframework.cronjob.service.QuartzManager;
+import com.beanframework.cronjob.service.CronjobQuartzManager;
 
 @Component
 @DisallowConcurrentExecution
@@ -47,10 +47,10 @@ public class EmailJob implements Job {
           new MessageFormat("{0} sent, {1} failed").format(new Object[] {sentEmail, failedEmail}));
 
       if (sentEmail > 0 || failedEmail > 0) {
-        context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+        context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
       }
     } catch (Exception e) {
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
       LOGGER.error(e.getMessage(), e);
       throw new JobExecutionException(e.getMessage(), e);
     }

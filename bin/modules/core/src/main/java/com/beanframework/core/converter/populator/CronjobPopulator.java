@@ -33,6 +33,7 @@ public class CronjobPopulator extends AbstractPopulator<Cronjob, CronjobDto>
       target.setLastStartExecutedDate(source.getLastStartExecutedDate());
       target.setLastFinishExecutedDate(source.getLastFinishExecutedDate());
       target.setParameters(source.getParameters());
+      target.setUser(populateUser(source.getUser()));
     } catch (Exception e) {
       throw new PopulatorException(e.getMessage(), e);
     }

@@ -154,6 +154,15 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
+										<label for="owner" th:text="#{module.cronjob.user}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.user.name}">
+											<th:block
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.cronjob.user.select}, tableId='selectedUserDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
 										<label for="name" th:text="#{module.common.parameters}"></label>
 										<th:block th:with="key=#{module.common.key}, value=#{module.common.value}">
 											<th:block
@@ -871,6 +880,8 @@
 			
 		    /*]]>*/
 		</script>
+		<th:block
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedUserDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${cronjobDto.user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
 		<th:block
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js (tableId='parameterDataTable', columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=${cronjobDto.parameters}, selectedItemNames='selectedParameterKeys', selectedItemValues='selectedParameterValues' )}"></th:block>
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js-add (tableId='parameterDataTable')}"></th:block>

@@ -294,7 +294,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser() throws Exception {
+  public void setCurrentUser(User model) {
+    UsernamePasswordAuthenticationToken authentication =
+        new UsernamePasswordAuthenticationToken(model, model.getPassword());
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
+
+  @Override
+  public User getCurrentUser() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth != null) {

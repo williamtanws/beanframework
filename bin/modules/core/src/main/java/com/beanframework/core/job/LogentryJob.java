@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.beanframework.core.facade.LogentryFacade;
-import com.beanframework.cronjob.service.QuartzManager;
+import com.beanframework.cronjob.service.CronjobQuartzManager;
 
 @Component
 @DisallowConcurrentExecution
@@ -26,7 +26,6 @@ public class LogentryJob implements Job {
 
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
-
     try {
       int count = 0;
       if (context.getMergedJobDataMap().get(HOURS) == null
@@ -41,22 +40,22 @@ public class LogentryJob implements Job {
         DateTime date = new DateTime();
         if (context.getMergedJobDataMap().get(HOURS) != null) {
           String hours = (String) context.getMergedJobDataMap().get(HOURS);
-          date.minusHours(Integer.valueOf(hours));
+          date = date.minusHours(Integer.valueOf(hours));
           count = notificationFacade.removeOldLogentryByToDate(date.toDate());
           context
               .setResult("Removed " + count + " old log entries more than " + hours + " hour(s)");
         } else if (context.getMergedJobDataMap().get(DAYS) != null) {
           String days = (String) context.getMergedJobDataMap().get(DAYS);
-          date.minusDays(Integer.valueOf(days));
+          date = date.minusDays(Integer.valueOf(days));
           count = notificationFacade.removeOldLogentryByToDate(date.toDate());
           context.setResult("Removed " + count + " old log entries more than " + days + " day(s)");
         }
 
       }
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 
     } catch (Exception e) {
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
       LOGGER.error(e.getMessage(), e);
       throw new JobExecutionException(e.getMessage(), e);
     }

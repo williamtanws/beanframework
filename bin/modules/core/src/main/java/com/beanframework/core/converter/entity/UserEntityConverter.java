@@ -136,14 +136,10 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
 
       if (prototypeParameters.isEmpty()) {
         prototype.getParameters().clear();
-      } else {
-
-        for (Map.Entry<String, String> entry : prototypeParameters.entrySet()) {
-          prototype.getParameters().put(entry.getKey(), entry.getValue());
-        }
       }
 
       if (source.getParameters().equals(prototypeParameters) == false) {
+        prototype.setParameters(prototypeParameters);
         prototype.setLastModifiedDate(lastModifiedDate);
       }
 

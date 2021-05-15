@@ -13,7 +13,9 @@ public interface UserService {
 
   UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception;
 
-  User getCurrentUser() throws Exception;
+  void setCurrentUser(User model);
+
+  User getCurrentUser();
 
   User updatePrincipal(User model);
 
