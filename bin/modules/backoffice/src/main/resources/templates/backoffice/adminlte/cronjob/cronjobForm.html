@@ -317,16 +317,16 @@
 							<div class="tab-pane fade" id="cron-tabs-daily" role="tabpanel" aria-labelledby="cron-tabs-daily-tab">
 								<div style="padding: 15px">
 									<input type="radio" value="1" name="DailyRadio" checked="checked">
-									&nbsp;Every&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
 									<input id="DaysInput" type="text" value="1" class="form-control" style="width: 40px; display: inline">
-									&nbsp;day(s)
+									&nbsp;<span th:text="#{module.cronjob.cron.every.days}"></span>
 								</div>
 								<div style="padding: 15px">
 									<input type="radio" value="2" name="DailyRadio">
-									&nbsp;Every week day&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.every.weekday}"></span>&nbsp;
 								</div>
 								<div style="padding: 15px">
-									Start time&nbsp;
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
 									<select id="DailyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
 										<option value="0">00</option>
 										<option value="1">01</option>
@@ -420,36 +420,36 @@
 							<div class="tab-pane fade" id="cron-tabs-weekly" role="tabpanel" aria-labelledby="cron-tabs-weekly-tab">
 								<div style="padding: 15px">
 									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="SUN">
+										<span th:text="#{module.cronjob.cron.Sunday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="MON">
-										Monday
+										<span th:text="#{module.cronjob.cron.Monday}"></span>
 									</label>
 									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="TUE">
-										Tuesday
+										<span th:text="#{module.cronjob.cron.Tuesday}"></span>
 									</label>
 									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="WED">
-										Wednesday
+										<span th:text="#{module.cronjob.cron.Wednesday}"></span>
 									</label>
 									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="THU">
-										Thursday
+										<span th:text="#{module.cronjob.cron.Thursday}"></span>
 									</label>
 									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="FRI">
-										Friday
+										<span th:text="#{module.cronjob.cron.Friday}"></span>
 									</label>
 									<label class="checkbox-inline" style="margin-right: 5px">
 										<input type="checkbox" value="SAT">
-										Saturday
-									</label>
-									<label class="checkbox-inline" style="margin-right: 5px">
-										<input type="checkbox" value="SUN">
-										Sunday
+										<span th:text="#{module.cronjob.cron.Saturday}"></span>
 									</label>
 								</div>
 								<div style="padding: 15px">
-									Start time&nbsp;
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
 									<select id="WeeklyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
 										<option value="0">00</option>
 										<option value="1">01</option>
@@ -553,19 +553,19 @@
 									<input type="radio" value="2" name="MonthlyRadio">
 									&nbsp;
 									<select id="WeekDay" class="form-control day-order-in-month" style="width: 80px; display: inline; margin-right: 5px;">
-										<option value="1" th:text="${module.cronjob.cron.first}"></option>
-										<option value="2" th:text="${module.cronjob.cron.second}"></option>
-										<option value="3" th:text="${module.cronjob.cron.third}"></option>
-										<option value="4" th:text="${module.cronjob.cron.fourth}"></option>
+										<option value="1" th:text="#{module.cronjob.cron.first}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.second}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.third}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.fourth}"></option>
 									</select>
 									<select id="DayInWeekOrder" class="form-control week-days" style="width: 100px; display: inline">
-										<option value="SUN" th:text="${module.cronjob.cron.sunday}"></option>
-										<option value="MON" th:text="${module.cronjob.cron.monday}"></option>
-										<option value="TUE" th:text="${module.cronjob.cron.tuesday}"></option>
-										<option value="WED" th:text="${module.cronjob.cron.wednesday}"></option>
-										<option value="THU" th:text="${module.cronjob.cron.thursday}"></option>
-										<option value="FRI" th:text="${module.cronjob.cron.friday}"></option>
-										<option value="SAT" th:text="${module.cronjob.cron.saturday}"></option>
+										<option value="SUN" th:text="#{module.cronjob.cron.Sunday}"></option>
+										<option value="MON" th:text="#{module.cronjob.cron.Monday}"></option>
+										<option value="TUE" th:text="#{module.cronjob.cron.Tuesday}"></option>
+										<option value="WED" th:text="#{module.cronjob.cron.Wednesday}"></option>
+										<option value="THU" th:text="#{module.cronjob.cron.Thursday}"></option>
+										<option value="FRI" th:text="#{module.cronjob.cron.Friday}"></option>
+										<option value="SAT" th:text="#{module.cronjob.cron.Saturday}"></option>
 									</select>
 									&nbsp;<span th:text="#{module.cronjob.cron.ofevery}"></span>&nbsp;
 									<input id="EveryMonthInput" type="text" class="form-control" value="1" style="width: 40px; display: inline;">
@@ -667,60 +667,60 @@
 							<div class="tab-pane fade" id="cron-tabs-yearly" role="tabpanel" aria-labelledby="cron-tabs-yearly-tab">
 								<div style="padding: 15px">
 									<input type="radio" value="1" name="YearlyRadio" checked="checked">
-									&nbsp;Every&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
 									<select id="MonthsOfYear" class="form-control months" style="width: 150px; display: inline">
-										<option value="1">January</option>
-										<option value="2">February</option>
-										<option value="3">March</option>
-										<option value="4">April</option>
-										<option value="5">May</option>
-										<option value="6">June</option>
-										<option value="7">July</option>
-										<option value="8">August</option>
-										<option value="9">September</option>
-										<option value="10">October</option>
-										<option value="11">Novermber</option>
-										<option value="12">December</option>
+										<option value="1" th:text="#{module.cronjob.cron.January}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.February}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.March}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.April}"></option>
+										<option value="5" th:text="#{module.cronjob.cron.May}"></option>
+										<option value="6" th:text="#{module.cronjob.cron.June}"></option>
+										<option value="7" th:text="#{module.cronjob.cron.July}"></option>
+										<option value="8" th:text="#{module.cronjob.cron.August}"></option>
+										<option value="9" th:text="#{module.cronjob.cron.September}"></option>
+										<option value="10" th:text="#{module.cronjob.cron.October}"></option>
+										<option value="11" th:text="#{module.cronjob.cron.Novermber}"></option>
+										<option value="12" th:text="#{module.cronjob.cron.December}"></option>
 									</select>
-									&nbsp;in day&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.inday}"></span>&nbsp;
 									<input id="YearInput" type="text" class="form-control" value="1" style="width: 40px; display: inline;">
 								</div>
 								<div style="padding: 15px">
 									<input type="radio" value="2" name="YearlyRadio">
-									&nbsp;The&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.the}"></span>&nbsp;
 									<select id="DayOrderInYear" class="form-control day-order-in-month" style="width: 90px; display: inline; margin-right: 5px;">
-										<option value="1">First</option>
-										<option value="2">Second</option>
-										<option value="3">Third</option>
-										<option value="4">Fourth</option>
+										<option value="1" th:text="#{module.cronjob.cron.first}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.second}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.third}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.fourth}"></option>
 									</select>
 									<select id="DayWeekForYear" class="form-control week-days" style="width: 100px; display: inline">
-										<option value="MON">Monday</option>
-										<option value="TUE">Tuesday</option>
-										<option value="WED">Wednesday</option>
-										<option value="THU">Thursday</option>
-										<option value="FRI">Friday</option>
-										<option value="SAT">Saturday</option>
-										<option value="SUN">Sunday</option>
+										<option value="SUN" th:text="#{module.cronjob.cron.Sunday}"></option>
+										<option value="MON" th:text="#{module.cronjob.cron.Monday}"></option>
+										<option value="TUE" th:text="#{module.cronjob.cron.Tuesday}"></option>
+										<option value="WED" th:text="#{module.cronjob.cron.Wednesday}"></option>
+										<option value="THU" th:text="#{module.cronjob.cron.Thursday}"></option>
+										<option value="FRI" th:text="#{module.cronjob.cron.Friday}"></option>
+										<option value="SAT" th:text="#{module.cronjob.cron.Saturday}"></option>
 									</select>
-									&nbsp;of&nbsp;
+									&nbsp;<span th:text="#{module.cronjob.cron.of}"></span>&nbsp;
 									<select id="MonthsOfYear2" class="form-control months" style="width: 110px; display: inline">
-										<option value="1">January</option>
-										<option value="2">February</option>
-										<option value="3">March</option>
-										<option value="4">April</option>
-										<option value="5">May</option>
-										<option value="6">June</option>
-										<option value="7">July</option>
-										<option value="8">August</option>
-										<option value="9">September</option>
-										<option value="10">October</option>
-										<option value="11">Novermber</option>
-										<option value="12">December</option>
+										<option value="1" th:text="#{module.cronjob.cron.January}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.February}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.March}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.April}"></option>
+										<option value="5" th:text="#{module.cronjob.cron.May}"></option>
+										<option value="6" th:text="#{module.cronjob.cron.June}"></option>
+										<option value="7" th:text="#{module.cronjob.cron.July}"></option>
+										<option value="8" th:text="#{module.cronjob.cron.August}"></option>
+										<option value="9" th:text="#{module.cronjob.cron.September}"></option>
+										<option value="10" th:text="#{module.cronjob.cron.October}"></option>
+										<option value="11" th:text="#{module.cronjob.cron.Novermber}"></option>
+										<option value="12" th:text="#{module.cronjob.cron.December}"></option>
 									</select>
 								</div>
 								<div style="padding: 15px">
-									Start time&nbsp;
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
 									<select id="YearlyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
 										<option value="0">00</option>
 										<option value="1">01</option>
