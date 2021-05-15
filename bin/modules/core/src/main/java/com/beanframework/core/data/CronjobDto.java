@@ -60,10 +60,14 @@ public class CronjobDto extends GenericDto {
 
   private Map<String, String> parameters = new HashMap<String, String>();
 
+  private UserDto user;
+
   @JsonIgnore
   private String[] selectedParameterKeys;
   @JsonIgnore
   private String[] selectedParameterValues;
+  @JsonIgnore
+  private String selectedUserUuid;
 
   public String getName() {
     return name;
@@ -200,5 +204,23 @@ public class CronjobDto extends GenericDto {
   public void setSelectedParameterValues(String[] selectedParameterValues) {
     this.selectedParameterValues = selectedParameterValues;
   }
+
+  public UserDto getUser() {
+    return user;
+  }
+
+  public void setUser(UserDto user) {
+    this.user = user;
+  }
+
+  public String getSelectedUserUuid() {
+    return selectedUserUuid;
+  }
+
+  public void setSelectedUserUuid(String selectedUserUuid) {
+    this.selectedUserUuid = selectedUserUuid;
+  }
+
+
 
 }

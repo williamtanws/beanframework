@@ -23,9 +23,9 @@ import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
 
 @Component
-public class QuartzManager {
+public class CronjobQuartzManager {
 
-  protected static final Logger LOGGER = LoggerFactory.getLogger(QuartzManager.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(CronjobQuartzManager.class);
 
   @Autowired
   private SchedulerFactoryBean schedulerFactoryBean;

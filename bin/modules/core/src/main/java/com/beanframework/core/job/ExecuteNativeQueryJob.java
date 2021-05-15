@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.CsvUtils;
-import com.beanframework.cronjob.service.QuartzManager;
+import com.beanframework.cronjob.service.CronjobQuartzManager;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
 
@@ -68,10 +68,10 @@ public class ExecuteNativeQueryJob implements Job {
         context.setResult("Updated " + count + " entity(s)");
       }
 
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 
     } catch (Exception e) {
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
       LOGGER.error(e.getMessage(), e);
       throw new JobExecutionException(e.getMessage(), e);
     }

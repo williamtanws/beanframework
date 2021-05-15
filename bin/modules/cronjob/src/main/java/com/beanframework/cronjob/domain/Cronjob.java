@@ -117,6 +117,10 @@ public class Cronjob extends GenericEntity {
       joinColumns = @JoinColumn(name = "cronjob_uuid"))
   Map<String, String> parameters = new HashMap<String, String>();
 
+  @Audited(withModifiedFlag = true)
+  @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
+  private UUID user;
+
   public String getName() {
     return name;
   }
@@ -237,4 +241,11 @@ public class Cronjob extends GenericEntity {
     this.parameters = parameters;
   }
 
+  public UUID getUser() {
+    return user;
+  }
+
+  public void setUser(UUID user) {
+    this.user = user;
+  }
 }

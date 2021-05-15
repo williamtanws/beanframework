@@ -3,6 +3,7 @@ package com.beanframework.core.converter.entity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import com.beanframework.common.exception.ConverterException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.core.data.CronjobDto;
 import com.beanframework.cronjob.domain.Cronjob;
+import com.beanframework.user.domain.User;
 
 @Component
 public class CronjobEntityConverter implements EntityConverter<CronjobDto, Cronjob> {
@@ -39,7 +41,7 @@ public class CronjobEntityConverter implements EntityConverter<CronjobDto, Cronj
 
   }
 
-  private Cronjob convertToEntity(CronjobDto source, Cronjob prototype) {
+  private Cronjob convertToEntity(CronjobDto source, Cronjob prototype) throws Exception {
 
     Date lastModifiedDate = new Date();
 
@@ -140,16 +142,34 @@ public class CronjobEntityConverter implements EntityConverter<CronjobDto, Cronj
 
     if (prototypeParameters.isEmpty()) {
       prototype.getParameters().clear();
-    } else {
-
-      for (Map.Entry<String, String> entry : prototypeParameters.entrySet()) {
-        prototype.getParameters().put(entry.getKey(), entry.getValue());
-      }
     }
 
     if (source.getParameters().equals(prototypeParameters) == false) {
+      prototype.setParameters(prototypeParameters);
       prototype.setLastModifiedDate(lastModifiedDate);
     }
+
+    // User
+    if (StringUtils.isBlank(source.getSelectedUserUuid())) {
+      if (prototype.getUser() != null) {
+        prototype.setUser(null);
+        prototype.setLastModifiedDate(lastModifiedDate);
+      }
+    } else {
+      User entity =
+          modelService.findOneByUuid(UUID.fromString(source.getSelectedUserUuid()), User.class);
+
+      if (entity != null) {
+
+        if (prototype.getUser() == null || prototype.getUser().equals(entity.getUuid()) == false) {
+          prototype.setUser(entity.getUuid());
+          prototype.setLastModifiedDate(lastModifiedDate);
+        }
+      } else {
+        throw new ConverterException("User UUID not found: " + source.getSelectedUserUuid());
+      }
+    }
+
     return prototype;
   }
 

@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -52,6 +51,8 @@ import com.beanframework.user.domain.User;
 import com.beanframework.user.domain.UserAttribute;
 import com.beanframework.user.domain.UserAuthority;
 import com.beanframework.user.domain.UserGroup;
+import com.beanframework.user.domain.UserPermission;
+import com.beanframework.user.domain.UserRight;
 import com.beanframework.user.event.AuthenticationEvent;
 
 @Service
@@ -82,9 +83,6 @@ public class UserServiceImpl implements UserService {
 
   @Value(UserConstants.Admin.DEFAULT_GROUP)
   private String defaultAdminGroup;
-
-  @Value(UserConstants.Employee.DEFAULT_GROUP)
-  private String defaultEmployeeGroup;
 
   @Value(UserConstants.Access.CONSOLE)
   private String ACCESS_CONSOLE;
@@ -122,45 +120,64 @@ public class UserServiceImpl implements UserService {
       throw new BadCredentialsException("Bad Credentials");
     }
 
-    UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
+    // Find admin
+    properties = new HashMap<String, Object>();
+    properties.put(UserGroup.ID, defaultAdminGroup);
 
-    // Skip account validation for admin group
-    if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(defaultAdminGroup))) {
-      return authentication;
-    } else {
-      if (user.getEnabled() == Boolean.FALSE) {
-        throw new DisabledException("Account Disabled");
-      }
-      if (user.getAccountNonExpired() == Boolean.FALSE) {
-        throw new AccountExpiredException("Account Expired");
-      }
-      if (user.getAccountNonLocked() == Boolean.FALSE) {
-        throw new LockedException("Account Locked");
-      }
-      if (user.getCredentialsNonExpired() == Boolean.FALSE) {
-        throw new CredentialsExpiredException("Password Expired");
-      }
+    UserGroup adminGroup = modelService.findOneByProperties(properties, UserGroup.class);
 
-      return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
-          getAuthorities(user));
+    // If admin group is exists
+    if (adminGroup != null) {
+      for (UUID userGroupUuid : user.getUserGroups()) {
+        if (userGroupUuid.equals(adminGroup.getUuid())) {
+          return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
+              getAdminAuthority());
+        }
+
+        // Check user group's sub group
+        UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
+        if (userGroup != null) {
+          for (UUID subGroupUuid : userGroup.getUserGroups()) {
+            if (subGroupUuid.equals(adminGroup.getUuid())) {
+              return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
+                  getAdminAuthority());
+            }
+          }
+        }
+      }
     }
+
+    // Normal user group
+    if (user.getEnabled() == Boolean.FALSE) {
+      throw new DisabledException("Account Disabled");
+    }
+    if (user.getAccountNonExpired() == Boolean.FALSE) {
+      throw new AccountExpiredException("Account Expired");
+    }
+    if (user.getAccountNonLocked() == Boolean.FALSE) {
+      throw new LockedException("Account Locked");
+    }
+    if (user.getCredentialsNonExpired() == Boolean.FALSE) {
+      throw new CredentialsExpiredException("Password Expired");
+    }
+
+    return new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
   }
 
   private Set<GrantedAuthority> getAdminAuthority() {
 
     Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-    // Always add admin group in case not exists in database
     authorities.add(new SimpleGrantedAuthority(ACCESS_CONSOLE));
     authorities.add(new SimpleGrantedAuthority(ACCESS_BACKOFFICE));
-    authorities.add(new SimpleGrantedAuthority(defaultAdminGroup));
-    authorities.add(new SimpleGrantedAuthority(defaultAdminGroup));
 
-    List<UserGroup> allUserGroups = modelService.findAll(UserGroup.class);
-    for (UserGroup userGroup : allUserGroups) {
+    List<UserRight> userRights = modelService.findAll(UserRight.class);
+    List<UserPermission> userPermissions = modelService.findAll(UserPermission.class);
 
-      Hibernate.initialize(userGroup.getUserAuthorities());
-      authorities.addAll(getGrantedAuthority(userGroup.getUserAuthorities()));
+    for (UserPermission userPermission : userPermissions) {
+      for (UserRight userRight : userRights) {
+        authorities
+            .add(new SimpleGrantedAuthority(userPermission.getId() + "_" + userRight.getId()));
+      }
     }
 
     return authorities;
@@ -169,44 +186,12 @@ public class UserServiceImpl implements UserService {
   private Set<GrantedAuthority> getAuthorities(User model) throws Exception {
 
     try {
-
-      List<UserGroup> userGroups = new ArrayList<UserGroup>();
-      for (UUID uuid : model.getUserGroups()) {
-
-        UserGroup userGroup = modelService.findOneByUuid(uuid, UserGroup.class);
-        if (userGroup != null) {
-          userGroups.add(userGroup);
-        }
-      }
-
-      // Find admin group
-      Map<String, Object> properties = new HashMap<String, Object>();
-      properties.put(UserGroup.ID, defaultAdminGroup);
-
-      UserGroup adminGroup = modelService.findOneByProperties(properties, UserGroup.class);
-
-      // If admin group is exists
-      if (adminGroup != null) {
-
-        // Check if employee user groups contains admingroup
-        for (UserGroup employeeUserGroup : userGroups) {
-
-          if (employeeUserGroup.getUuid().equals(adminGroup.getUuid())) {
-            return getAdminAuthority();
-          }
-
-          // Check if employee user groups' sub groups also contains admingroup
-          if (employeeUserGroup.getUserGroups().contains(adminGroup.getUuid())) {
-            return getAdminAuthority();
-          }
-        }
-      }
-
       // Find employee user group and sub user group authority
       Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
       // User Group
-      for (UserGroup userGroup : userGroups) {
+      for (UUID userGroupUuid : model.getUserGroups()) {
+        UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
 
         Hibernate.initialize(userGroup.getUserAuthorities());
         authorities.addAll(getGrantedAuthority(userGroup.getUserAuthorities()));
@@ -294,7 +279,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser() throws Exception {
+  public void setCurrentUser(User model) {
+    UsernamePasswordAuthenticationToken authentication =
+        new UsernamePasswordAuthenticationToken(model, model.getPassword());
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
+
+  @Override
+  public User getCurrentUser() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth != null) {

@@ -24,7 +24,11 @@ import com.beanframework.common.service.ModelService;
 import com.beanframework.cronjob.domain.Cronjob;
 import com.beanframework.cronjob.domain.CronjobEnum;
 import com.beanframework.cronjob.event.CronjobEvent;
-import com.beanframework.cronjob.service.QuartzManager;
+import com.beanframework.cronjob.service.CronjobQuartzManager;
+import com.beanframework.user.domain.User;
+import com.beanframework.user.service.OverRiddenUser;
+import com.beanframework.user.service.UserService;
+import net.bytebuddy.utility.RandomString;
 
 @Component
 public class CronjobGlobalListener extends JobListenerSupport implements ApplicationContextAware {
@@ -35,6 +39,12 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 
   @Autowired
   private ModelService modelService;
+
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private OverRiddenUser overRiddenUser;
 
   @Autowired
   private ApplicationEventPublisher applicationEventPublisher;
@@ -59,14 +69,26 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
     try {
       JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 
-      UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
+      UUID uuid = (UUID) dataMap.get(CronjobQuartzManager.CRONJOB_UUID);
 
       cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
       if (cronjob != null) {
+
+        if (cronjob.getUser() != null) {
+          // Set user session and thread
+          User currentUser = modelService.findOneByUuid(cronjob.getUser(), User.class);
+          if (currentUser != null) {
+            userService.setCurrentUser(currentUser);
+
+            RandomString randomThreadName = new RandomString(9);
+            Thread.currentThread().setName(randomThreadName.toString());
+            overRiddenUser.getUserThreadMap().put(Thread.currentThread().getName(), currentUser);
+          }
+        }
+
+
         cronjob.setStatus(CronjobEnum.Status.RUNNING);
         cronjob.setLastStartExecutedDate(new Date());
-        cronjob.setLastModifiedBy(null);
-
         modelService.saveEntity(cronjob);
       }
     } catch (Exception e) {
@@ -82,18 +104,20 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
     try {
       JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 
-      UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
+      UUID uuid = (UUID) dataMap.get(CronjobQuartzManager.CRONJOB_UUID);
 
       cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
       cronjob.setStatus(CronjobEnum.Status.ABORTED);
       cronjob.setResult(null);
       cronjob.setLastFinishExecutedDate(new Date());
-      cronjob.setLastModifiedBy(null);
 
       modelService.saveEntity(cronjob);
+
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error(e.getMessage(), e);
+    } finally {
+      overRiddenUser.getUserThreadMap().remove(Thread.currentThread().getName());
     }
   }
 
@@ -105,7 +129,7 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
 
     JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 
-    UUID uuid = (UUID) dataMap.get(QuartzManager.CRONJOB_UUID);
+    UUID uuid = (UUID) dataMap.get(CronjobQuartzManager.CRONJOB_UUID);
 
     Cronjob cronjob = null;
     CronjobEnum.Status status = null;
@@ -143,7 +167,6 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
         cronjob.setResult(result);
         cronjob.setMessage(message);
         cronjob.setLastFinishExecutedDate(new Date());
-        cronjob.setLastModifiedBy(null);
 
         modelService.saveEntity(cronjob);
       }
@@ -152,11 +175,12 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
       LOGGER.error(e.getMessage(), e);
       jobException.addSuppressed(e);
     } finally {
-      if (context.get(QuartzManager.CRONJOB_NOTIFICATION) == Boolean.TRUE) {
+      if (context.get(CronjobQuartzManager.CRONJOB_NOTIFICATION) == Boolean.TRUE) {
         applicationEventPublisher.publishEvent(new CronjobEvent(cronjob,
             MessageFormat.format("{0}: status={1}, result={2}, message={3}", cronjob.getName(),
                 status.toString(), result.toString(), message.toString())));
       }
+      overRiddenUser.getUserThreadMap().remove(Thread.currentThread().getName());
     }
   }
 

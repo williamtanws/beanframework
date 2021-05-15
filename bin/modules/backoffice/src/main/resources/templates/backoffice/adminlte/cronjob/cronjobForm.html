@@ -47,12 +47,37 @@
 							<div class="row">
 								<div class="col-md-3">
 									<div class="form-group">
+										<label for="startup" th:text="#{module.cronjob.startup}"></label>
+										<select class="form-control" name="startup">
+											<option value="" th:text="'&nbsp'"></option>
+											<option value="1" th:selected="*{startup == true}" th:text="#{module.common.yes}"></option>
+											<option value="0" th:selected="*{startup == false}" th:text="#{module.common.no}"></option>
+										</select>
+										<span class="help-block"></span>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="cronExpression" th:text="#{module.cronjob.cronexpression}"></label>
+										<span>*</span>
+										<div class="input-group">
+											<input type="text" class="form-control" name="cronExpression" th:value="*{cronExpression}" id="cronExpression">
+											<span class="input-group-append">
+												<button type="button" class="btn btn-info btn-flat" data-toggle="modal" data-target="#modal-cronExpression">
+													<span class="fas fa-calendar"></span>
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
 										<label for="jobTriggerStartDate" th:text="#{module.cronjob.triggerstartdate}"></label>
 										<div class="input-group date">
 											<span class="input-group-addon">
 												<span class="glyphicon glyphicon-calendar"></span>
 											</span>
-											<input type='text' class="form-control datetimepicker" name="triggerStartDate"/>
+											<input type='text' class="form-control datetimepicker" name="triggerStartDate" />
 										</div>
 									</div>
 								</div>
@@ -61,12 +86,12 @@
 										<label for="jobTrigger" th:text="#{module.cronjob.trigger}"></label>
 										<select name="jobTrigger" class="form-control">
 											<option></option>
-											<option th:each="state : ${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).values()}" th:value="${state.name()}" th:text="${state}"></option>	
+											<option th:each="state : ${T(com.beanframework.cronjob.domain.CronjobEnum.JobTrigger).values()}" th:value="${state.name()}" th:text="${state}"></option>
 										</select>
 									</div>
 								</div>
 							</div>
-							<hr/>
+							<hr />
 							<dl class="row">
 								<dt class="col-sm-2" th:text="#{module.cronjob.triggerstartdate}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{triggerStartDate != null} ? *{#dates.format(triggerStartDate, ' dd MMMM yyyy hh:mma')}"></dd>
@@ -77,7 +102,9 @@
 								<dt class="col-sm-2" th:text="#{module.cronjob.result}+':'"></dt>
 								<dd class="col-sm-4" th:text="*{result}"></dd>
 								<dt class="col-sm-2" th:text="#{module.cronjob.message}+':'"></dt>
-								<dd class="col-sm-10"><textarea rows="3" disabled="disabled" th:text="*{message}" class="form-control"></textarea></dd>
+								<dd class="col-sm-10">
+									<textarea rows="3" disabled="disabled" th:text="*{message}" class="form-control"></textarea>
+								</dd>
 							</dl>
 							<dl class="row">
 								<dt class="col-sm-3" th:text="#{module.cronjob.laststartexecuteddate}+':'"></dt>
@@ -85,7 +112,7 @@
 								<dt class="col-sm-3" th:text="#{module.cronjob.lastfinishexecuteddate}+':'"></dt>
 								<dd class="col-sm-3" th:text="*{lastFinishExecutedDate != null} ? *{#dates.format(lastFinishExecutedDate, ' dd MMMM yyyy hh:mma')}"></dd>
 							</dl>
-							<hr/>
+							<hr />
 							<div class="row">
 								<div class="col-md-4">
 									<div class="form-group">
@@ -108,7 +135,7 @@
 										<span class="help-block"></span>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<div class="form-group">
 										<label for="jobClass" th:text="#{module.cronjob.jobclass}"></label>
 										<span>*</span>
@@ -116,41 +143,24 @@
 										<span class="help-block"></span>
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<div class="form-group">
 										<label for="description" th:text="#{module.cronjob.description}"></label>
 										<textarea class="form-control" name="description" th:text="*{description}"></textarea>
 										<span class="help-block"></span>
 									</div>
 								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="startup" th:text="#{module.cronjob.startup}"></label>
-										<select class="form-control" name="startup">
-											<option value="" th:text="'&nbsp'"></option>
-											<option value="1" th:selected="*{startup == true}" th:text="#{module.common.yes}"></option>
-											<option value="0" th:selected="*{startup == false}" th:text="#{module.common.no}"></option>
-										</select>
-										<span class="help-block"></span>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="cronExpression" th:text="'Cron Builder'"></label>
-										<div id="cronBuilder"></div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="cronExpression" th:text="#{module.cronjob.cronexpression}"></label>
-										<span>*</span>
-										<input type="text" class="form-control" name="cronExpression" th:value="*{cronExpression}" id="cronExpression">
-										<span id="cronExpressionDescription" class="help-block"></span>
-										<span class="help-block"></span>
-									</div>
-								</div>
 							</div>
 							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="owner" th:text="#{module.cronjob.user}"></label>
+										<th:block th:with="id=#{module.common.id},name=#{module.user.name}">
+											<th:block
+												th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: select (title=#{module.cronjob.user.select}, tableId='selectedUserDataTable', columnsi18n=${#strings.arraySplit(id+','+name, ',')}, columns=${#strings.arraySplit('id,name', ',')}, selectedItemDto=*{user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
+										</th:block>
+									</div>
+								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="name" th:text="#{module.common.parameters}"></label>
@@ -173,6 +183,655 @@
 				<!-- /.card -->
 			</div>
 		</form>
+		<div class="modal fade" id="modal-cronExpression">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" th:text="#{module.cronjob.cronexpression}"></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="card-header p-0 border-bottom-0">
+							<ul class="nav nav-tabs" id="cron-tabs-tab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" id="cron-tabs-minutes-tab" data-toggle="pill" href="#cron-tabs-minutes" role="tab" aria-controls="cron-tabs-minutes" aria-selected="true" th:text="#{module.cronjob.cron.Minutes}"></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="cron-tabs-hourly-tab" data-toggle="pill" href="#cron-tabs-hourly" role="tab" aria-controls="cron-tabs-hourly" aria-selected="true" th:text="#{module.cronjob.cron.Hourly}"></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="cron-tabs-daily-tab" data-toggle="pill" href="#cron-tabs-daily" role="tab" aria-controls="cron-tabs-dailys" aria-selected="true" th:text="#{module.cronjob.cron.Daily}"></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="cron-tabs-weekly-tab" data-toggle="pill" href="#cron-tabs-weekly" role="tab" aria-controls="cron-tabs-weekly" aria-selected="true" th:text="#{module.cronjob.cron.Weekly}"></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="cron-tabs-monthly-tab" data-toggle="pill" href="#cron-tabs-monthly" role="tab" aria-controls="cron-tabs-monthly" aria-selected="true" th:text="#{module.cronjob.cron.Monthly}"></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="cron-tabs-yearly-tab" data-toggle="pill" href="#cron-tabs-yearly" role="tab" aria-controls="cron-tabs-yearly" aria-selected="true" th:text="#{module.cronjob.cron.Yearly}"></a>
+								</li>
+							</ul>
+						</div>
+						<div class="tab-content" id="cron-tabs-tabContent">
+							<div class="tab-pane fade show active" id="cron-tabs-minutes" role="tabpanel" aria-labelledby="cron-tabs-minutes-tab">
+								<div style="padding: 15px">
+									<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
+									<input id="MinutesInput" type="text" value="1" class="form-control" style="width: 40px; display: inline">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.minutues}"></span>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="cron-tabs-hourly" role="tabpanel" aria-labelledby="cron-tabs-hourly-tab">
+								<div style="padding: 15px">
+									<input type="radio" value="1" name="HourlyRadio" checked="checked">
+									&nbsp;<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
+									<input id="HoursInput" type="text" class="form-control" value="1" style="width: 40px; display: inline">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.hours}"></span>
+								</div>
+								<div style="padding: 15px">
+									<input type="radio" value="2" name="HourlyRadio">
+									&nbsp;<span th:text="#{module.cronjob.cron.at}"></span>&nbsp;
+									<select id="AtHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+									</select>
+									<select id="AtMinutes" class="form-control minutes" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+										<option value="51">51</option>
+										<option value="52">52</option>
+										<option value="53">53</option>
+										<option value="54">54</option>
+										<option value="55">55</option>
+										<option value="56">56</option>
+										<option value="57">57</option>
+										<option value="58">58</option>
+										<option value="59">59</option>
+									</select>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="cron-tabs-daily" role="tabpanel" aria-labelledby="cron-tabs-daily-tab">
+								<div style="padding: 15px">
+									<input type="radio" value="1" name="DailyRadio" checked="checked">
+									&nbsp;<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
+									<input id="DaysInput" type="text" value="1" class="form-control" style="width: 40px; display: inline">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.days}"></span>
+								</div>
+								<div style="padding: 15px">
+									<input type="radio" value="2" name="DailyRadio">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.weekday}"></span>&nbsp;
+								</div>
+								<div style="padding: 15px">
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
+									<select id="DailyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+									</select>
+									<select id="DailyMinutes" class="form-control minutes" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+										<option value="51">51</option>
+										<option value="52">52</option>
+										<option value="53">53</option>
+										<option value="54">54</option>
+										<option value="55">55</option>
+										<option value="56">56</option>
+										<option value="57">57</option>
+										<option value="58">58</option>
+										<option value="59">59</option>
+									</select>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="cron-tabs-weekly" role="tabpanel" aria-labelledby="cron-tabs-weekly-tab">
+								<div style="padding: 15px">
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="SUN">
+										<span th:text="#{module.cronjob.cron.Sunday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="MON">
+										<span th:text="#{module.cronjob.cron.Monday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="TUE">
+										<span th:text="#{module.cronjob.cron.Tuesday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="WED">
+										<span th:text="#{module.cronjob.cron.Wednesday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="THU">
+										<span th:text="#{module.cronjob.cron.Thursday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="FRI">
+										<span th:text="#{module.cronjob.cron.Friday}"></span>
+									</label>
+									<label class="checkbox-inline" style="margin-right: 5px">
+										<input type="checkbox" value="SAT">
+										<span th:text="#{module.cronjob.cron.Saturday}"></span>
+									</label>
+								</div>
+								<div style="padding: 15px">
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
+									<select id="WeeklyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+									</select>
+									<select id="WeeklyMinutes" class="form-control minutes" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+										<option value="51">51</option>
+										<option value="52">52</option>
+										<option value="53">53</option>
+										<option value="54">54</option>
+										<option value="55">55</option>
+										<option value="56">56</option>
+										<option value="57">57</option>
+										<option value="58">58</option>
+										<option value="59">59</option>
+									</select>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="cron-tabs-monthly" role="tabpanel" aria-labelledby="cron-tabs-monthly-tab">
+								<div style="padding: 15px">
+									<input type="radio" value="1" name="MonthlyRadio" checked="checked">
+									&nbsp;<span th:text="#{module.cronjob.cron.day}"></span>&nbsp;
+									<input id="DayOfMOnthInput" type="text" class="form-control" value="1" style="width: 40px; display: inline">
+									&nbsp;<span th:text="#{module.cronjob.cron.ofevery}"></span>&nbsp;
+									<input id="MonthInput" type="text" class="form-control" value="1" style="width: 40px; display: inline;">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.months}"></span>
+								</div>
+								<div style="padding: 15px">
+									<input type="radio" value="2" name="MonthlyRadio">
+									&nbsp;
+									<select id="WeekDay" class="form-control day-order-in-month" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="1" th:text="#{module.cronjob.cron.first}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.second}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.third}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.fourth}"></option>
+									</select>
+									<select id="DayInWeekOrder" class="form-control week-days" style="width: 100px; display: inline">
+										<option value="SUN" th:text="#{module.cronjob.cron.Sunday}"></option>
+										<option value="MON" th:text="#{module.cronjob.cron.Monday}"></option>
+										<option value="TUE" th:text="#{module.cronjob.cron.Tuesday}"></option>
+										<option value="WED" th:text="#{module.cronjob.cron.Wednesday}"></option>
+										<option value="THU" th:text="#{module.cronjob.cron.Thursday}"></option>
+										<option value="FRI" th:text="#{module.cronjob.cron.Friday}"></option>
+										<option value="SAT" th:text="#{module.cronjob.cron.Saturday}"></option>
+									</select>
+									&nbsp;<span th:text="#{module.cronjob.cron.ofevery}"></span>&nbsp;
+									<input id="EveryMonthInput" type="text" class="form-control" value="1" style="width: 40px; display: inline;">
+									&nbsp;<span th:text="#{module.cronjob.cron.every.months}"></span>
+								</div>
+								<div style="padding: 15px">
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
+									<select id="MonthlyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+									</select>
+									<select id="MonthlyMinutes" class="form-control minutes" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+										<option value="51">51</option>
+										<option value="52">52</option>
+										<option value="53">53</option>
+										<option value="54">54</option>
+										<option value="55">55</option>
+										<option value="56">56</option>
+										<option value="57">57</option>
+										<option value="58">58</option>
+										<option value="59">59</option>
+									</select>
+								</div>
+
+							</div>
+							<div class="tab-pane fade" id="cron-tabs-yearly" role="tabpanel" aria-labelledby="cron-tabs-yearly-tab">
+								<div style="padding: 15px">
+									<input type="radio" value="1" name="YearlyRadio" checked="checked">
+									&nbsp;<span th:text="#{module.cronjob.cron.every}"></span>&nbsp;
+									<select id="MonthsOfYear" class="form-control months" style="width: 150px; display: inline">
+										<option value="1" th:text="#{module.cronjob.cron.January}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.February}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.March}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.April}"></option>
+										<option value="5" th:text="#{module.cronjob.cron.May}"></option>
+										<option value="6" th:text="#{module.cronjob.cron.June}"></option>
+										<option value="7" th:text="#{module.cronjob.cron.July}"></option>
+										<option value="8" th:text="#{module.cronjob.cron.August}"></option>
+										<option value="9" th:text="#{module.cronjob.cron.September}"></option>
+										<option value="10" th:text="#{module.cronjob.cron.October}"></option>
+										<option value="11" th:text="#{module.cronjob.cron.Novermber}"></option>
+										<option value="12" th:text="#{module.cronjob.cron.December}"></option>
+									</select>
+									&nbsp;<span th:text="#{module.cronjob.cron.inday}"></span>&nbsp;
+									<input id="YearInput" type="text" class="form-control" value="1" style="width: 40px; display: inline;">
+								</div>
+								<div style="padding: 15px">
+									<input type="radio" value="2" name="YearlyRadio">
+									&nbsp;<span th:text="#{module.cronjob.cron.the}"></span>&nbsp;
+									<select id="DayOrderInYear" class="form-control day-order-in-month" style="width: 90px; display: inline; margin-right: 5px;">
+										<option value="1" th:text="#{module.cronjob.cron.first}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.second}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.third}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.fourth}"></option>
+									</select>
+									<select id="DayWeekForYear" class="form-control week-days" style="width: 100px; display: inline">
+										<option value="SUN" th:text="#{module.cronjob.cron.Sunday}"></option>
+										<option value="MON" th:text="#{module.cronjob.cron.Monday}"></option>
+										<option value="TUE" th:text="#{module.cronjob.cron.Tuesday}"></option>
+										<option value="WED" th:text="#{module.cronjob.cron.Wednesday}"></option>
+										<option value="THU" th:text="#{module.cronjob.cron.Thursday}"></option>
+										<option value="FRI" th:text="#{module.cronjob.cron.Friday}"></option>
+										<option value="SAT" th:text="#{module.cronjob.cron.Saturday}"></option>
+									</select>
+									&nbsp;<span th:text="#{module.cronjob.cron.of}"></span>&nbsp;
+									<select id="MonthsOfYear2" class="form-control months" style="width: 110px; display: inline">
+										<option value="1" th:text="#{module.cronjob.cron.January}"></option>
+										<option value="2" th:text="#{module.cronjob.cron.February}"></option>
+										<option value="3" th:text="#{module.cronjob.cron.March}"></option>
+										<option value="4" th:text="#{module.cronjob.cron.April}"></option>
+										<option value="5" th:text="#{module.cronjob.cron.May}"></option>
+										<option value="6" th:text="#{module.cronjob.cron.June}"></option>
+										<option value="7" th:text="#{module.cronjob.cron.July}"></option>
+										<option value="8" th:text="#{module.cronjob.cron.August}"></option>
+										<option value="9" th:text="#{module.cronjob.cron.September}"></option>
+										<option value="10" th:text="#{module.cronjob.cron.October}"></option>
+										<option value="11" th:text="#{module.cronjob.cron.Novermber}"></option>
+										<option value="12" th:text="#{module.cronjob.cron.December}"></option>
+									</select>
+								</div>
+								<div style="padding: 15px">
+									<span th:text="#{module.cronjob.cron.starttime}"></span>&nbsp;
+									<select id="YearlyHours" class="form-control hours" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+									</select>
+									<select id="YearlyMinutes" class="form-control minutes" style="width: 80px; display: inline; margin-right: 5px;">
+										<option value="0">00</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+										<option value="29">29</option>
+										<option value="30">30</option>
+										<option value="31">31</option>
+										<option value="32">32</option>
+										<option value="33">33</option>
+										<option value="34">34</option>
+										<option value="35">35</option>
+										<option value="36">36</option>
+										<option value="37">37</option>
+										<option value="38">38</option>
+										<option value="39">39</option>
+										<option value="40">40</option>
+										<option value="41">41</option>
+										<option value="42">42</option>
+										<option value="43">43</option>
+										<option value="44">44</option>
+										<option value="45">45</option>
+										<option value="46">46</option>
+										<option value="47">47</option>
+										<option value="48">48</option>
+										<option value="49">49</option>
+										<option value="50">50</option>
+										<option value="51">51</option>
+										<option value="52">52</option>
+										<option value="53">53</option>
+										<option value="54">54</option>
+										<option value="55">55</option>
+										<option value="56">56</option>
+										<option value="57">57</option>
+										<option value="58">58</option>
+										<option value="59">59</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer justify-content-between">
+						<button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{module.common.close}"></button>
+						<button type="button" class="btn btn-primary" th:text="#{module.common.select}" id="select-cron-btn"></button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: add (tableId='parameterDataTable')}"></th:block>
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-form-delete :: modal (uuid=${cronjobDto.uuid}, deleteUrl=@{${@environment.getProperty('path.cronjob.form')}} )}"></th:block>
 	</th:block>
@@ -222,11 +881,12 @@
 		    /*]]>*/
 		</script>
 		<th:block
+			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-select :: js-single (tableId='selectedUserDataTable', columns=${#strings.arraySplit('id,name', ',')}, pageUrl=@{${@environment.getProperty('path.api.user')}}, selectedItemDto=${cronjobDto.user}, selectedItemUuidName='selectedUserUuid' )}"></th:block>
+		<th:block
 			th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js (tableId='parameterDataTable', columns=${#strings.arraySplit('key,value', ',')}, selectedItemDto=${cronjobDto.parameters}, selectedItemNames='selectedParameterKeys', selectedItemValues='selectedParameterValues' )}"></th:block>
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/content-datatable-map :: js-add (tableId='parameterDataTable')}"></th:block>
 		<th:block th:if="${cronjobDto.uuid != null}" th:insert="~{backoffice/adminlte/common/fragment/content-form-history :: js (historyUrl=@{${@environment.getProperty('path.api.cronjob.history')}(uuid=${cronjobDto.uuid})})}"></th:block>
-	
-		<script type="text/javascript" th:src="@{/static/backoffice/jquery-cron-quartz-master/src/jquery-cron-quartz.js}" ></script>
+
 		<script th:inline="javascript">
 			    /*<![CDATA[*/
 			    $(document).ready(function() {			    
@@ -241,21 +901,83 @@
 					    }
 				    });
 				    
-				    $(function() {
+				 	// Close modal on button click
+			        $("#select-cron-btn").click(function(){
+			        	generate();
+			            $("#modal-cronExpression").modal('hide');
+			        });
+				 	
+			        function generate() {
 
-				        // Initialize DOM with cron builder with options
-				        $('#cronBuilder').cronBuilder({
-				           selectorLabel: "",
-				           language: "en",
-				           onChange: function(expression) {
-				               $('#cronExpression').val(expression);
-				           }
-				        });
-				    });
+			            var activeTab = $("ul#cron-tabs-tab li a.active").prop("id");
+			            var results = "", activeTab;
+			            switch (activeTab) {
+			                case "cron-tabs-minutes-tab":
+			                    results = "0 0/" + $("#MinutesInput").val() + " * 1/1 * ? *";
+			                    //activeTab = "MINUTES";
+			                    break;
+			                case "cron-tabs-hourly-tab":
+			                    switch ($("input:radio[name=HourlyRadio]:checked").val()) {
+			                        case "1":
+			                            results = "0 0 0/" + $("#HoursInput").val() + " 1/1 * ? *";
+			                            break;
+			                        case "2":
+			                            results = "0 " + Number($("#AtMinutes").val()) + " " + Number($("#AtHours").val()) + " 1/1 * ? *";
+			                            break;
+			                    }
+			                    //activeTab = "HOURLY";
+			                    break;
+			                case "cron-tabs-daily-tab":
+			                    switch ($("input:radio[name=DailyRadio]:checked").val()) {
+			                        case "1":
+			                            results = "0 " + Number($("#DailyMinutes").val()) + " " + Number($("#DailyHours").val()) + " 1/" + $("#DaysInput").val() + " * ? *";
+			                            break;
+			                        case "2":
+			                            results = "0 " + Number($("#DailyMinutes").val()) + " " + Number($("#DailyHours").val()) + " ? * MON-FRI *";
+			                            break;
+			                    }
+			                    //activeTab = "DAILY";
+			                    break;
+			                case "cron-tabs-weekly-tab":
+			                    var selectedDays = "";
+			                    $("#cron-tabs-weekly input:checkbox:checked").each(function () {
+			                        selectedDays += $(this).val() + ",";
+			                    });
+			                    if (selectedDays.length > 0)
+			                        selectedDays = selectedDays.substr(0, selectedDays.length - 1);
+			                    results = "0 " + Number($("#WeeklyMinutes").val()) + " " + Number($("#WeeklyHours").val()) + " ? * " + selectedDays + " *";
+			                    //activeTab = "WEEKLY";
+			                    break;
+			                case "cron-tabs-monthly-tab":
+			                    switch ($("input:radio[name=MonthlyRadio]:checked").val()) {
+			                        case "1":
+			                            results = "0 " + Number($("#MonthlyMinutes").val()) + " " + Number($("#MonthlyHours").val()) + " " + $("#DayOfMOnthInput").val() + " 1/" + $("#MonthInput").val() + " ? *";
+			                            break;
+			                        case "2":
+			                            results = "0 " + Number($("#MonthlyMinutes").val()) + " " + Number($("#MonthlyHours").val()) + " ? 1/" + Number($("#EveryMonthInput").val()) + " " + $("#DayInWeekOrder").val() + "#" + $("#WeekDay").val() + " *";
+			                            break;
+			                    }
+			                    //activeTab = "MONTHLY";
+			                    break;
+			                case "cron-tabs-yearly-tab":
+			                    switch ($("input:radio[name=YearlyRadio]:checked").val()) {
+			                        case "1":
+			                            results = "0 " + Number($("#YearlyMinutes").val()) + " " + Number($("#YearlyHours").val()) + " " + $("#YearInput").val() + " " + $("#MonthsOfYear").val() + " ? *";
+			                            break;
+			                        case "2":
+			                            results = "0 " + Number($("#YearlyMinutes").val()) + " " + Number($("#YearlyHours").val()) + " ? " + $("#MonthsOfYear2").val() + " " + $("#DayWeekForYear").val() + "#" + $("#DayOrderInYear").val() + " *";
+			                            break;
+			                    }
+			                    //activeTab = "YEARLY";
+			                    break;
+			            }
+			            console.log(results);
+			            $("#cronExpression").val(results);
+			        }
 				});
 			    /*]]>*/
 		</script>
-	
+
 	</th:block>
 </body>
 

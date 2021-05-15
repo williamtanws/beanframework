@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.service.ModelService;
-import com.beanframework.cronjob.service.QuartzManager;
+import com.beanframework.cronjob.service.CronjobQuartzManager;
 import com.beanframework.imex.domain.Imex;
 import com.beanframework.imex.service.ImexService;
 
@@ -52,10 +52,10 @@ public class ImexJob implements Job {
 
         context.setResult("Executed " + models.size() + " imex");
       }
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
 
     } catch (Exception e) {
-      context.put(QuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
+      context.put(CronjobQuartzManager.CRONJOB_NOTIFICATION, Boolean.TRUE);
       LOGGER.error(e.getMessage(), e);
       throw new JobExecutionException(e.getMessage(), e);
     }

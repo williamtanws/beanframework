@@ -16,8 +16,9 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.security.ConsoleCsrfHeaderFilter;
-import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 import com.beanframework.console.security.ConsoleLoginSuccessHandler;
+import com.beanframework.console.security.ConsoleLogoutHandler;
+import com.beanframework.console.security.ConsoleSessionExpiredDetectingLoginUrlAuthenticationEntryPoint;
 import com.beanframework.user.UserConstants;
 import com.beanframework.user.security.UserAuthProvider;
 
@@ -63,6 +64,9 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
   private ConsoleLoginSuccessHandler loginSuccessHandler;
 
   @Autowired
+  private ConsoleLogoutHandler logoutHandler;
+
+  @Autowired
   private SessionRegistry sessionRegistry;
 
   @Value(UserConstants.Access.CONSOLE)
@@ -78,9 +82,9 @@ public class ConsoleSecurityConfig extends WebSecurityConfigurerAdapter {
         .successHandler(loginSuccessHandler).failureUrl(PATH_CONSOLE_LOGIN + "?error")
         .usernameParameter(HTTP_USERNAME_PARAM).passwordParameter(HTTP_PASSWORD_PARAM).permitAll()
         .and().logout().logoutUrl(PATH_CONSOLE_LOGOUT)
-        .logoutSuccessUrl(PATH_CONSOLE_LOGIN + "?logout").invalidateHttpSession(true)
-        .deleteCookies(ConsoleWebConstants.Cookie.REMEMBER_ME).permitAll().and().exceptionHandling()
-        .accessDeniedPage(PATH_CONSOLE_LOGIN + "?denied")
+        .logoutSuccessUrl(PATH_CONSOLE_LOGIN + "?logout").addLogoutHandler(logoutHandler)
+        .invalidateHttpSession(true).deleteCookies(ConsoleWebConstants.Cookie.REMEMBER_ME)
+        .permitAll().and().exceptionHandling().accessDeniedPage(PATH_CONSOLE_LOGIN + "?denied")
         .authenticationEntryPoint(consoleAuthenticationEntryPoint()).and().rememberMe()
         .rememberMeParameter(HTTP_REMEMBERME_PARAM).rememberMeCookieName(HTTP_REMEMBERME_COOKIENAME)
         .tokenValiditySeconds(HTTP_REMEMBERME_TOKENVALIDITYSECONDS).and().sessionManagement()

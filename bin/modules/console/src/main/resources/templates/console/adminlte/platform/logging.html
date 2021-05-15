@@ -51,7 +51,7 @@
 										</select>
 									</td>
 									<td style="display:none">
-										<select class="form-control" th:id="${logger.key}">
+										<select class="form-control" th:id="${logger.key}" th:disabled="${#authorization.expression('hasAuthority(''logging_update'')') == false}">
 											<th:block th:each="level : *{loggers.get('levels')}">
 												<span th:text="${level}" th:if="${logger.value.effectiveLevel.toString() == level.toString()}"></span>
 											</th:block>

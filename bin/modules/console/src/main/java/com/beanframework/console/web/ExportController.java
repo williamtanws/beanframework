@@ -18,6 +18,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.console.ExportWebConstants;
+import com.beanframework.console.ExportWebConstants.ExportPreAuthorizeEnum;
 import com.beanframework.core.controller.AbstractController;
 
 @Controller
@@ -45,12 +47,14 @@ public class ExportController extends AbstractController {
 
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm:ss");
 
+  @PreAuthorize(ExportPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = ExportWebConstants.Path.EXPORT)
   public String exportView(Model model, @RequestParam Map<String, Object> requestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) {
     return VIEW_EXPORT;
   }
 
+  @PreAuthorize(ExportPreAuthorizeEnum.HAS_READ)
   @PostMapping(value = ExportWebConstants.Path.EXPORT)
   public ResponseEntity<InputStreamResource> exportQuery(@RequestParam("query") String query,
       Model model, @RequestParam Map<String, Object> requestParams,
