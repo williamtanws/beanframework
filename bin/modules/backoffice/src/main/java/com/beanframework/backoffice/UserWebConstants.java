@@ -8,6 +8,7 @@ public interface UserWebConstants {
       public static final String USER = "${path.api.user}";
       public static final String USER_HISTORY = "${path.api.user.history}";
       public static final String USER_CHECKID = "${path.api.user.checkid}";
+      public static final String USER_SETTINGS = "${path.api.user.settings}";
     }
 
     public static final String USER = "${path.user}";

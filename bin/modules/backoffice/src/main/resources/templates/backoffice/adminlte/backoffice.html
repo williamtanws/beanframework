@@ -20,10 +20,20 @@
 <style>
 .navbar-nav .nav-item .active {
 	background-color: #f4f6f9;
+	color: white;
+}
+
+.dark-mode .navbar-nav .nav-item .active {
+	background-color: #343a40;
+	color: white;
+}
+
+.dark-mode .navbar-nav .nav-item .nav-link {
+	color: #bdbdbd;
 }
 </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+<body th:class="'hold-transition sidebar-mini layout-fixed '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}" data-panel-auto-height-mode="height">
 	<div class="wrapper">
 
 		<!-- Header -->
@@ -34,16 +44,16 @@
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
-			<div class="nav navbar navbar-expand-lg navbar-white navbar-light border-bottom p-0">
+			<div th:class="'nav navbar navbar-expand-lg navbar-light border-bottom p-0 '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : 'navbar-white'}">
 				<a class="nav-link bg-danger" href="#" data-widget="iframe-close" th:text="#{module.common.close}"></a>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft">
+				<a th:class="'nav-link ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-scrollleft">
 					<i class="fas fa-angle-double-left"></i>
 				</a>
 				<ul class="navbar-nav" role="tablist"></ul>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-scrollright">
+				<a th:class="'nav-link ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-scrollright">
 					<i class="fas fa-angle-double-right"></i>
 				</a>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-fullscreen">
+				<a th:class="'nav-link ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-fullscreen">
 					<i class="fas fa-expand"></i>
 				</a>
 			</div>
@@ -51,7 +61,7 @@
 				<div class="tab-empty">
 					<h2 class="display-4" th:utext="#{module.common.backoffice.login.box.msg}"></h2>
 				</div>
-				<div class="tab-loading">
+				<div th:class="'tab-loading '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}">
 					<div>
 						<h2 class="display-4">
 							<span th:text="#{module.common.loading}"></span>
@@ -61,6 +71,31 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+			<div class="os-content" style="padding: 16px; height: 100%; width: 100%;">
+				<h5>User Settings</h5>
+				<hr class="mb-2">
+				<h6>Header Options</h6>
+				<div class="mb-1">
+					<input type="checkbox" value="1" class="mr-1" id="user-settings-header-theme" th:checked="${#authentication.principal.parameters.get('user.settings.header.theme') == 'navbar-dark'}">
+					<span>Dark Mode</span>
+				</div>
+				<h6>Sidebar Options</h6>
+				<div class="mb-1">
+					<input type="checkbox" value="1" class="mr-1" id="user-settings-sidebar-theme" th:checked="${#authentication.principal.parameters.get('user.settings.sidebar.theme') == 'sidebar-light-primary'}">
+					<span>Light Mode</span>
+				</div>
+				<h6>Body Options</h6>
+				<div class="mb-1">
+					<input type="checkbox" value="1" class="mr-1" id="user-settings-body-theme" th:checked="${#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode'}">
+					<span>Dark Mode</span>
+				</div>
+			</div>
+		</aside>
+		<!-- /.control-sidebar -->
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
@@ -79,6 +114,99 @@
 
 	<script th:inline="javascript">
 		/*<![CDATA[*/
+			
+		var userSettingsUrl = /*[[@{${@environment.getProperty('path.api.user.settings')}}]]*/;
+			
+		$('#user-settings-header-theme').change(function() {
+			if ($(this).is(':checked')) {
+				//$('.main-header').removeClass('navbar-white');
+				//$('.main-header').addClass('navbar-dark');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsHeaderTheme:"navbar-dark"},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			} else {
+				//$('.main-header').removeClass('navbar-dark');
+				//$('.main-header').addClass('navbar-white');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsHeaderTheme:"navbar-white"},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			}
+			window.location.href=window.location.href;
+	    });	
+			
+		$('#user-settings-sidebar-theme').change(function() {
+			if ($(this).is(':checked')) {
+				//$('.main-sidebar').removeClass('sidebar-dark-primary');
+				//$('.main-sidebar').addClass('sidebar-light-primary');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsSidebarTheme:"sidebar-light-primary"},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			} else {
+				//$('.main-sidebar').removeClass('sidebar-light-primary');
+				//$('.main-sidebar').addClass('sidebar-dark-primary');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsSidebarTheme:"sidebar-dark-primary"},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			}
+			window.location.href=window.location.href;
+	    });	
+			
+		$('#user-settings-body-theme').change(function() {
+			if ($(this).is(':checked')) {
+				//$('body').addClass('dark-mode');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsBodyTheme:"dark-mode"},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			} else {
+				//$('body').removeClass('dark-mode');
+				
+				$.ajax({
+					  url: userSettingsUrl,
+					  data: {userSettingsBodyTheme:""},
+				      success: function (result) {
+				      },
+				      error: function(data){
+				      	console.log(data);
+				      }
+				});
+			}
+			window.location.href=window.location.href;
+	    });	
 		
 		$('.content-wrapper').IFrame({
 		  onTabClick(item) {
@@ -175,7 +303,6 @@
 		        	url: url,
 			        async: true,
 			        success: function (result) {
-			            
 			        },
 			        error: function(data){
 			            console.log(data);

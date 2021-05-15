@@ -5,7 +5,7 @@
 <body>
 	<th:block th:fragment="sidebar">
 		<!-- Main Sidebar Container -->
-		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+		<aside th:class="'main-sidebar elevation-4 '+${#authentication.principal.parameters.get('user.settings.sidebar.theme') != null ? #authentication.principal.parameters.get('user.settings.sidebar.theme') : 'sidebar-dark-primary'}">
 			<!-- Brand Logo -->
 			<a th:href="@{${@environment.getProperty('backoffice.webroot')}}" class="brand-link text-center">
 				<span class="brand-text font-weight-light" th:utext="#{module.common.backoffice}"></span>
