@@ -11,10 +11,12 @@ import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.beanframework.console.EnvironmentWebConstants;
+import com.beanframework.console.EnvironmentWebConstants.EnvironmentPreAuthorizeEnum;
 
 @Controller
 public class EnvironmentController {
@@ -26,6 +28,7 @@ public class EnvironmentController {
   private String VIEW_ENVIRONMENT;
 
   @SuppressWarnings("rawtypes")
+  @PreAuthorize(EnvironmentPreAuthorizeEnum.HAS_READ)
   @RequestMapping(EnvironmentWebConstants.Path.ENVIRONMENT)
   public String envs(Model model) throws IOException {
 

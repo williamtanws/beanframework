@@ -1,6 +1,6 @@
 package com.beanframework.console;
 
-public interface ApplicationWebConstants {
+public interface OverviewWebConstants {
 
   public static final String PAGINATION = "pagination";
 
@@ -40,5 +40,17 @@ public interface ApplicationWebConstants {
     public static final String LOGIN_WRONG_USERNAME_PASSWORD =
         "module.common.login.error.wrongusernameorpassword";
     public static final String RECORD_UUID_NOT_FOUND = "module.common.record.uuid.notfound";
+  }
+
+  public static interface OverviewPreAuthorizeEnum {
+    public static final String AUTHORITY_READ = "overview_read";
+    public static final String AUTHORITY_CREATE = "overview_create";
+    public static final String AUTHORITY_UPDATE = "overview_update";
+    public static final String AUTHORITY_DELETE = "overview_delete";
+
+    public static final String HAS_READ = "hasAuthority('" + AUTHORITY_READ + "')";
+    public static final String HAS_CREATE = "hasAuthority('" + AUTHORITY_CREATE + "')";
+    public static final String HAS_UPDATE = "hasAuthority('" + AUTHORITY_UPDATE + "')";
+    public static final String HAS_DELETE = "hasAuthority('" + AUTHORITY_DELETE + "')";
   }
 }

@@ -5,21 +5,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.beanframework.console.ApplicationWebConstants;
+import com.beanframework.console.OverviewWebConstants;
+import com.beanframework.console.OverviewWebConstants.OverviewPreAuthorizeEnum;
 
 @Controller
-public class ApplicationController {
+public class OverviewController {
 
   @Value("${spring.pid.file}")
   private String PID_FILE;
 
-  @Value(ApplicationWebConstants.View.APPLICATION_OVERVIEW)
+  @Value(OverviewWebConstants.View.APPLICATION_OVERVIEW)
   private String VIEW_CONSOLE_APPLICATION_OVERVIEW;
 
-  @RequestMapping(ApplicationWebConstants.Path.APPLICATION_OVERVIEW)
+  @PreAuthorize(OverviewPreAuthorizeEnum.HAS_READ)
+  @RequestMapping(OverviewWebConstants.Path.APPLICATION_OVERVIEW)
   public String overview(Model model) throws IOException {
 
     File pidFile = new File(PID_FILE);

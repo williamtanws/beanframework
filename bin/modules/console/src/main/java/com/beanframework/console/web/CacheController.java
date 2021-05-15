@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.CacheWebConstants;
+import com.beanframework.console.CacheWebConstants.CachePreAuthorizeEnum;
 import com.beanframework.console.ConsoleWebConstants;
 
 @Controller
@@ -34,6 +36,7 @@ public class CacheController {
   @Autowired
   private CacheManager cacheManager;
 
+  @PreAuthorize(CachePreAuthorizeEnum.HAS_READ)
   @GetMapping(value = {CacheWebConstants.Path.CACHE})
   public String cache(Model model, @RequestParam Map<String, Object> allRequestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) {
@@ -53,6 +56,7 @@ public class CacheController {
 
   }
 
+  @PreAuthorize(CachePreAuthorizeEnum.HAS_DELETE)
   @PostMapping(value = {CacheWebConstants.Path.CACHE_CLEARALL}, params = "clearall")
   public RedirectView clear(Model model, @RequestParam Map<String, Object> allRequestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) {

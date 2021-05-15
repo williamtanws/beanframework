@@ -19,19 +19,19 @@
 					<!-- Left navbar links -->
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<a th:href="@{${@environment.getProperty('path.console.application.overview')}}" class="nav-link" th:text="#{module.common.overview}"></a>
+							<a th:href="@{${@environment.getProperty('path.console.application.overview')}}" class="nav-link" th:text="#{module.common.overview}" sec:authorize="${#authorization.expression('hasAuthority(''overview_read'')')}"></a>
 						</li>
 						<li class="nav-item dropdown">
-							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.platform}"></a>
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.platform}" sec:authorize="hasAuthority('configuration_read') or hasAuthority('logging_read') or hasAuthority('update_read')"></a>
 							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
 								<li>
-									<a th:href="@{${@environment.getProperty('path.configuration')}}" class="dropdown-item" th:text="#{module.configuration}"></a>
+									<a th:href="@{${@environment.getProperty('path.configuration')}}" class="dropdown-item" th:text="#{module.configuration}" sec:authorize="${#authorization.expression('hasAuthority(''configuration_read'')')}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.logging}"></a>
+									<a th:href="@{${@environment.getProperty('path.logging')}}" class="dropdown-item" th:text="#{module.logging}" sec:authorize="${#authorization.expression('hasAuthority(''logging_read'')')}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.update')}}" class="dropdown-item" th:text="#{module.common.update}"></a>
+									<a th:href="@{${@environment.getProperty('path.update')}}" class="dropdown-item" th:text="#{module.common.update}" sec:authorize="${#authorization.expression('hasAuthority(''update_read'')')}"></a>
 								</li>
 								<li>
 									<a th:href="@{${@environment.getProperty('path.license')}}" class="dropdown-item" th:text="#{module.common.license}"></a>
@@ -39,37 +39,37 @@
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
-							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.monitor}"></a>
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.monitor}" sec:authorize="hasAuthority('cache_read') or hasAuthority('environment_read')"></a>
 							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
 								<li>
-									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}"></a>
+									<a th:href="@{${@environment.getProperty('path.cache')}}" class="dropdown-item" th:text="#{module.common.cache}" sec:authorize="${#authorization.expression('hasAuthority(''cache_read'')')}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.environment')}}" class="dropdown-item" th:text="#{module.environment}"></a>
+									<a th:href="@{${@environment.getProperty('path.environment')}}" class="dropdown-item" th:text="#{module.environment}" sec:authorize="${#authorization.expression('hasAuthority(''environment_read'')')}"></a>
 								</li>
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
-							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.tools}"></a>
+							<a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle" th:text="#{module.common.tools}" sec:authorize="hasAuthority('search_read') or hasAuthority('import_read') or hasAuthority('export_read')"></a>
 							<ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
 								<li>
-									<a th:href="@{${@environment.getProperty('path.search')}}" class="dropdown-item" th:text="#{module.common.search}"></a>
+									<a th:href="@{${@environment.getProperty('path.search')}}" class="dropdown-item" th:text="#{module.common.search}" sec:authorize="${#authorization.expression('hasAuthority(''search_read'')')}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.import')}}" class="dropdown-item" th:text="#{module.common.import}"></a>
+									<a th:href="@{${@environment.getProperty('path.import')}}" class="dropdown-item" th:text="#{module.common.import}" sec:authorize="${#authorization.expression('hasAuthority(''import_read'')')}"></a>
 								</li>
 								<li>
-									<a th:href="@{${@environment.getProperty('path.export')}}" class="dropdown-item" th:text="#{module.common.export}"></a>
+									<a th:href="@{${@environment.getProperty('path.export')}}" class="dropdown-item" th:text="#{module.common.export}" sec:authorize="${#authorization.expression('hasAuthority(''export_read'')')}"></a>
 								</li>
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a th:href="@{${@environment.getProperty('path.filemanager')}}" class="nav-link" th:text="#{module.filemanager}"></a>
+							<a th:href="@{${@environment.getProperty('path.filemanager')}}" class="nav-link" th:text="#{module.filemanager}" sec:authorize="${#authorization.expression('hasAuthority(''filemanager_read'')')}"></a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="${#authorization.expression('hasAuthority(''documentation_read'')')}">
 							<a href="#" class="nav-link" target="_blank" onClick="window.open('/documentation', '_blank').focus();" th:text="#{module.common.documentation}"> </a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="${#authorization.expression('hasAuthority(''backoffice_read'')')}">
 							<a href="#" class="nav-link" th:onClick="'window.location.href=\''+@{${@environment.getProperty('path.backoffice')}}+'\''" th:text="#{module.common.backoffice}"></a>
 						</li>
 					</ul>

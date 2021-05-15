@@ -97,13 +97,16 @@
 					+ "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>"
 					+ "<'row'<'col-sm-12'tr>>"
 					+ "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-				"buttons": [{
+				"buttons": [
+				/*[# th:if="${#authorization.expression('hasAuthority(''cache_delete'')')}"]*/	
+				{
 					text: /*[[#{module.common.cache.clearall}]]*/,
 					className: 'btn btn-danger',
 					action: function (e, dt, node, config) {
 						$("#form-clear").submit();
 					}
 				},
+				/*[/]*/
 				{
 	                extend: 'csv',
 	                text: /*[[#{module.common.export.csv}]]*/,

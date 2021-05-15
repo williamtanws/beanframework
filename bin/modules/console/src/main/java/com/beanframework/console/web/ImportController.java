@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.ImportWebConstants;
+import com.beanframework.console.ImportWebConstants.ImportPreAuthorizeEnum;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.imex.service.ImexService;
 
@@ -34,12 +36,14 @@ public class ImportController extends AbstractController {
   @Autowired
   private ImexService platformService;
 
+  @PreAuthorize(ImportPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = ImportWebConstants.Path.IMPORT)
   public String importView(Model model, @RequestParam Map<String, Object> requestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) {
     return VIEW_IMPORT;
   }
 
+  @PreAuthorize(ImportPreAuthorizeEnum.HAS_UPDATE)
   @PostMapping(value = ImportWebConstants.Path.IMPORT, params = "importFile")
   public RedirectView importFile(@RequestParam("files") MultipartFile[] files, Model model,
       @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
@@ -60,6 +64,7 @@ public class ImportController extends AbstractController {
     return redirectView;
   }
 
+  @PreAuthorize(ImportPreAuthorizeEnum.HAS_UPDATE)
   @PostMapping(value = ImportWebConstants.Path.IMPORT, params = "importQuery")
   public RedirectView importQuery(@RequestParam("query") String query, Model model,
       @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,

@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.beanframework.console.FilemanagerWebConstants;
+import com.beanframework.console.FilemanagerWebConstants.FilemanagerPreAuthorizeEnum;
 import com.beanframework.core.api.AbstractResource;
 
 @RestController
@@ -55,6 +57,7 @@ public class FilemanagerResource extends AbstractResource {
     }
   }
 
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_LIST)
   public Object list(@RequestBody JSONObject json) throws ServletException {
 
@@ -103,6 +106,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Upload File
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_UPLOAD)
   public Object upload(@RequestParam("destination") String destination,
       HttpServletRequest request) {
@@ -135,6 +139,7 @@ public class FilemanagerResource extends AbstractResource {
    * 
    * @throws Exception
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_READ)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_PREVIEW)
   public void preview(HttpServletResponse response, String path) throws Exception {
 
@@ -166,6 +171,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Create directory
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CREATEFOLDER)
   public Object createFolder(@RequestBody JSONObject json) {
     try {
@@ -185,6 +191,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Modify file or directory
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_CHANGEPERMISSIONS)
   public Object changePermissions(@RequestBody JSONObject json) {
     try {
@@ -209,6 +216,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Create File or directory
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COPY)
   public Object copy(@RequestBody JSONObject json, HttpServletRequest request) {
     try {
@@ -234,6 +242,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Move files or directories
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_MOVE)
   public Object move(@RequestBody JSONObject json) {
     try {
@@ -263,6 +272,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Delete file or directory
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_DELETE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_REMOVE)
   public Object remove(@RequestBody JSONObject json) {
     try {
@@ -285,6 +295,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Rename file or directory
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_RENAME)
   public Object rename(@RequestBody JSONObject json) {
     try {
@@ -309,6 +320,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * View the contents of the file, for html?txt, etc. Edit the file
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_GETCONTENT)
   public Object getContent(@RequestBody JSONObject json) {
     try {
@@ -330,6 +342,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * Modify the contents of the file, for html?txt, etc. Edit the file
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EDIT)
   public Object edit(@RequestBody JSONObject json) {
     try {
@@ -349,6 +362,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * File compression
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_UPDATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_COMPRESS)
   public Object compress(@RequestBody JSONObject json) {
     try {
@@ -378,6 +392,7 @@ public class FilemanagerResource extends AbstractResource {
   /**
    * File decompression
    */
+  @PreAuthorize(FilemanagerPreAuthorizeEnum.HAS_CREATE)
   @RequestMapping(FilemanagerWebConstants.Path.Api.ANGULARFILEMANAGER_EXTRACT)
   public Object extract(@RequestBody JSONObject json) {
     try {

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.beanframework.console.ConsoleWebConstants;
 import com.beanframework.console.UpdateWebConstants;
+import com.beanframework.console.UpdateWebConstants.UpdatePreAuthorizeEnum;
 import com.beanframework.imex.ImexConstants;
 import com.beanframework.imex.service.ImexService;
 
@@ -48,6 +50,7 @@ public class UpdateController {
   @Value(ImexConstants.IMEX_IMPORT_UPDATE_LOCATIONS)
   List<String> IMEX_IMPORT_LOCATIONS;
 
+  @PreAuthorize(UpdatePreAuthorizeEnum.HAS_READ)
   @GetMapping(value = UpdateWebConstants.Path.UPDATE)
   public String list(Model model, @RequestParam Map<String, Object> requestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
@@ -56,6 +59,7 @@ public class UpdateController {
     return VIEW_UPDATE;
   }
 
+  @PreAuthorize(UpdatePreAuthorizeEnum.HAS_UPDATE)
   @PostMapping(value = UpdateWebConstants.Path.UPDATE)
   public String update(Model model, @RequestParam Map<String, Object> requestParams,
       RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {

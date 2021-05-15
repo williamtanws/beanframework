@@ -135,6 +135,12 @@
 							</li>
 						</ul>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#idocs_problems">Problems</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#idocs_faq">FAQ</a>
+					</li>
 				</ul>
 			</div>
 
@@ -961,21 +967,26 @@ for (TrainingDto dto : pagination.getContent()) {
 								Data Syntax in CSV:
 								<ul>
 									<li>
-										<code>INSERT</code> - To create new data only, no data created if exists in database, 
+										<code>INSERT</code>
+										- To create new data only, no data created if exists in database,
 									</li>
 									<li>
-										<code>UPDATE</code> - To modify existing data only, no data updated if not exists in database.
+										<code>UPDATE</code>
+										- To modify existing data only, no data updated if not exists in database.
 									</li>
 									<li>
-										<code>INSERT_UPDATE</code> - To create or modify data in database.
+										<code>INSERT_UPDATE</code>
+										- To create or modify data in database.
 									</li>
 									<li>
-										<code>REMOVE</code> - To remove existing data in database.
+										<code>REMOVE</code>
+										- To remove existing data in database.
 									</li>
 								</ul>
 								<br>
 								Example:
-								<pre><code class="html">
+								<pre>
+									<code class="html">
 INSERT_UPDATE Training,id      ,name
                       ,training,Training
 								</code>
@@ -985,17 +996,88 @@ INSERT_UPDATE Training,id      ,name
 								To add more data column in CSV:
 								<ul>
 									<li>
-										<code>TrainingCsv.</code> - Add new data attribute.
+										<code>TrainingCsv.</code>
+										- Add new data attribute.
 									</li>
 									<li>
-										<code>TrainingEntityCsvConverter.java</code> - Add new data attribute.
+										<code>TrainingEntityCsvConverter.java</code>
+										- Add new data attribute.
 									</li>
 									<li>
-										<code>TrainingImportListener</code> - Optional: To customizing a new import logic.
+										<code>TrainingImportListener</code>
+										- Optional: To customizing a new import logic.
 									</li>
 								</ul>
 							</li>
 						</ul>
+					</section>
+
+					<hr class="divider">
+
+					<!-- FAQ -->
+					<section id="idocs_problems">
+						<h2>Problems</h2>
+						<p class="text-4">A list of frequently problems.</p>
+
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="accordion accordion-alterate arrow-right" id="popularTopics">
+									<div class="card">
+										<div class="card-header" id="heading1">
+											<h5 class="mb-0">
+												<a href="#" class="collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">HOW TO RESOLVE LIQUIBASE LOCK ERROR?</a>
+											</h5>
+										</div>
+										<div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#popularTopics">
+											<div class="card-body">
+												<pre class="html">
+Waiting for changelog lock....
+Waiting for changelog lock....
+Waiting for changelog lock....
+Waiting for changelog lock....
+Waiting for changelog lock....
+Waiting for changelog lock....
+Waiting for changelog lock....
+Liquibase Update Failed: Could not acquire change log lock. 
+</pre>
+												The root cause was that some changesets with some sql statements took a very long time for execution and was accidentaly aborted. Then on the next time when liquibase was to execute the same changesets, the previous lock was held. Lockdata is stored in the
+												table DATABASECHANGELOCK. To get rid of the lock you just change 1 to 0 or drop that table and recreate.
+												<blockquote>
+													<p>update `flw_ev_databasechangeloglock` set LOCKED=false, LOCKGRANTED=null, LOCKEDBY=null where ID=1;</p>
+												</blockquote>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</section>
+
+					<hr class="divider">
+
+					<!-- FAQ -->
+					<section id="idocs_faq">
+						<h2>FAQ</h2>
+						<p class="text-4">A list of frequently asked questions (FAQs) and answers on a particular topic.</p>
+
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="accordion accordion-alterate arrow-right" id="popularTopics">
+									<div class="card">
+										<div class="card-header" id="heading1">
+											<h5 class="mb-0">
+												<a href="#" class="collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">...?</a>
+											</h5>
+										</div>
+										<div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#popularTopics">
+											<div class="card-body">...</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 					</section>
 				</div>
 			</div>

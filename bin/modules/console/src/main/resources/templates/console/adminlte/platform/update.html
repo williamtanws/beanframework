@@ -51,7 +51,7 @@
 									</div>
 								</div>
 								<div class="card-footer">
-									<button type="submit" onclick="update()" class="btn btn-success" th:text="#{module.common.update}" data-toggle="modal" data-target="#modal-loading" data-backdrop="static" data-keyboard="false"></button>
+									<button type="submit" onclick="update()" class="btn btn-success" th:text="#{module.common.update}" data-toggle="modal" data-target="#modal-loading" data-backdrop="static" data-keyboard="false" sec:authorize="hasAuthority('update_update')"></button>
 								</div>
 							</div>
 							<div class="modal fade" id="modal-loading">

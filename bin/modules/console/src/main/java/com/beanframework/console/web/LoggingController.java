@@ -4,10 +4,12 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.logging.LoggersEndpoint;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.beanframework.console.LoggingWebConstants;
+import com.beanframework.console.LoggingWebConstants.LoggingPreAuthorizeEnum;
 
 @Controller
 public class LoggingController {
@@ -18,6 +20,7 @@ public class LoggingController {
   @Value(LoggingWebConstants.View.LOGGING)
   private String VIEW_LOGGING;
 
+  @PreAuthorize(LoggingPreAuthorizeEnum.HAS_READ)
   @RequestMapping(LoggingWebConstants.Path.LOGGING)
   public String loggers(Model model) throws IOException {
 

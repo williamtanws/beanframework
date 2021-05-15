@@ -17,8 +17,8 @@
 		</div>
 
 	</th:block>
-	<th:block layout:fragment="js">
-		<th:block th:insert="~{console/adminlte/common/fragment/content-datatable :: js (tableId='configurationTable', columns=${#strings.arraySplit('id,value', ',')}, pageUrl=@{${@environment.getProperty('path.api.configuration')}}, formUrl=@{${@environment.getProperty('path.configuration.form')}}, addAuthority=true, selectAuthority=true )}"></th:block>
+	<th:block layout:fragment="js" th:with="addAuthority=${#authorization.expression('hasAuthority(''configuration_create'')')}">
+		<th:block th:insert="~{console/adminlte/common/fragment/content-datatable :: js (tableId='configurationTable', columns=${#strings.arraySplit('id,value', ',')}, pageUrl=@{${@environment.getProperty('path.api.configuration')}}, formUrl=@{${@environment.getProperty('path.configuration.form')}}, addAuthority=${addAuthority}, selectAuthority=true )}"></th:block>
 	</th:block>
 </body>
 </html>

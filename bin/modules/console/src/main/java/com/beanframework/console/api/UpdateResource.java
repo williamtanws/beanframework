@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.beanframework.common.data.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.LocaleMessageService;
 import com.beanframework.console.UpdateWebConstants;
+import com.beanframework.console.UpdateWebConstants.UpdatePreAuthorizeEnum;
 import com.beanframework.imex.ImexConstants;
 
 @RestController
@@ -52,6 +54,7 @@ public class UpdateResource {
     return folders;
   }
 
+  @PreAuthorize(UpdatePreAuthorizeEnum.HAS_READ)
   @RequestMapping(UpdateWebConstants.Path.Api.UPDATE_TREE)
   public List<TreeJson> list(Model model, @RequestParam Map<String, Object> requestParams)
       throws BusinessException, IOException {

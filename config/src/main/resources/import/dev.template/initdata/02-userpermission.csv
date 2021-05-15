@@ -1,4 +1,4 @@
-INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
+INSERT UserPermission,id,name,sort,dynamicFieldSlotIds
 ,console			,Console				,0	,userpermission_name_en=Console;userpermission_name_cn=控制台
 ,backoffice			,Backoffice				,1	,userpermission_name_en=Backoffice;userpermission_name_cn=后台
 ,dashboard			,Dashboard				,1	,userpermission_name_en=Dashboard;userpermission_name_cn=仪表盘
@@ -33,3 +33,14 @@ INSERT_UPDATE UserPermission,id,name,sort,dynamicFieldSlotIds
 ,media				,Media					,120,userpermission_name_en=Media;userpermission_name_cn=媒体
 ,site				,Site					,130,userpermission_name_en=Site;userpermission_name_cn=网站
 ,comment			,Comment				,140,userpermission_name_en=Comment;userpermission_name_cn=留言
+,overview			,Console Overview		,500,userpermission_name_en=Overview;userpermission_name_cn=概述
+,configuration		,Console Configuration	,500,userpermission_name_en=Configuration;userpermission_name_cn=配置
+,logging			,Console Logging		,500,userpermission_name_en=Logging;userpermission_name_cn=记录中
+,update				,Console Update			,500,userpermission_name_en=Update;userpermission_name_cn=更新
+,cache				,Console Cache			,500,userpermission_name_en=Cache;userpermission_name_cn=缓存
+,environment		,Console Environment	,500,userpermission_name_en=Environment;userpermission_name_cn=环境
+,search				,Console Search			,500,userpermission_name_en=Search;userpermission_name_cn=搜索
+,import				,Console Import			,500,userpermission_name_en=Import;userpermission_name_cn=导入
+,export				,Console Export			,500,userpermission_name_en=Export;userpermission_name_cn=导出
+,filemanager		,Console File Manager	,500,userpermission_name_en=File Manager;userpermission_name_cn=文件管理器
+,documentation		,Console Documentation	,500,userpermission_name_en=Documentation;userpermission_name_cn=说明文件

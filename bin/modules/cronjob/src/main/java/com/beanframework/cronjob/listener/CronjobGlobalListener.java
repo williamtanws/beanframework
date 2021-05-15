@@ -74,14 +74,16 @@ public class CronjobGlobalListener extends JobListenerSupport implements Applica
       cronjob = modelService.findOneByUuid(uuid, Cronjob.class);
       if (cronjob != null) {
 
-        // Set user session and thread
-        User currentUser = modelService.findOneByUuid(cronjob.getUser(), User.class);
-        if (currentUser != null) {
-          userService.setCurrentUser(currentUser);
+        if (cronjob.getUser() != null) {
+          // Set user session and thread
+          User currentUser = modelService.findOneByUuid(cronjob.getUser(), User.class);
+          if (currentUser != null) {
+            userService.setCurrentUser(currentUser);
 
-          RandomString randomThreadName = new RandomString(9);
-          Thread.currentThread().setName(randomThreadName.toString());
-          overRiddenUser.getUserThreadMap().put(Thread.currentThread().getName(), currentUser);
+            RandomString randomThreadName = new RandomString(9);
+            Thread.currentThread().setName(randomThreadName.toString());
+            overRiddenUser.getUserThreadMap().put(Thread.currentThread().getName(), currentUser);
+          }
         }
 
 

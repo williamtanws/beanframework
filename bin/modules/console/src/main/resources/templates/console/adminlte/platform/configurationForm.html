@@ -21,7 +21,7 @@
 					<!-- /.col -->
 					<div class="col-sm-6">
 						<div class="float-sm-right">
-							<th:block th:insert="~{console/adminlte/common/fragment/content-form-save :: action}"></th:block>
+							<th:block th:insert="~{console/adminlte/common/fragment/content-form-save :: action}" sec:authorize="hasAuthority('configuration_create') or hasAuthority('configuration_update')"></th:block>
 						</div>
 					</div>
 					<!-- /.col -->
