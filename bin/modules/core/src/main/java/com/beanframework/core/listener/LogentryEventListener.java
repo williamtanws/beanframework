@@ -12,12 +12,17 @@ import com.beanframework.common.event.AbstractEvent;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.logentry.domain.Logentry;
 import com.beanframework.logentry.event.LogentryEvent;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.event.AuthenticationEvent;
+import com.beanframework.user.service.UserService;
 
 @Component
 public class LogentryEventListener implements ApplicationListener<AbstractEvent> {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(LogentryEventListener.class);
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   private ModelService modelService;
@@ -46,12 +51,16 @@ public class LogentryEventListener implements ApplicationListener<AbstractEvent>
             entity.setType(logentryEvent.getType());
             entity.setCreatedDate(new Date(logentryEvent.getTimestamp()));
             if (sourceEntity.getUuid() != null) {
-              entity.setMessage(MessageFormat.format("{0}: uuid={1}, id={2}, lastModifiedBy={3}",
+              String by = null;
+              User currentUser = userService.getCurrentUser();
+              if (currentUser != null) {
+                by = currentUser.getId();
+              } else {
+                by = "system";
+              }
+              entity.setMessage(MessageFormat.format("{0}: uuid={1}, id={2}, by={3}",
                   logentryEvent.getSource().getClass().getSimpleName(),
-                  sourceEntity.getUuid().toString(), sourceEntity.getId(),
-                  sourceEntity.getLastModifiedBy() != null
-                      ? sourceEntity.getLastModifiedBy().getId()
-                      : null));
+                  sourceEntity.getUuid().toString(), sourceEntity.getId(), by));
             }
             modelService.saveEntityByLegacyMode(entity, Logentry.class);
           }

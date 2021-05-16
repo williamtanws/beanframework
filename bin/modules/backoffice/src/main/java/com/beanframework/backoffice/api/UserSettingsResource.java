@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.UserWebConstants;
 import com.beanframework.backoffice.web.BackofficeController;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.RequestUtils;
 import com.beanframework.core.api.AbstractResource;
-import com.beanframework.core.data.UserDto;
-import com.beanframework.core.facade.UserFacade;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
 @RestController
@@ -26,7 +26,7 @@ public class UserSettingsResource extends AbstractResource {
   private UserService userService;
 
   @Autowired
-  private UserFacade userFacade;
+  private ModelService modelService;
 
   @RequestMapping(value = UserWebConstants.Path.Api.USER_SETTINGS)
   @ResponseBody
@@ -46,7 +46,7 @@ public class UserSettingsResource extends AbstractResource {
     String user_settings_body_theme = (String) requestParams.get("userSettingsBodyTheme");
     String user_settings_body_smalltext = (String) requestParams.get("userSettingsBodySmalltext");
 
-    UserDto user = userFacade.getCurrentUser();
+    User user = userService.getCurrentUser();
 
     if (user_settings_header_theme != null) {
       user.getParameters().put("user.settings.header.theme", user_settings_header_theme);
@@ -81,7 +81,7 @@ public class UserSettingsResource extends AbstractResource {
       user.getParameters().put("user.settings.body.smalltext", user_settings_body_smalltext);
     }
 
-    userFacade.update(user);
+    modelService.saveEntity(user);
     userService.updateCurrentUserSession();
 
     return new ResponseEntity<>(HttpStatus.OK);

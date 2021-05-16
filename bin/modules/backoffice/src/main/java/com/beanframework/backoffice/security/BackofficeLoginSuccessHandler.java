@@ -14,10 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import com.beanframework.backoffice.BackofficeWebConstants;
-import com.beanframework.core.data.UserDto;
-import com.beanframework.core.facade.UserFacade;
+import com.beanframework.common.service.ModelService;
 import com.beanframework.logentry.LogentryType;
 import com.beanframework.user.UserConstants;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.event.AuthenticationEvent;
 import com.beanframework.user.service.UserService;
 
@@ -34,20 +34,20 @@ public class BackofficeLoginSuccessHandler extends SavedRequestAwareAuthenticati
   private ApplicationEventPublisher applicationEventPublisher;
 
   @Autowired
-  private UserFacade userFacade;
+  private UserService userService;
 
   @Autowired
-  private UserService userService;
+  private ModelService modelService;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws ServletException, IOException {
 
     try {
-      UserDto user = userFacade.getCurrentUser();
+      User user = userService.getCurrentUser();
       user.getParameters().put(UserConstants.LOGIN_LAST_DATE,
           UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
-      userFacade.update(user);
+      modelService.saveEntity(user);
       userService.updateCurrentUserSession();
 
       applicationEventPublisher.publishEvent(new AuthenticationEvent(authentication.getPrincipal(),
