@@ -1,5 +1,7 @@
 package com.beanframework.core.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.beanframework.common.data.GenericDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -347,6 +349,29 @@ public class AddressDto extends GenericDto {
 
   public void setSelectedDefaultShipmentAddressUuid(String selectedDefaultShipmentAddressUuid) {
     this.selectedDefaultShipmentAddressUuid = selectedDefaultShipmentAddressUuid;
+  }
+
+  public String fullAddress() {
+
+    List<String> address = new ArrayList<String>();
+
+    if (getStreetNumber() != null) {
+      address.add(getStreetNumber());
+    }
+    if (getStreetName() != null) {
+      address.add(getStreetName());
+    }
+    if (getPostalCode() != null) {
+      address.add(getPostalCode());
+    }
+    if (getTown() != null) {
+      address.add(getTown());
+    }
+    if (getCountry() != null && getCountry().getName() != null) {
+      address.add(getCountry().getName());
+    }
+
+    return String.join(",", address);
   }
 
 }

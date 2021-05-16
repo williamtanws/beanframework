@@ -31,14 +31,14 @@ public class UserAuthProvider implements AuthenticationProvider {
     String id = authentication.getName();
     String password = (String) authentication.getCredentials();
 
-    if (id == null || StringUtils.isBlank(id.trim())) {
+    if (StringUtils.isBlank(id.trim())) {
       throw new BadCredentialsException(
           localeMessageService.getMessage(UserConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
     } else {
       id = id.trim();
     }
 
-    if (password == null || StringUtils.isBlank(password)) {
+    if (StringUtils.isBlank(password)) {
       throw new BadCredentialsException(
           localeMessageService.getMessage(UserConstants.Locale.LOGIN_WRONG_USERNAME_PASSWORD));
     }

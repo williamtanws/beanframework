@@ -53,19 +53,15 @@ public class MyAccountController extends AbstractController {
   public RedirectView update(
       @Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO) MyAccountDto myaccountDto,
       Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-      RedirectAttributes redirectAttributes) {
+      RedirectAttributes redirectAttributes) throws Exception {
 
-    if (myaccountDto.getUuid() == null) {
-      redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR,
-          "Update record required existing UUID.");
-    } else {
-      try {
-        myaccountDto = myaccountFacade.update(myaccountDto);
+    try {
+      myaccountDto.setUuid(myaccountFacade.getCurrentUser().getUuid());
+      myaccountDto = myaccountFacade.update(myaccountDto);
 
-        addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
-      } catch (BusinessException e) {
-        addErrorMessage(MyAccountDto.class, e.getMessage(), bindingResult, redirectAttributes);
-      }
+      addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
+    } catch (BusinessException e) {
+      addErrorMessage(MyAccountDto.class, e.getMessage(), bindingResult, redirectAttributes);
     }
 
     redirectAttributes.addAttribute(GenericDto.UUID, myaccountDto.getUuid());

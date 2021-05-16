@@ -15,7 +15,41 @@
 			<section class="content">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-4">
+							<!-- Profile Image -->
+							<div class="card card-primary card-outline">
+								<div class="card-body box-profile">
+									<div class="text-center">
+										<img class="profile-user-img img-fluid img-circle" th:src="@{${@environment.getProperty('path.user.profile.picture')}(uuid=${#authentication.principal.uuid},type=original)}">
+									</div>
+
+									<h3 class="profile-username text-center" th:text="${myaccountDto.name}"></h3>
+
+									<p class="text-muted text-center" th:text="${myaccountDto.id}"></p>
+									<hr>
+									<strong>
+										<i class="fas fa-home mr-1"></i>
+										<span th:text="#{module.address}"></span>
+									</strong>
+									<p class="text-muted" th:each="address : ${myaccountDto.addresses}" th:text="${address.fullAddress}"></p>
+									<hr>
+									<strong>
+										<i class="fas fa-building mr-1"></i>
+										<span th:text="#{module.company}"></span>
+									</strong>
+									<p class="text-muted" th:each="company : ${myaccountDto.companies}" th:text="${company.name}"></p>
+									<hr>
+									<strong>
+										<i class="fas fa-users mr-1"></i>
+										<span th:text="#{module.usergroup}"></span>
+									</strong>
+									<p class="text-muted" th:each="usergroup : ${myaccountDto.userGroups}" th:text="${usergroup.name}"></p>
+								</div>
+								<!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+						</div>
+						<div class="col-md-8">
 							<!-- general form elements -->
 							<div class="card card-primary">
 								<!-- form start -->
@@ -31,6 +65,7 @@
 										</div>
 										<div class="form-group">
 											<label for="name" th:text="#{module.myaccount.name}"></label>
+											<span>*</span>
 											<input type="text" class="form-control" name="name" th:value="*{name}">
 										</div>
 										<div class="form-group">
@@ -42,6 +77,15 @@
 											<label for="confirmPassword" th:text="#{module.myaccount.password.confirm}"></label>
 											<input name="confirmPassword" type="password" class="form-control">
 											<span class="help-block"></span>
+										</div>
+										<div class="form-group">
+											<label for="profilePicture" th:text="#{module.user.picture}"></label>
+											<div class="input-group">
+												<div class="custom-file">
+													<input type="file" class="custom-file-input" id="profilePicture" name="profilePicture">
+													<label class="custom-file-label" for="profilePicture"></label>
+												</div>
+											</div>
 										</div>
 									</div>
 									<!-- /.card-body -->

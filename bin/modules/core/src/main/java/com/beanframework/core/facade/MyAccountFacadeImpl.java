@@ -40,6 +40,8 @@ public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto>
       User entity = modelService.getEntity(dto, CoreConstants.TypeCode.MYACCOUNT);
       entity = modelService.saveEntity(entity);
 
+      userService.saveProfilePicture(entity, dto.getProfilePicture());
+
       userService.updatePrincipal(entity);
 
       return modelService.getDto(entity, dtoClass);
