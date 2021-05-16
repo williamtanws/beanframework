@@ -22,7 +22,7 @@ public class ConsoleLogoutHandler implements LogoutHandler {
       Authentication authentication) {
     User user = (User) authentication.getPrincipal();
     applicationEventPublisher.publishEvent(new AuthenticationEvent(authentication.getPrincipal(),
-        LogentryType.LOGOUT, "Logout ID=" + user.getId()));
+        LogentryType.LOGOUT, "ID=" + user.getId()));
 
   }
 }
