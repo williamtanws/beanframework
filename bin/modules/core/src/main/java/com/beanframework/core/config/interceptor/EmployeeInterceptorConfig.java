@@ -6,8 +6,6 @@ import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.employee.EmployeeInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.employee.EmployeeLoadInterceptor;
 import com.beanframework.core.interceptor.employee.EmployeePrepareInterceptor;
-import com.beanframework.core.interceptor.employee.EmployeeRemoveInterceptor;
-import com.beanframework.core.interceptor.employee.EmployeeValidateInterceptor;
 import com.beanframework.user.domain.Employee;
 
 @Configuration
@@ -62,42 +60,6 @@ public class EmployeeInterceptorConfig {
   public InterceptorMapping EmployeePrepareInterceptorMapping() {
     InterceptorMapping mapping = new InterceptorMapping();
     mapping.setInterceptor(employeePrepareInterceptor());
-    mapping.setTypeCode(Employee.class.getSimpleName());
-
-    return mapping;
-  }
-
-  //////////////////////////
-  // Validate Interceptor //
-  //////////////////////////
-
-  @Bean
-  public EmployeeValidateInterceptor employeeValidateInterceptor() {
-    return new EmployeeValidateInterceptor();
-  }
-
-  @Bean
-  public InterceptorMapping EmployeeValidateInterceptorMapping() {
-    InterceptorMapping mapping = new InterceptorMapping();
-    mapping.setInterceptor(employeeValidateInterceptor());
-    mapping.setTypeCode(Employee.class.getSimpleName());
-
-    return mapping;
-  }
-
-  ////////////////////////
-  // Remove Interceptor //
-  ////////////////////////
-
-  @Bean
-  public EmployeeRemoveInterceptor employeeRemoveInterceptor() {
-    return new EmployeeRemoveInterceptor();
-  }
-
-  @Bean
-  public InterceptorMapping EmployeeRemoveInterceptorMapping() {
-    InterceptorMapping mapping = new InterceptorMapping();
-    mapping.setInterceptor(employeeRemoveInterceptor());
     mapping.setTypeCode(Employee.class.getSimpleName());
 
     return mapping;

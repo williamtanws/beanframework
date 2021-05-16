@@ -6,8 +6,6 @@ import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.vendor.VendorInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.vendor.VendorLoadInterceptor;
 import com.beanframework.core.interceptor.vendor.VendorPrepareInterceptor;
-import com.beanframework.core.interceptor.vendor.VendorRemoveInterceptor;
-import com.beanframework.core.interceptor.vendor.VendorValidateInterceptor;
 import com.beanframework.user.domain.Vendor;
 
 @Configuration
@@ -62,42 +60,6 @@ public class VendorInterceptorConfig {
   public InterceptorMapping vendorPrepareInterceptorMapping() {
     InterceptorMapping mapping = new InterceptorMapping();
     mapping.setInterceptor(vendorPrepareInterceptor());
-    mapping.setTypeCode(Vendor.class.getSimpleName());
-
-    return mapping;
-  }
-
-  //////////////////////////
-  // Validate Interceptor //
-  //////////////////////////
-
-  @Bean
-  public VendorValidateInterceptor vendorValidateInterceptor() {
-    return new VendorValidateInterceptor();
-  }
-
-  @Bean
-  public InterceptorMapping vendorValidateInterceptorMapping() {
-    InterceptorMapping mapping = new InterceptorMapping();
-    mapping.setInterceptor(vendorValidateInterceptor());
-    mapping.setTypeCode(Vendor.class.getSimpleName());
-
-    return mapping;
-  }
-
-  ////////////////////////
-  // Remove Interceptor //
-  ////////////////////////
-
-  @Bean
-  public VendorRemoveInterceptor vendorRemoveInterceptor() {
-    return new VendorRemoveInterceptor();
-  }
-
-  @Bean
-  public InterceptorMapping vendorRemoveInterceptorMapping() {
-    InterceptorMapping mapping = new InterceptorMapping();
-    mapping.setInterceptor(vendorRemoveInterceptor());
     mapping.setTypeCode(Vendor.class.getSimpleName());
 
     return mapping;
