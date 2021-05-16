@@ -1,0 +1,92 @@
+.modal {
+	padding: 0 !important;
+}
+
+.modal .modal-dialog {
+	width: 100%;
+	max-width: none;
+	height: 100%;
+	margin: 0;
+}
+
+.modal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+}
+
+.modal .modal-body {
+	overflow-y: auto;
+	padding: 10px 5px;
+}
+
+.modal .modal-header {
+	padding: 10px 2rem 10px 1rem;
+}
+
+.modal .modal-header .close {
+	font-size: 36px;
+}
+
+.content-wrapper .content-header {
+	padding: 10px 1rem 10px 1rem;
+}
+
+table .selected {
+	background-color: rgba(0, 0, 0, .075);
+}
+
+.table-select {
+	background-color: #f7f7f7;
+}
+
+.content-wrapper .content-header {
+	background-color: #f4f6f9;
+}
+
+.modal .modal-header {
+	background-color: #f4f6f9;
+}
+
+.consistent-height .tab-content {
+	display: flex;
+}
+
+.consistent-height .tab-content>.tab-pane {
+	display: block; /* undo "display: none;" */
+	visibility: hidden;
+	margin-right: -100%;
+	width: 100%;
+}
+
+.consistent-height .tab-content>.active {
+	visibility: visible;
+}
+
+div.ck-editor__editable {
+	min-height: 200px;
+}
+
+.dark-mode table .selected {
+	background-color: #5f5f5f;
+}
+
+.dark-mode table.dataTable.fixedHeader-floating {
+	background-color: black !important;
+}
+
+.dark-mode .table-select {
+	background-color: #454d55;
+}
+
+.dark-mode .content-wrapper .content-header {
+	background-color: #454d55;
+}
+
+.dark-mode .modal .modal-header {
+	background-color: #454d55;
+}
+
+.dark-mode .container-fluid {
+	background-color: #454d55;
+}

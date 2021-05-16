@@ -1,0 +1,17 @@
+.navbar-nav .nav-item .active {
+	background-color: #f4f6f9;
+	color: white;
+}
+
+.dark-mode .navbar{
+	border-bottom: 1px solid #4b545c !important;
+}
+
+.dark-mode .navbar-nav .nav-item .active {
+	background-color: #343a40;
+	color: white;
+}
+
+.dark-mode .navbar-nav .nav-item .nav-link {
+	color: #bdbdbd;
+}

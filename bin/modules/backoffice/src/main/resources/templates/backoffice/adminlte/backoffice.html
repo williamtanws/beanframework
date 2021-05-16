@@ -17,27 +17,13 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/dist/css/adminlte.min.css}">
 <!-- overlayScrollbars -->
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-<style>
-.navbar-nav .nav-item .active {
-	background-color: #f4f6f9;
-	color: white;
-}
 
-.dark-mode .navbar{
-	border-bottom: 1px solid #4b545c !important;
-}
-
-.dark-mode .navbar-nav .nav-item .active {
-	background-color: #343a40;
-	color: white;
-}
-
-.dark-mode .navbar-nav .nav-item .nav-link {
-	color: #bdbdbd;
-}
-</style>
+<!-- backoffice -->
+<link rel="stylesheet" th:href="@{/static/backoffice/backoffice.css}">
 </head>
-<body th:class="'hold-transition sidebar-mini layout-fixed '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}+' '+${#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : ''}" data-panel-auto-height-mode="height">
+<body
+	th:class="'hold-transition sidebar-mini layout-fixed '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}+' '+${#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : ''}"
+	data-panel-auto-height-mode="height">
 	<div class="wrapper">
 
 		<!-- Header -->
@@ -50,14 +36,17 @@
 		<div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
 			<div th:class="'nav navbar navbar-expand-lg navbar-light border-bottom p-0 '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : 'navbar-white'}">
 				<a class="nav-link bg-danger" href="#" data-widget="iframe-close" th:text="#{module.common.close}"></a>
-				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-scrollleft">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-scrollleft">
 					<i class="fas fa-angle-double-left"></i>
 				</a>
 				<ul class="navbar-nav" role="tablist"></ul>
-				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-scrollright">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-scrollright">
 					<i class="fas fa-angle-double-right"></i>
 				</a>
-				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#" data-widget="iframe-fullscreen">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-fullscreen">
 					<i class="fas fa-expand"></i>
 				</a>
 			</div>
@@ -65,20 +54,20 @@
 				<div class="tab-empty">
 					<h2 class="display-4" th:utext="#{module.common.backoffice.login.box.msg}"></h2>
 				</div>
-				<div th:class="'tab-loading '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}">
+				<!-- <div th:class="'tab-loading '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}">
 					<div>
 						<h2 class="display-4">
 							<span th:text="#{module.common.loading}"></span>
 							<i class="fa fa-sync fa-spin"></i>
 						</h2>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
 		<!-- Main control sidebar -->
 		<th:block th:insert="~{backoffice/adminlte/common/fragment/main-control-sidebar :: control-sidebar}"></th:block>
-		
+
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
@@ -108,7 +97,6 @@
 		
 	    var userSessionTitle =/*[[#{module.user.session}]]*/;
 		var userSessionLink = /*[[@{${@environment.getProperty('path.user.session')}}]]*/;
-		
 	/* ]]> */
 	</script>
 	<script th:src="@{/static/backoffice/backoffice.js}"></script>
