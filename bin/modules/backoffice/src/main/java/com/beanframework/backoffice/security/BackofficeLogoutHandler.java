@@ -1,7 +1,5 @@
 package com.beanframework.backoffice.security;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,11 +10,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
-import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.logentry.LogentryType;
+import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.event.AuthenticationEvent;
+import com.beanframework.user.service.UserService;
 
 @Component
 public class BackofficeLogoutHandler implements LogoutHandler {
@@ -27,23 +26,25 @@ public class BackofficeLogoutHandler implements LogoutHandler {
   private ApplicationEventPublisher applicationEventPublisher;
 
   @Autowired
-  private ModelService modelService;
+  private UserService userService;
 
-  public static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy, hh:mm:ssa");
-  public static final String LOGOUT_LAST_DATE = "logout.last.date";
+  @Autowired
+  private ModelService modelService;
 
   @Override
   public void logout(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) {
-    User user = (User) authentication.getPrincipal();
-    user.getParameters().put(LOGOUT_LAST_DATE, dateFormat.format(new Date()));
     try {
+      User user = userService.getCurrentUser();
+      user.getParameters().put(UserConstants.LOGOUT_LAST_DATE,
+          UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
       modelService.saveEntity(user);
-    } catch (BusinessException e) {
+
+      applicationEventPublisher.publishEvent(new AuthenticationEvent(authentication.getPrincipal(),
+          LogentryType.LOGOUT, "ID=" + user.getId()));
+    } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
     }
-    applicationEventPublisher.publishEvent(new AuthenticationEvent(authentication.getPrincipal(),
-        LogentryType.LOGOUT, "ID=" + user.getId()));
 
   }
 }

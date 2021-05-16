@@ -12,6 +12,5 @@ public class AuthenticationEvent extends LogentryEvent {
 
   public AuthenticationEvent(Object source, LogentryType type, String message) {
     super(source, type, message);
-    // TODO Auto-generated constructor stub
   }
 }

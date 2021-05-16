@@ -103,7 +103,7 @@ public class UserFacadeImpl extends AbstractFacade<User, UserDto> implements Use
 
   @Override
   public UserDto getCurrentUser() throws Exception {
-    User user = userService.getCurrentUser();
+    User user = userService.getCurrentUserSession();
     return modelService.getDto(user, dtoClass);
   }
 

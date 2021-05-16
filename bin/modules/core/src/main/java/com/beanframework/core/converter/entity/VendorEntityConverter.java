@@ -71,56 +71,24 @@ public class VendorEntityConverter implements EntityConverter<VendorDto, Vendor>
         prototype.setLastModifiedDate(lastModifiedDate);
       }
 
-      if (source.getAccountNonExpired() == null) {
-        if (prototype.getAccountNonExpired() != null) {
-          prototype.setAccountNonExpired(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
-      } else {
-        if (prototype.getAccountNonExpired() == null || prototype.getAccountNonExpired()
-            .equals(source.getAccountNonExpired()) == Boolean.FALSE) {
-          prototype.setAccountNonExpired(source.getAccountNonExpired());
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
+      if (source.getEnabled() != prototype.getEnabled()) {
+        prototype.setEnabled(source.getEnabled());
+        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
-      if (source.getAccountNonLocked() == null) {
-        if (prototype.getAccountNonLocked() != null) {
-          prototype.setAccountNonLocked(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
-      } else {
-        if (prototype.getAccountNonLocked() == null || prototype.getAccountNonLocked()
-            .equals(source.getAccountNonLocked()) == Boolean.FALSE) {
-          prototype.setAccountNonLocked(source.getAccountNonLocked());
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
+      if (source.getAccountNonExpired() != prototype.getAccountNonExpired()) {
+        prototype.setAccountNonExpired(source.getAccountNonExpired());
+        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
-      if (source.getCredentialsNonExpired() == null) {
-        if (prototype.getCredentialsNonExpired() != null) {
-          prototype.setCredentialsNonExpired(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
-      } else {
-        if (prototype.getCredentialsNonExpired() == null || prototype.getCredentialsNonExpired()
-            .equals(source.getCredentialsNonExpired()) == Boolean.FALSE) {
-          prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
+      if (source.getAccountNonLocked() != prototype.getAccountNonLocked()) {
+        prototype.setAccountNonLocked(source.getAccountNonLocked());
+        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
-      if (source.getEnabled() == null) {
-        if (prototype.getEnabled() != null) {
-          prototype.setEnabled(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
-      } else {
-        if (prototype.getEnabled() == null
-            || prototype.getEnabled().equals(source.getEnabled()) == Boolean.FALSE) {
-          prototype.setEnabled(source.getEnabled());
-          prototype.setLastModifiedDate(lastModifiedDate);
-        }
+      if (source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired()) {
+        prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
+        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Parameters

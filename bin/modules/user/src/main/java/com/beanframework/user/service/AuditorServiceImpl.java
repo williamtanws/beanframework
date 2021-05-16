@@ -32,20 +32,25 @@ public class AuditorServiceImpl implements AuditorService {
         auditor.setUuid(model.getUuid());
         auditor.setId(model.getId());
         auditor.setName(model.getName());
+
+        modelService.saveEntity(auditor);
       } else {
         Date lastModifiedDate = new Date();
-        if (StringUtils.equals(model.getId(), auditor.getId()) == Boolean.FALSE) {
-          auditor.setId(model.getId());
-          auditor.setLastModifiedDate(lastModifiedDate);
-        }
+        if (StringUtils.equals(model.getId(), auditor.getId()) == Boolean.FALSE
+            || StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
 
-        if (StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
-          auditor.setName(model.getName());
+          if (StringUtils.equals(model.getId(), auditor.getId()) == Boolean.FALSE) {
+            auditor.setId(model.getId());
+          }
+
+          if (StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
+            auditor.setName(model.getName());
+          }
           auditor.setLastModifiedDate(lastModifiedDate);
+
+          modelService.saveEntity(auditor);
         }
       }
-
-      modelService.saveEntity(auditor);
 
       return auditor;
     } catch (Exception e) {

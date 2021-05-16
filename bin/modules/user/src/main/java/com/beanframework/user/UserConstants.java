@@ -1,5 +1,8 @@
 package com.beanframework.user;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public final class UserConstants {
 
   private UserConstants() {
@@ -68,5 +71,15 @@ public final class UserConstants {
   public static interface Vendor {
     public static final String DEFAULT_GROUP = "${module.vendor.default.group}";
   }
+
+  public static final DateFormat PARAMETER_DATE_FORMAT =
+      new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss");
+  public static final String LOGOUT_LAST_DATE = "logout.last.date";
+  public static final String LOGIN_LAST_DATE = "login.last.date";
+  public static final String LOGIN_ATTEMPT_COUNT = "login.attempt.count";
+  public static final String LOGIN_ATTEMPT_MAX = "login.attempt.max";
+  public static final String ACCOUNT_EXPIRED_DATE = "account.expired.date";
+  public static final String PASSWORD_EXPIRED_DATE = "password.expired.date";
+  public static final String PASSWORD_CHANGED_LAST_DATE = "password.changed.last.date";
 
 }

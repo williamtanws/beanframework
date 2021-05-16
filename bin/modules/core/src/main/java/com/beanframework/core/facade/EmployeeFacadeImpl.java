@@ -99,7 +99,7 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto>
 
   @Override
   public EmployeeDto getCurrentUser() throws Exception {
-    User user = userService.getCurrentUser();
+    User user = userService.getCurrentUserSession();
     Employee employee = modelService.findOneByUuid(user.getUuid(), Employee.class);
     EmployeeDto dto = modelService.getDto(employee, dtoClass);
     return dto;

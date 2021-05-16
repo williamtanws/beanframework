@@ -33,7 +33,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<Auditor> {
           && overRiddenUser.getUserThreadMap().get(Thread.currentThread().getName()) != null) {
         user = overRiddenUser.getUserThreadMap().get(Thread.currentThread().getName());
       } else {
-        user = userService.getCurrentUser();
+        user = userService.getCurrentUserSession();
       }
 
       if (user != null) {

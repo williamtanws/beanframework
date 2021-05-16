@@ -93,7 +93,7 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
     user.getParameters().put(NotificationConstants.USER_NOTIFICATION,
         NotificationConstants.USER_NOTIFICATION_DATEFORMAT.format(new Date()));
     modelService.saveEntity(user);
-    userService.updatePrincipal(user);
+    userService.updateCurrentUserSession();
   }
 
   @Override

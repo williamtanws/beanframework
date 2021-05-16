@@ -64,7 +64,7 @@ public class CommentEntityConverter implements EntityConverter<CommentDto, Comme
       }
 
       if (prototype.getUser() == null && source.getUser() == null) {
-        prototype.setUser(userService.getCurrentUser().getUuid());
+        prototype.setUser(userService.getCurrentUserSession().getUuid());
         prototype.setLastModifiedDate(lastModifiedDate);
       } else if (prototype.getUser().equals(source.getUser().getUuid()) == Boolean.FALSE) {
         User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);

@@ -82,7 +82,7 @@ public class UserSettingsResource extends AbstractResource {
     }
 
     modelService.saveEntity(user);
-    userService.updatePrincipal(user);
+    userService.updateCurrentUserSession();
 
     return new ResponseEntity<>(HttpStatus.OK);
   }
