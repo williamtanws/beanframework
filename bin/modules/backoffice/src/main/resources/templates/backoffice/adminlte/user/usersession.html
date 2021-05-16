@@ -23,6 +23,7 @@
 									<table id="usersessions" class="table table-bordered table-hover">
 										<thead>
 											<tr>
+												<th th:text="#{module.user.name}"></th>
 												<th th:text="#{module.user.id}"></th>
 												<th th:text="#{module.user.session.id}"></th>
 												<th th:text="#{module.user.session.lastrequest}"></th>
@@ -37,8 +38,10 @@
 										<tbody>
 											<tr th:each="row : ${sessions}">
 												<th scope="row">
-													<a sec:authorize="hasAuthority('usersession_read')" th:href="@{${@environment.getProperty('path.user')}(uuid=${row.user.uuid})}" th:text="${row.user.id}"></a>
-													<span sec:authorize="!hasAuthority('usersession_read')" th:text="${row.user.id}"></span>
+													<span th:text="${row.user.name}"></span>
+												</th>
+												<th>
+													<span th:text="${row.user.id}"></span>
 												</th>
 												<td>
 													<th:block th:each="row2 : ${row.sessionInformations}">
@@ -115,10 +118,44 @@
 	    	    'processing': false,
 	    	    'serverSide': false,
 		        'bStateSave': false,
-		        'dom': 
+		        'dom': "<'row'<'form-group col-sm-12 col-md-12'B>>" +
 	    	      "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 	    	      "<'row'<'col-sm-12'tr>>" +
-	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+	    	      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", 
+	    	      "buttons": [
+			            {
+			                extend: 'csv',
+			                text: /*[[#{module.common.export.csv}]]*/,
+			                className: 'btn btn-default'
+			            },
+			            {
+			                extend: 'excel',
+			                text: /*[[#{module.common.export.excel}]]*/,
+			                className: 'btn btn-default'
+			            },
+			            {
+			                extend: 'pdf',
+			                text: /*[[#{module.common.export.pdf}]]*/,
+			                className: 'btn btn-default'
+			            },
+			            {
+			                extend: 'print',
+			                text: /*[[#{module.common.print}]]*/,
+			                className: 'btn btn-default'
+			            },
+			            {
+			                extend: 'colvis',
+			                text: /*[[#{module.common.columns}]]*/,
+			                className: 'btn btn-default'
+			            },
+			        	{
+			                text: /*[[#{module.common.refresh}]]*/,
+			                className: 'btn btn-default',
+			                action: function ( e, dt, node, config ) {
+			                	location.reload();
+			                }
+			            }
+			    	]
 			});
 			/*]]>*/
 		</script>

@@ -17,7 +17,8 @@ $('.content-wrapper').IFrame({
     scrollOffset: 40,
     scrollBehaviorSwap: false,
     iconMaximize: 'fa-expand',
-    iconMinimize: 'fa-compress'
+    iconMinimize: 'fa-compress',
+    allowDuplicates: false
 });
 
 function changeLocale(locale) {

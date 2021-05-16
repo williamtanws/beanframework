@@ -30,7 +30,7 @@ public class ConsoleLoginSuccessHandler extends SavedRequestAwareAuthenticationS
 
     User user = (User) authentication.getPrincipal();
     applicationEventPublisher.publishEvent(new AuthenticationEvent(authentication.getPrincipal(),
-        LogentryType.LOGIN, "Logon ID=" + user.getId()));
+        LogentryType.LOGIN, "ID=" + user.getId()));
     getRedirectStrategy().sendRedirect(request, response, PATH_CONSOLE);
   }
 }

@@ -12,7 +12,7 @@
 	</th:block>
 	<th:block th:fragment="tree-submenu (menu)">
 		<li class="nav-item">
-			<a th:href="${menu.target.toString() == '_self' ? menu.path : '#'}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target.toString()}]] );">
+			<a th:href="${menu.target.toString() == '_self' ? menu.path : '#'}" class="nav-link"  th:onClick="menuOnClick([[${menu.path}]],[[${menu.target.toString()}]] );" th:id="'menu-'+${menu.id}">
 				<i th:class="'nav-icon '+${menu.icon}"></i>
 				<p>
 					<th:block th:text="${menu.getName(#locale.toString())}"></th:block>
@@ -34,7 +34,7 @@
 	</th:block>
 	<th:block th:fragment="button-submenu">
 		<th:block th:if="${#lists.isEmpty(menu.childs)}">
-			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}">
+			<a class="btn btn-app" th:href="${menu.path}" th:target="${menu.target != null ? menu.target.toString():''}" th:id="'menu-'+${menu.id}">
 				<i th:classappend="${menu.icon}"></i>
 				<th:block th:insert="backoffice/adminlte/common/fragment/menu :: name"></th:block>
 			</a>
