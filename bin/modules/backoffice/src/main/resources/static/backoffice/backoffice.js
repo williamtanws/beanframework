@@ -1,37 +1,32 @@
+$('.content-wrapper').IFrame({
+    onTabClick(item) {
+        return item
+    },
+    onTabChanged(item) {
+        return item
+    },
+    onTabCreated(item) {
+        return item
+    },
+    autoIframeMode: true,
+    autoItemActive: true,
+    autoShowNewTab: true,
+    loadingScreen: 750,
+    useNavbarItems: true,
+    allowDuplicates: false
+});
 
-function changeLocale(locale) {
-    var url = window.location.href.split('#')[0];
-    url = String(url.replace(
-        /&?locale=([^&]$|[^&]*)/i, ""));
-    if (window.location.href.indexOf('?') > -1) {
-        url = url + '&locale=' + locale;
-    } else {
-        url = url + '?locale=' + locale;
-    }
-
-    window.location.href = url;
+function openTabSidebar(menuId) {
+	$('.content-wrapper').IFrame('openTabSidebar',$('#'+menuId), true);
 }
 
-function menuOnClick(path, target) {
-    if (target != "_self") {
-        window.open(path, target).focus();
-    }
-}
+$('.dropdown-header').on('click', function(e) {
+    e.stopPropagation();
+});
 
-function openUserSession() {
-    $('.content-wrapper').IFrame('createTab',userSessionTitlee,userSessionLinkk, '-backoffice-user-session', true);
-}
-
-function changeUserSettings(data){
-	$.ajax({
-        url: userSettingsUrl,
-        data: data,
-        success: function(result) {},
-        error: function(data) {
-            console.log(data);
-        }
-    });
-}
+$('#notification-messages').on('click', function(e) {
+    e.stopPropagation();
+})
 
 $('#user-settings-header-theme').change(function() {
     if ($(this).is(':checked')) {
@@ -161,30 +156,35 @@ $('#user-settings-body-smalltext').change(function() {
     $('.content-wrapper').IFrame('removeActiveTab', 'all');
 });
 
-$('.content-wrapper').IFrame({
-    onTabClick(item) {
-        return item
-    },
-    onTabChanged(item) {
-        return item
-    },
-    onTabCreated(item) {
-        return item
-    },
-    autoIframeMode: true,
-    autoItemActive: true,
-    autoShowNewTab: true,
-    loadingScreen: 750,
-    useNavbarItems: true
-});;
+function changeLocale(locale) {
+    var url = window.location.href.split('#')[0];
+    url = String(url.replace(
+        /&?locale=([^&]$|[^&]*)/i, ""));
+    if (window.location.href.indexOf('?') > -1) {
+        url = url + '&locale=' + locale;
+    } else {
+        url = url + '?locale=' + locale;
+    }
 
-$('.dropdown-header').on('click', function(e) {
-    e.stopPropagation();
-});
+    window.location.href = url;
+}
 
-$('#notification-messages').on('click', function(e) {
-    e.stopPropagation();
-})
+function menuOnClick(path, target) {
+    if (target != "_self") {
+        window.open(path, target).focus();
+    }
+}
+
+function changeUserSettings(data){
+	$.ajax({
+        url: userSettingsUrl,
+        data: data,
+        success: function(result) {},
+        error: function(data) {
+            console.log(data);
+        }
+    });
+}
 
 $(document).ready(function() {
     const checkForNotifications = (delay) => {
