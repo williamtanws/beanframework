@@ -29,7 +29,4 @@ public interface VendorFacade {
   int countHistory(DataTableRequest dataTableRequest) throws Exception;
 
   VendorDto createDto() throws Exception;
-
-  VendorDto getCurrentUser() throws Exception;
-
 }

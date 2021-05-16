@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -115,36 +116,30 @@ public class UserServiceImpl implements UserService {
     }
 
     if (passwordEncoder.matches(password, user.getPassword()) == Boolean.FALSE) {
+
+      if (StringUtils.isNotBlank(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_COUNT))) {
+        try {
+          int loginAttemptCount =
+              Integer.valueOf(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_COUNT));
+          loginAttemptCount = loginAttemptCount + 1;
+
+          user.getParameters().put(UserConstants.LOGIN_ATTEMPT_COUNT,
+              String.valueOf(loginAttemptCount));
+        } catch (Exception e) {
+          LOGGER.error(e.getMessage(), e);
+        }
+      } else {
+        user.getParameters().put(UserConstants.LOGIN_ATTEMPT_COUNT, "1");
+      }
+      user = modelService.saveEntity(user);
+
       applicationEventPublisher.publishEvent(
           new AuthenticationEvent(user, LogentryType.LOGIN, "Wrong password for ID=" + id));
       throw new BadCredentialsException("Bad Credentials");
     }
 
-    // Find admin
-    properties = new HashMap<String, Object>();
-    properties.put(UserGroup.ID, defaultAdminGroup);
-
-    UserGroup adminGroup = modelService.findOneByProperties(properties, UserGroup.class);
-
-    // If admin group is exists
-    if (adminGroup != null) {
-      for (UUID userGroupUuid : user.getUserGroups()) {
-        if (userGroupUuid.equals(adminGroup.getUuid())) {
-          return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
-              getAdminAuthority());
-        }
-
-        // Check user group's sub group
-        UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
-        if (userGroup != null) {
-          for (UUID subGroupUuid : userGroup.getUserGroups()) {
-            if (subGroupUuid.equals(adminGroup.getUuid())) {
-              return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
-                  getAdminAuthority());
-            }
-          }
-        }
-      }
+    if (isAdmin(user)) {
+      return new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAdminAuthorities());
     }
 
     // Normal user group
@@ -152,19 +147,84 @@ public class UserServiceImpl implements UserService {
       throw new DisabledException("Account Disabled");
     }
     if (user.getAccountNonExpired() == Boolean.FALSE) {
-      throw new AccountExpiredException("Account Expired");
+      try {
+        if (StringUtils.isNotBlank(user.getParameters().get(UserConstants.ACCOUNT_EXPIRED_DATE))) {
+          Date expiredDate = UserConstants.PARAMETER_DATE_FORMAT
+              .parse(user.getParameters().get(UserConstants.ACCOUNT_EXPIRED_DATE));
+
+          if (new Date().after(expiredDate)) {
+            throw new AccountExpiredException("Account Expired");
+          }
+        }
+      } catch (Exception e) {
+        LOGGER.error(e.getMessage(), e);
+      }
     }
     if (user.getAccountNonLocked() == Boolean.FALSE) {
-      throw new LockedException("Account Locked");
+      try {
+        if (StringUtils.isNotBlank(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_COUNT))
+            && StringUtils.isNotBlank(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_MAX))) {
+          int loginAttemptCount =
+              Integer.valueOf(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_COUNT));
+          int loginAttemptMax =
+              Integer.valueOf(user.getParameters().get(UserConstants.LOGIN_ATTEMPT_MAX));
+
+          if (loginAttemptCount >= loginAttemptMax) {
+            throw new LockedException("Account Locked");
+          }
+        }
+      } catch (Exception e) {
+        LOGGER.error(e.getMessage(), e);
+      }
     }
     if (user.getCredentialsNonExpired() == Boolean.FALSE) {
-      throw new CredentialsExpiredException("Password Expired");
+      try {
+        if (user.getParameters().get(UserConstants.PASSWORD_EXPIRED_DATE) != null) {
+          Date expiredDate = UserConstants.PARAMETER_DATE_FORMAT
+              .parse(user.getParameters().get(UserConstants.PASSWORD_EXPIRED_DATE));
+
+          if (new Date().after(expiredDate)) {
+            throw new CredentialsExpiredException("Password Expired");
+          }
+        }
+      } catch (Exception e) {
+        LOGGER.error(e.getMessage(), e);
+      }
     }
 
     return new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
   }
 
-  private Set<GrantedAuthority> getAdminAuthority() {
+  private boolean isAdmin(User user) throws Exception {
+    // Find admin
+    Map<String, Object> properties = new HashMap<String, Object>();
+    properties.put(UserGroup.ID, defaultAdminGroup);
+
+    UserGroup adminGroup = modelService.findOneByProperties(properties, UserGroup.class);
+
+    // Check admin user group
+    if (adminGroup != null) {
+      for (UUID userGroupUuid : user.getUserGroups()) {
+        if (userGroupUuid.equals(adminGroup.getUuid())) {
+          return true;
+        }
+
+        // Check user group's sub group
+        UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
+        if (userGroup != null) {
+          for (UUID subGroupUuid : userGroup.getUserGroups()) {
+            if (subGroupUuid.equals(adminGroup.getUuid())) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private Set<GrantedAuthority> getAdminAuthorities() {
 
     Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
     authorities.add(new SimpleGrantedAuthority(ACCESS_CONSOLE));
@@ -286,7 +346,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser() {
+  public User getCurrentUserSession() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth != null) {
@@ -299,18 +359,36 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User updatePrincipal(User model) {
+  public User getCurrentUser() throws Exception {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+    if (auth != null) {
+
+      User principal = (User) auth.getPrincipal();
+      return modelService.findOneByUuid(principal.getUuid(), User.class);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public void updateCurrentUserSession() throws Exception {
+
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     User principal = (User) auth.getPrincipal();
-    principal.setId(model.getId());
-    principal.setName(model.getName());
-    principal.setPassword(model.getPassword());
 
-    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal,
-        principal.getPassword(), auth.getAuthorities());
+    User user = modelService.findOneByUuid(principal.getUuid(), User.class);
+
+    UsernamePasswordAuthenticationToken token = null;
+    if (isAdmin(user)) {
+      token =
+          new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAdminAuthorities());
+      SecurityContextHolder.getContext().setAuthentication(token);
+    } else {
+      token =
+          new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
+    }
     SecurityContextHolder.getContext().setAuthentication(token);
-
-    return principal;
   }
 
   @Override
@@ -373,7 +451,7 @@ public class UserServiceImpl implements UserService {
   public Set<UUID> getAllUserGroupsByCurrentUser() throws Exception {
     Set<UUID> userGroupUuids = new HashSet<UUID>();
 
-    User user = getCurrentUser();
+    User user = getCurrentUserSession();
 
     for (UUID userGroupUuid : user.getUserGroups()) {
 

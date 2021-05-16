@@ -96,7 +96,7 @@ public class CustomerFacadeImpl extends AbstractFacade<Customer, CustomerDto>
 
   @Override
   public CustomerDto getCurrentUser() throws Exception {
-    User user = userService.getCurrentUser();
+    User user = userService.getCurrentUserSession();
     Customer customer = modelService.findOneByUuid(user.getUuid(), Customer.class);
     CustomerDto dto = modelService.getDto(customer, dtoClass);
     return dto;

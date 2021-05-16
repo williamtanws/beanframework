@@ -3,7 +3,6 @@ package com.beanframework.core.facade;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import com.beanframework.common.data.DataTableRequest;
@@ -11,16 +10,12 @@ import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.VendorDto;
 import com.beanframework.core.specification.VendorSpecification;
 import com.beanframework.user.domain.Vendor;
-import com.beanframework.user.service.VendorService;
 
 @Component
 public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implements VendorFacade {
 
   private static final Class<Vendor> entityClass = Vendor.class;
   private static final Class<VendorDto> dtoClass = VendorDto.class;
-
-  @Autowired
-  private VendorService vendorService;
 
   @Override
   public VendorDto findOneByUuid(UUID uuid) throws Exception {
@@ -90,13 +85,5 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
   @Override
   public VendorDto createDto() throws Exception {
     return createDto(entityClass, dtoClass);
-  }
-
-  @Override
-  public VendorDto getCurrentUser() throws Exception {
-    Vendor entity = vendorService.getCurrentUser();
-    VendorDto dto = modelService.getDto(entity, dtoClass);
-
-    return dto;
   }
 }

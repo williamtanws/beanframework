@@ -15,9 +15,11 @@ public interface UserService {
 
   void setCurrentUser(User model);
 
-  User getCurrentUser();
+  User getCurrentUserSession();
 
-  User updatePrincipal(User model);
+  User getCurrentUser() throws Exception;
+
+  void updateCurrentUserSession() throws Exception;
 
   Set<UserSession> findAllSessions();
 

@@ -23,8 +23,8 @@ public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto>
 
   @Override
   public MyAccountDto getCurrentUser() throws Exception {
-    User user = userService.getCurrentUser();
-    return modelService.getDto(user, dtoClass);
+    User user = userService.getCurrentUserSession();
+    return modelService.getDto(modelService.findOneByUuid(user.getUuid(), User.class), dtoClass);
   }
 
   @Override
@@ -42,7 +42,7 @@ public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto>
 
       userService.saveProfilePicture(entity, dto.getProfilePicture());
 
-      userService.updatePrincipal(entity);
+      userService.updateCurrentUserSession();
 
       return modelService.getDto(entity, dtoClass);
 
