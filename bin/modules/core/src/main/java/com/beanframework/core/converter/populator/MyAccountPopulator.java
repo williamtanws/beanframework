@@ -2,6 +2,7 @@ package com.beanframework.core.converter.populator;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,16 @@ public class MyAccountPopulator extends AbstractPopulator<User, MyAccountDto>
       populateGeneric(source, target);
       target.setName(source.getName());
       target.setPassword(source.getPassword());
+
+      for (UUID uuid : source.getUserGroups()) {
+        target.getUserGroups().add(populateUserGroup(uuid));
+      }
+      for (UUID uuid : source.getCompanies()) {
+        target.getCompanies().add(populateCompany(uuid));
+      }
+      for (UUID uuid : source.getAddresses()) {
+        target.getAddresses().add(populateAddress(uuid));
+      }
 
       Collections.sort(target.getAttributes(), new Comparator<UserAttributeDto>() {
         @Override

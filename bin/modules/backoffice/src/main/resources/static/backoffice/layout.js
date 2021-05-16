@@ -1,3 +1,7 @@
+$(function () {
+  bsCustomFileInput.init();
+});
+
 $(document).ready(function() {
 
     var spin = document.getElementById("form-save-button-spin");

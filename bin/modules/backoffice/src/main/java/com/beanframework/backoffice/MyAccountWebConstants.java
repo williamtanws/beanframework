@@ -13,7 +13,7 @@ public interface MyAccountWebConstants {
   }
 
   public interface View {
-    public static final String MYACCOUNT_FORM = "${view.myaccount.form}";
+    public static final String MYACCOUNT_FORM = "${view.myaccount}";
   }
 
   public interface ModelAttribute {
