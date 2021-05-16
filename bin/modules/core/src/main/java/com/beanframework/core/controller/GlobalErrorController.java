@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import com.beanframework.common.utils.RequestUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
@@ -26,6 +27,8 @@ public class GlobalErrorController implements ErrorController {
   @Autowired
   private Environment environment;
 
+  public static final String COOKIE_DOCUMENTATION_REFERER = "doc_referer";
+
   @RequestMapping
   public String handleError(Model model, HttpServletRequest request) {
     String originalUri = (String) request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
@@ -33,17 +36,13 @@ public class GlobalErrorController implements ErrorController {
     Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
     String message = (String) request.getAttribute("javax.servlet.error.message");
 
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (int i = 0; i < cookies.length; i++) {
-        Cookie cookie = cookies[i];
-        if (cookie.getName().equalsIgnoreCase("referer")
-            && StringUtils.isNotBlank(cookie.getValue())) {
-          String[] value = cookie.getValue().split("/");
-          originalUri = "/" + value[value.length - 1];
-          model.addAttribute("fullpage", true);
-          model.addAttribute("homeurl", cookie.getValue());
-        }
+    Cookie cookie = RequestUtils.getCookie(request.getCookies(), COOKIE_DOCUMENTATION_REFERER);
+    if (cookie != null) {
+      if (StringUtils.isNotBlank(cookie.getValue())) {
+        String[] value = cookie.getValue().split("/");
+        originalUri = "/" + value[value.length - 1];
+        model.addAttribute("fullpage", true);
+        model.addAttribute("homeurl", cookie.getValue());
       }
     }
 

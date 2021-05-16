@@ -11,7 +11,7 @@
 			window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
 		}
 		</script>
-		<div class="login-page">
+		<div th:class="'login-page '+${loginTheme}">
 			<div class="login-box">
 				<!-- /.login-logo -->
 				<div class="card card-outline card-primary">
