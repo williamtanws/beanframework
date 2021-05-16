@@ -86,6 +86,10 @@ table .selected {
 .dark-mode table .selected {
 	background-color: #5f5f5f;
 }
+
+.dark-mode table .fixedHeader-floating {
+	background-color: black;
+}
 	
 .dark-mode .table-select {
 	background-color: #454d55;
@@ -102,7 +106,6 @@ table .selected {
 .dark-mode .container-fluid{
 	background-color: #454d55;
 }
-
 
 .consistent-height .tab-content {
 	display: flex;
@@ -124,7 +127,7 @@ div.ck-editor__editable { min-height: 200px;}
 </style>
 
 </head>
-<body th:class="'layout-top-nav '+ ${#authorization.expression('isAuthenticated()') ? (#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : '') : ''}" style="height: auto;">
+<body th:class="'layout-top-nav '+ ${#authorization.expression('isAuthenticated()') ? (#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : '')+' '+(#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : '') : ''}" style="height: auto;">
 	<div class="wrapper">
 		<div layout:fragment="content"></div>
 	</div>

@@ -31,7 +31,16 @@ public class UserSettingsResource extends AbstractResource {
 
     String user_settings_header_theme = (String) requestParams.get("userSettingsHeaderTheme");
     String user_settings_sidebar_theme = (String) requestParams.get("userSettingsSidebarTheme");
+    String user_settings_sidebar_navflatstyle =
+        (String) requestParams.get("userSettingsSidebarNavflatstyle");
+    String user_settings_sidebar_navlegacystyle =
+        (String) requestParams.get("userSettingsSidebarNavlegacystyle");
+    String user_settings_sidebar_navcompact =
+        (String) requestParams.get("userSettingsSidebarNavcompact");
+    String user_settings_sidebar_navchildindent =
+        (String) requestParams.get("userSettingsSidebarNavchildindent");
     String user_settings_body_theme = (String) requestParams.get("userSettingsBodyTheme");
+    String user_settings_body_smalltext = (String) requestParams.get("userSettingsBodySmalltext");
 
     User user = userService.getCurrentUser();
 
@@ -41,8 +50,27 @@ public class UserSettingsResource extends AbstractResource {
     if (user_settings_sidebar_theme != null) {
       user.getParameters().put("user.settings.sidebar.theme", user_settings_sidebar_theme);
     }
+    if (user_settings_sidebar_navflatstyle != null) {
+      user.getParameters().put("user.settings.sidebar.navflatstyle",
+          user_settings_sidebar_navflatstyle);
+    }
+    if (user_settings_sidebar_navlegacystyle != null) {
+      user.getParameters().put("user.settings.sidebar.navlegacystyle",
+          user_settings_sidebar_navlegacystyle);
+    }
+    if (user_settings_sidebar_navcompact != null) {
+      user.getParameters().put("user.settings.sidebar.navcompact",
+          user_settings_sidebar_navcompact);
+    }
+    if (user_settings_sidebar_navchildindent != null) {
+      user.getParameters().put("user.settings.sidebar.navchildindent",
+          user_settings_sidebar_navchildindent);
+    }
     if (user_settings_body_theme != null) {
       user.getParameters().put("user.settings.body.theme", user_settings_body_theme);
+    }
+    if (user_settings_body_smalltext != null) {
+      user.getParameters().put("user.settings.body.smalltext", user_settings_body_smalltext);
     }
 
     modelService.saveEntity(user);

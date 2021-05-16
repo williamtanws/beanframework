@@ -37,7 +37,7 @@
 
 				<!-- Sidebar Menu -->
 				<nav class="mt-2">
-        			<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+        			<ul th:class="'nav nav-pills nav-sidebar flex-column '+${#authentication.principal.parameters.get('user.settings.sidebar.navflatstyle') != null ? #authentication.principal.parameters.get('user.settings.sidebar.navflatstyle') : ''}+' '+${#authentication.principal.parameters.get('user.settings.sidebar.navlegacystyle') != null ? #authentication.principal.parameters.get('user.settings.sidebar.navlegacystyle') : ''}+' '+${#authentication.principal.parameters.get('user.settings.sidebar.navcompact') != null ? #authentication.principal.parameters.get('user.settings.sidebar.navcompact') : ''}+' '+${#authentication.principal.parameters.get('user.settings.sidebar.navchildindent') != null ? #authentication.principal.parameters.get('user.settings.sidebar.navchildindent') : ''}" data-widget="treeview" role="menu" data-accordion="false">
 						<th:block th:insert="~{backoffice/adminlte/common/fragment/main-menu :: tree}"></th:block>
 					</ul>
 				</nav>
