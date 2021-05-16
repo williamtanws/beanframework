@@ -17,13 +17,13 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/dist/css/adminlte.min.css}">
 <!-- overlayScrollbars -->
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-<style>
-.navbar-nav .nav-item .active {
-	background-color: #f4f6f9;
-}
-</style>
+
+<!-- backoffice -->
+<link rel="stylesheet" th:href="@{/static/backoffice/backoffice.css}">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+<body
+	th:class="'hold-transition sidebar-mini layout-fixed '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}+' '+${#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : ''}"
+	data-panel-auto-height-mode="height">
 	<div class="wrapper">
 
 		<!-- Header -->
@@ -34,16 +34,19 @@
 
 		<!-- Content Wrapper. Contains page content -->
 		<div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
-			<div class="nav navbar navbar-expand-lg navbar-white navbar-light border-bottom p-0">
+			<div th:class="'nav navbar navbar-expand-lg navbar-light border-bottom p-0 '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : 'navbar-white'}">
 				<a class="nav-link bg-danger" href="#" data-widget="iframe-close" th:text="#{module.common.close}"></a>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-scrollleft">
 					<i class="fas fa-angle-double-left"></i>
 				</a>
 				<ul class="navbar-nav" role="tablist"></ul>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-scrollright">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-scrollright">
 					<i class="fas fa-angle-double-right"></i>
 				</a>
-				<a class="nav-link bg-light" href="#" data-widget="iframe-fullscreen">
+				<a th:class="'nav-link nav-link-theme ' + ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? (#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode' ? 'bg-dark':'bg-light') : 'bg-light'}" href="#"
+					data-widget="iframe-fullscreen">
 					<i class="fas fa-expand"></i>
 				</a>
 			</div>
@@ -51,16 +54,20 @@
 				<div class="tab-empty">
 					<h2 class="display-4" th:utext="#{module.common.backoffice.login.box.msg}"></h2>
 				</div>
-				<div class="tab-loading">
+				<!-- <div th:class="'tab-loading '+ ${#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : ''}">
 					<div>
 						<h2 class="display-4">
 							<span th:text="#{module.common.loading}"></span>
 							<i class="fa fa-sync fa-spin"></i>
 						</h2>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
+
+		<!-- Main control sidebar -->
+		<th:block th:insert="~{backoffice/adminlte/common/fragment/main-control-sidebar :: control-sidebar}"></th:block>
+
 	</div>
 	<!-- jQuery -->
 	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
@@ -78,128 +85,21 @@
 	<script th:src="@{/static/adminlte/plugins/jquery-validation/jquery.validate.min.js}"></script>
 
 	<script th:inline="javascript">
-		/*<![CDATA[*/
+	/*<![CDATA[*/
+	    /* variable used by backoffice.js */
+	    var userSettingsUrl = /*[[@{${@environment.getProperty('path.api.user.settings')}}]]*/;
+	    
+    	var notificationUrl = /*[[@{${@environment.getProperty('path.api.notification.new')}}]]*/;
+		var notificationInterval = /*[[${@Config.get('notification.interval','5000')}]]*/;
+		var notificationCheckedUrl = /*[[@{${@environment.getProperty('path.api.notification.checked')}}]]*/;
 		
-		$('.content-wrapper').IFrame({
-		  onTabClick(item) {
-		    return item
-		  },
-		  onTabChanged(item) {
-		    return item
-		  },
-		  onTabCreated(item) {
-		    return item
-		  },
-		  autoIframeMode: true,
-		  autoItemActive: true,
-		  autoShowNewTab: true,
-		  loadingScreen: 750,
-		  useNavbarItems: true
-		});
-
-		var overviewName = /*[[#{module.common.overview}]]*/;
-		var overviewPath = /*[[@{${@environment.getProperty('path.backoffice.application.overview')}}]]*/;
-		//$('.content-wrapper').IFrame('createTab', overviewName, overviewPath, 'index', true);
+		var loginUrl = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/;
 		
-		function changeLocale(locale) {
-				var url = window.location.href.split('#')[0];
-			    url = String(url.replace(
-			        /&?locale=([^&]$|[^&]*)/i, ""));
-			    if (window.location.href.indexOf('?') > -1) {
-			        url = url + '&locale=' + locale;
-			    } else {
-			        url = url + '?locale=' + locale;
-			    }
-			
-			    window.location.href = url;
-		}
-		
-		function menuOnClick(path, target) {
-			if(target != "_self"){
-				window.open(path, target).focus();
-			}
-		}
-		
-		function openUserSession(){
-
-			var title =/*[[#{module.user.session}]]*/;
-			var link = /*[[@{${@environment.getProperty('path.user.session')}}]]*/;
-			var uniqueName =/*[[#{module.user.session}]]*/;
-		
-			$('.content-wrapper').IFrame('createTab', title, link, '-backoffice-user-session', true);
-		}
-		
-		$(document).ready( function() {
-			
-			
-			const checkForNotifications = (delay) => {
-			    setTimeout(() => {
-			    	var url = /*[[@{${@environment.getProperty('path.api.notification.new')}}]]*/;
-					var interval = /*[[${@Config.get('notification.interval','5000')}]]*/;
-			        $.ajax({
-			        	url: url,
-				        async: true,
-				        success: function (result) {
-				        	if(result.total > 0){
-					            $("#notification-total").html(result.total);
-				        	}
-				        	else{
-				        		$("#notification-total").html('');
-				        	}
-				        	
-				            $("#notification-overall").html(result.overallMessage);
-				            
-				            if (jQuery.isEmptyObject(result.notificationMessages)){
-				        		$("#notification-messages").html('');
-				            }
-				            else{
-					            $.each(result.notificationMessages, function (i, notification) {
-						        	$("#notification-messages").html("<div class='dropdown-divider'></div><a class='dropdown-item'><i class='"+notification.icon+"'></i>&nbsp;&nbsp;"+notification.message+"<span class='float-right text-muted text-sm'>"+notification.timeAgo+"</span></a>")
-						        });
-				            }
-				        },
-				        error: function(data){
-				            console.log(data);
-				        }
-			        }).done(() => {
-			            // do your staff 
-			            checkForNotifications(interval)
-			        })
-			    }, delay)
-			}
-			checkForNotifications(0);
-			
-			$("#notification-checked").click(function() {
-				var url = /*[[@{${@environment.getProperty('path.api.notification.checked')}}]]*/;
-				$.ajax({
-		        	url: url,
-			        async: true,
-			        success: function (result) {
-			            
-			        },
-			        error: function(data){
-			            console.log(data);
-			        }
-		        });
-			});
-		});
-		
-		$('.dropdown-header').on('click', function(e) {
-			  e.stopPropagation();
-		});
-		
-		$('#notification-messages').on('click', function(e) {
-			  e.stopPropagation();
-		});
-		
-		$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
-		    if ( jqxhr.status== 401 ) {
-		    	window.top.location.href = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/; 
-		    }
-		});
-		
-		/*]]>*/
+	    var userSessionTitle =/*[[#{module.user.session}]]*/;
+		var userSessionLink = /*[[@{${@environment.getProperty('path.user.session')}}]]*/;
+	/* ]]> */
 	</script>
+	<script th:src="@{/static/backoffice/backoffice.js}"></script>
 
 	<!-- toastr -->
 	<th:block th:insert="/backoffice/adminlte/common/fragment/toastr :: js"></th:block>

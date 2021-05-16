@@ -31,72 +31,10 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-fixedheader/css/fixedHeader.bootstrap4.min.css}">
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
 
-<style>
-table .selected {
-	background-color: rgba(0, 0, 0, .075);
-}
-
-.table-select {
-	background-color: #f7f7f7;
-}
-
-.modal {
-	padding: 0 !important;
-}
-
-.modal .modal-dialog {
-	width: 100%;
-	max-width: none;
-	height: 100%;
-	margin: 0;
-}
-
-.modal .modal-content {
-	height: 100%;
-	border: 0;
-	border-radius: 0;
-}
-
-.modal .modal-body {
-	overflow-y: auto;
-	padding: 10px 5px;
-}
-
-.modal .modal-header {
-	padding: 10px 2rem 10px 1rem;
-	background-color: #f4f6f9;
-}
-
-.modal .modal-header .close {
-	font-size: 36px;
-}
-
-.content-wrapper .content-header {
-	padding: 10px 1rem 10px 1rem;
-	background-color: #f4f6f9;
-}
-
-.consistent-height .tab-content {
-	display: flex;
-}
-
-.consistent-height .tab-content>.tab-pane {
-	display: block; /* undo "display: none;" */
-	visibility: hidden;
-	margin-right: -100%;
-	width: 100%;
-}
-
-.consistent-height .tab-content>.active {
-	visibility: visible;
-}
-
-
-div.ck-editor__editable { min-height: 200px;}
-</style>
-
+<!-- backoffice -->
+<link rel="stylesheet" th:href="@{/static/backoffice/layout.css}">
 </head>
-<body class="layout-top-nav" style="height: auto;">
+<body th:class="'layout-top-nav '+ ${#authorization.expression('isAuthenticated()') ? (#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : '')+' '+(#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : '') : ''}" style="height: auto;">
 	<div class="wrapper">
 		<div layout:fragment="content"></div>
 	</div>
@@ -153,76 +91,11 @@ div.ck-editor__editable { min-height: 200px;}
 	<th:block layout:fragment="toastr">
 		<th:block th:insert="/backoffice/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>
+	
+	<!-- backoffice -->
+	<script th:src="@{/static/backoffice/layout.js}"></script>
 
+	<!-- content -->
 	<th:block layout:fragment="js"></th:block>
-
-	<script th:inline="javascript">
-		$(document).ready(function() {
-
-			var spin = document.getElementById("form-save-button-spin");
-			if (spin !== null) {
-				if (spin.style.display === "none") {
-					spin.style.display = "block";
-				} else {
-					spin.style.display = "none";
-				}
-			}
-
-			var btn = document.getElementById("form-save-button");
-			if (spin !== null) {
-				if (btn.style.display === "none") {
-					btn.style.display = "block";
-				} else {
-					btn.style.display = "none";
-				}
-			}
-			
-		    $('.datetimepicker').daterangepicker({
-			      singleDatePicker: true,
-			      timePicker: true,
-			      timePickerIncrement: 30,
-			      locale: {
-			        format: 'MM/DD/YYYY hh:mm A'
-			      }
-			});
-
-			$(function() {
-				var allEditors = document.querySelectorAll('.editor');
-				for (var i = 0; i < allEditors.length; ++i) {
-				  ClassicEditor.create(allEditors[i], {
-						ckfinder: {
-							// To avoid issues, set it to an absolute path that does not start with dots, e.g. '/ckfinder/core/php/(...)'
-							uploadUrl: '/ckfinder/connector?command=QuickUpload&type=Files&responseType=json'
-						},
-						toolbar: {
-						    items: [
-						        'ckfinder', '|',
-						        'heading', '|',
-						        'fontfamily', 'fontsize', '|',
-						        'alignment', '|',
-						        'fontColor', 'fontBackgroundColor', '|',
-						        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
-						        'link', '|',
-						        'outdent', 'indent', '|',
-						        'bulletedList', 'numberedList', 'todoList', '|',
-						        'code', 'codeBlock', '|',
-						        'insertTable', '|',
-						        'uploadImage', 'blockQuote', '|',
-						        'undo', 'redo'
-						    ],
-						    shouldNotGroupWhenFull: true
-						}
-		
-					} )
-					.then( function( editor ) {
-						// console.log( editor );
-					} )
-					.catch( function( error ) {
-						console.error( error );
-					} );
-				}
-			});
-		});
-	</script>
 </body>
 </html>
