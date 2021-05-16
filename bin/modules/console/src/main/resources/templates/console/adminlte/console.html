@@ -17,11 +17,9 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/dist/css/adminlte.min.css}">
 <!-- overlayScrollbars -->
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-<style>
-.content-wrapper .navbar-nav .nav-item .active{
-	 background-color: #f4f6f9;
-}
-</style>
+
+<!-- console -->
+<link rel="stylesheet" th:href="@{/static/console/console.css}">
 </head>
 <body class="layout-top-nav layout-footer-not-fixed" data-panel-auto-height-mode="height">
 	<script th:inline="javascript">
@@ -53,14 +51,14 @@
 				<div class="tab-empty">
 					<h2 class="display-4" th:utext="#{module.common.console.login.box.msg}"></h2>
 				</div>
-				<div class="tab-loading">
+				<!-- <div class="tab-loading">
 					<div>
 						<h2 class="display-4">
 							<span th:text="#{module.common.loading}"></span>
 							<i class="fa fa-sync fa-spin"></i>
 						</h2>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
@@ -83,55 +81,12 @@
 	<script th:src="@{/static/adminlte/plugins/jquery-validation/jquery.validate.min.js}"></script>
 
 	<script th:inline="javascript">
-		/*<![CDATA[*/
-		
-		$('.content-wrapper').IFrame({
-			  onTabClick(item) {
-			    return item
-			  },
-			  onTabChanged(item) {
-			    return item
-			  },
-			  onTabCreated(item) {
-			    return item
-			  },
-			  loadingScreen: 750,
-			  autoIframeMode: true,
-			  autoItemActive: true,
-			  autoShowNewTab: true,
-			  loadingScreen: true,
-			  useNavbarItems: true,
-			  scrollOffset: 40,
-			  scrollBehaviorSwap: false,
-			  iconMaximize: 'fa-expand',
-			  iconMinimize: 'fa-compress'
-		});
-
-		var overviewName = /*[[#{module.common.overview}]]*/;
-		var overviewPath = /*[[@{${@environment.getProperty('path.console.application.overview')}}]]*/;
-		//$('.content-wrapper').IFrame('createTab', overviewName, overviewPath, 'index', true);
-		
-		function changeLocale(locale) {
-				var url = window.location.href.split('#')[0];
-			    url = String(url.replace(
-			        /&?locale=([^&]$|[^&]*)/i, ""));
-			    if (window.location.href.indexOf('?') > -1) {
-			        url = url + '&locale=' + locale;
-			    } else {
-			        url = url + '?locale=' + locale;
-			    }
-			
-			    window.location.href = url;
-		}
-		
-		$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
-		    if ( jqxhr.status== 401 ) {
-		    	window.top.location.href = /*[[@{${@environment.getProperty('path.console.login')}}]]*/; 
-		    }
-		});
-		
-		/*]]>*/
+	/*<![CDATA[*/
+		var loginUrl = /*[[@{${@environment.getProperty('path.backoffice.login')}}]]*/;
+	/*]]>*/
 	</script>
+	<!-- console -->
+	<script th:src="@{/static/console/console.js}"></script>
 
 	<!-- toastr -->
 	<th:block th:insert="/console/adminlte/common/fragment/toastr :: js"></th:block>

@@ -90,3 +90,7 @@ div.ck-editor__editable {
 .dark-mode .container-fluid {
 	background-color: #454d55;
 }
+
+.dark-mode .card-menu{
+	background-color: #5f5f5f !important;
+}
