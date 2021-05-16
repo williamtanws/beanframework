@@ -9,7 +9,6 @@
 			<!-- Control sidebar content goes here -->
 			<div class="os-content" style="padding: 16px; height: 100%; width: 100%;">
 				<h5 th:text="#{module.coomon.usersettings}"></h5>
-				<small th:text="#{module.coomon.usersettings.note}"></small>
 				<hr class="mb-2">
 				<h6 th:text="#{module.coomon.usersettings.options.header}"></h6>
 				<div class="mb-1">
@@ -40,6 +39,7 @@
 				</div>
 
 				<h6 th:text="#{module.coomon.usersettings.options.body}"></h6>
+				<small th:text="#{module.coomon.usersettings.options.body.note}"></small>
 				<div class="mb-1">
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-body-theme" th:checked="${#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode'}">
 					<span th:text="#{module.coomon.usersettings.options.body.darkmode}"></span>

@@ -31,7 +31,6 @@ function changeUserSettings(data){
             console.log(data);
         }
     });
-    $('.content-wrapper').IFrame('removeActiveTab', 'all');
 }
 
 $('#user-settings-header-theme').change(function() {
@@ -144,6 +143,7 @@ $('#user-settings-body-theme').change(function() {
             userSettingsBodyTheme: ""
         });
     }
+    $('.content-wrapper').IFrame('removeActiveTab', 'all');
 });
 
 $('#user-settings-body-smalltext').change(function() {
@@ -158,6 +158,7 @@ $('#user-settings-body-smalltext').change(function() {
         	userSettingsBodySmalltext: ""
         });
     }
+    $('.content-wrapper').IFrame('removeActiveTab', 'all');
 });
 
 $('.content-wrapper').IFrame({
