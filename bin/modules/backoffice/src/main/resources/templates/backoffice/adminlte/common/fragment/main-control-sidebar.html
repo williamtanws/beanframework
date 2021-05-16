@@ -11,7 +11,7 @@
 				<h5 th:text="#{module.coomon.usersettings}"></h5>
 				<hr class="mb-2">
 				<h6 th:text="#{module.coomon.usersettings.options.header}"></h6>
-				<div class="mb-1">
+				<div class="mb-4">
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-header-theme" th:checked="${#authentication.principal.parameters.get('user.settings.header.theme') == 'navbar-dark'}">
 					<span th:text="#{module.coomon.usersettings.options.header.darkmode}"></span>
 				</div>
@@ -33,7 +33,7 @@
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-sidebar-navcompact" th:checked="${#authentication.principal.parameters.get('user.settings.sidebar.navcompact') == 'nav-compact'}">
 					<span th:text="#{module.coomon.usersettings.options.sidebar.navcompact}"></span>
 				</div>
-				<div class="mb-1">
+				<div class="mb-4">
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-sidebar-navchildindent" th:checked="${#authentication.principal.parameters.get('user.settings.sidebar.navchildindent') == 'nav-child-indent'}">
 					<span th:text="#{module.coomon.usersettings.options.sidebar.navchildindent}"></span>
 				</div>
@@ -44,7 +44,7 @@
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-body-theme" th:checked="${#authentication.principal.parameters.get('user.settings.body.theme') == 'dark-mode'}">
 					<span th:text="#{module.coomon.usersettings.options.body.darkmode}"></span>
 				</div>
-				<div class="mb-1">
+				<div class="mb-4">
 					<input type="checkbox" value="1" class="mr-1" id="user-settings-body-smalltext" th:checked="${#authentication.principal.parameters.get('user.settings.body.smalltext') == 'text-sm'}">
 					<span th:text="#{module.coomon.usersettings.options.body.smalltext}"></span>
 				</div>
