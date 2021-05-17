@@ -1,4 +1,4 @@
-INSERT_UPDATE Configuration,id,value
+INSERT Configuration,id,value
 ,demo										,true
 ,footer										,"<div class='pull-right hidden-xs'><b>Version</b> 2.0.x </div><strong>Copyright &copy; 2018-2020 <a href='https://beanframework.com'>Beanframework</a>.</strong> All rights reserved."
 ,defaultavatar								,"/static/core/img/avatar.png"
@@ -10,3 +10,12 @@ INSERT_UPDATE Configuration,id,value
 ,userright.dynamicfield.template			,"userrighttemplate"
 ,userpermission.dynamicfield.template		,"userpermissiontemplate"
 ,notification.interval						,"5000"
+,employee.account.expiry.hours.default		,"720"
+,employee.password.expiry.hours.default		,"720"
+,employee.account.login.attempt.max.default	,"5"
+,customer.account.expiry.hours.default		,"720"
+,customer.password.expiry.hours.default		,"720"
+,customer.account.login.attempt.max.default	,"5"
+,vendor.account.expiry.hours.default		,"720"
+,vendor.password.expiry.hours.default		,"720"
+,vendor.account.login.attempt.max.default	,"5"

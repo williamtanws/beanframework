@@ -31,6 +31,7 @@ public class UserSpecification extends CommonSpecification {
       public List<Selection<?>> toSelection(Root<T> root) {
         List<Selection<?>> multiselect = new ArrayList<Selection<?>>();
         multiselect.add(root.get(User.UUID));
+        multiselect.add(root.get(User.TYPE));
         multiselect.add(root.get(User.ID));
         multiselect.add(root.get(User.NAME));
         return multiselect;

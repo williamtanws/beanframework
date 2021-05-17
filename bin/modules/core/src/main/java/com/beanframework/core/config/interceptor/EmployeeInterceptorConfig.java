@@ -39,7 +39,7 @@ public class EmployeeInterceptorConfig {
   }
 
   @Bean
-  public InterceptorMapping EmployeeLoadInterceptorMapping() {
+  public InterceptorMapping employeeLoadInterceptorMapping() {
     InterceptorMapping mapping = new InterceptorMapping();
     mapping.setInterceptor(employeeLoadInterceptor());
     mapping.setTypeCode(Employee.class.getSimpleName());
@@ -57,7 +57,7 @@ public class EmployeeInterceptorConfig {
   }
 
   @Bean
-  public InterceptorMapping EmployeePrepareInterceptorMapping() {
+  public InterceptorMapping employeePrepareInterceptorMapping() {
     InterceptorMapping mapping = new InterceptorMapping();
     mapping.setInterceptor(employeePrepareInterceptor());
     mapping.setTypeCode(Employee.class.getSimpleName());

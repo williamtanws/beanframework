@@ -24,4 +24,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
       return entity.getValue();
     }
   }
+
+  @Override
+  public String get(String id, String defaultValue) throws Exception {
+    Map<String, Object> properties = new HashMap<String, Object>();
+    properties.put(Configuration.ID, id);
+    Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
+    if (entity == null) {
+      return defaultValue;
+    } else {
+      return entity.getValue();
+    }
+  }
 }

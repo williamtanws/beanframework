@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.beanframework.common.interceptor.InterceptorMapping;
 import com.beanframework.core.interceptor.user.UserInitialDefaultsInterceptor;
+import com.beanframework.core.interceptor.user.UserLoadInterceptor;
 import com.beanframework.core.interceptor.user.UserPrepareInterceptor;
 import com.beanframework.core.interceptor.usergroup.UserGroupInitialDefaultsInterceptor;
 import com.beanframework.core.interceptor.usergroup.UserGroupLoadInterceptor;
@@ -87,6 +88,20 @@ public class UserInterceptorConfig {
   //////////////////////
   // Load Interceptor //
   //////////////////////
+
+  @Bean
+  public UserLoadInterceptor userLoadInterceptor() {
+    return new UserLoadInterceptor();
+  }
+
+  @Bean
+  public InterceptorMapping userLoadInterceptorMapping() {
+    InterceptorMapping mapping = new InterceptorMapping();
+    mapping.setInterceptor(userLoadInterceptor());
+    mapping.setTypeCode(User.class.getSimpleName());
+
+    return mapping;
+  }
 
   @Bean
   public UserGroupLoadInterceptor userGroupLoadInterceptor() {
