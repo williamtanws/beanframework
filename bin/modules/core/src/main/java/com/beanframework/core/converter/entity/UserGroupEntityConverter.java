@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
@@ -27,10 +26,7 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
 
       if (source.getUuid() != null) {
         UserGroup prototype = modelService.findOneByUuid(source.getUuid(), UserGroup.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(UserGroup.class));
@@ -45,18 +41,15 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
       throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Attribute
@@ -70,9 +63,6 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
                   prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
                 prototype.getAttributes().get(i)
                     .setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-                prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
-                prototype.setLastModifiedDate(lastModifiedDate);
               }
             }
           }
@@ -91,7 +81,6 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
                 prototype.getUserAuthorities().get(i)
                     .setEnabled(sourceUserAuthority.getEnabled() == null ? Boolean.FALSE
                         : sourceUserAuthority.getEnabled());
-                prototype.setLastModifiedDate(lastModifiedDate);
               }
             }
           }
@@ -113,7 +102,6 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
           }
           if (remove) {
             itr.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -137,7 +125,6 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
             if (entity != null
                 && StringUtils.equals(prototype.getId(), entity.getId()) == Boolean.FALSE) {
               prototype.getUserGroups().add(entity.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -146,7 +133,6 @@ public class UserGroupEntityConverter implements EntityConverter<UserGroupDto, U
         for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
     } catch (Exception e) {

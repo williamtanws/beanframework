@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
@@ -28,10 +27,7 @@ public class DynamicFieldTemplateEntityConverter
       if (source.getUuid() != null) {
         DynamicFieldTemplate prototype =
             modelService.findOneByUuid(source.getUuid(), DynamicFieldTemplate.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(DynamicFieldTemplate.class));
@@ -46,18 +42,14 @@ public class DynamicFieldTemplateEntityConverter
 
     try {
 
-      Date lastModifiedDate = new Date();
-
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // DynamicFieldSlots
@@ -75,7 +67,6 @@ public class DynamicFieldTemplateEntityConverter
           }
           if (remove) {
             itr.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -97,7 +88,6 @@ public class DynamicFieldTemplateEntityConverter
                 DynamicFieldSlot.class);
             if (DynamicFieldSlot != null) {
               prototype.getDynamicFieldSlots().add(DynamicFieldSlot.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -107,7 +97,6 @@ public class DynamicFieldTemplateEntityConverter
             .hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 

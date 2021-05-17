@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity.csv;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -49,21 +48,17 @@ public class RegionCsvEntityConverter implements EntityCsvConverter<RegionCsv, R
   private Region convertToEntity(RegionCsv source, Region prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.isNotBlank(source.getId())) {
         prototype.setId(source.getId());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getName())) {
         prototype.setName(source.getName());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getActive() != null) {
         prototype.setActive(source.getActive());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Country
@@ -76,7 +71,6 @@ public class RegionCsvEntityConverter implements EntityCsvConverter<RegionCsv, R
           LOGGER.error("Country ID not exists: " + source.getCountryId());
         } else {
           prototype.setCountry(entity.getUuid());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 

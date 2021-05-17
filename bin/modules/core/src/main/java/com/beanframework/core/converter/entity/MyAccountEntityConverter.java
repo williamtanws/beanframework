@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,10 +26,7 @@ public class MyAccountEntityConverter implements EntityConverter<MyAccountDto, U
 
       if (source.getUuid() != null) {
         User prototype = modelService.findOneByUuid(source.getUuid(), User.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(User.class));
@@ -44,23 +40,19 @@ public class MyAccountEntityConverter implements EntityConverter<MyAccountDto, U
   private User convertToEntity(MyAccountDto source, User prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getPassword())) {
         prototype.setPassword(passwordEncoder.encode(source.getPassword()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
     } catch (Exception e) {
       throw new ConverterException(e.getMessage(), e);

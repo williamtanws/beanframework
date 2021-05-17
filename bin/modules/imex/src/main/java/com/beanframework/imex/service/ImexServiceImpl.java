@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -337,20 +336,17 @@ public class ImexServiceImpl implements ImexService {
 
               if (mode.equalsIgnoreCase("INSERT")) {
                 if (((GenericEntity) entity).getUuid() == null) {
-                  ((GenericEntity) entity).setLastModifiedDate(new Date());
                   modelService.saveEntity(entity);
                   imported = true;
                 }
 
               } else if (mode.equalsIgnoreCase("UPDATE")) {
                 if (((GenericEntity) entity).getUuid() != null) {
-                  ((GenericEntity) entity).setLastModifiedDate(new Date());
                   modelService.saveEntity(entity);
                   imported = true;
                 }
 
               } else if (mode.equalsIgnoreCase("INSERT_UPDATE")) {
-                ((GenericEntity) entity).setLastModifiedDate(new Date());
                 modelService.saveEntity(entity);
                 imported = true;
 

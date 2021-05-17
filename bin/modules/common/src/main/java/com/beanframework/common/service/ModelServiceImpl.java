@@ -3,6 +3,7 @@ package com.beanframework.common.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -410,6 +411,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
         entry.getValue().beforeSave(model, beforeSaveEvent);
       }
 
+      ((GenericEntity) model).setLastModifiedDate(new Date());
       model = modelRepository.save(model);
 
       Set<Entry<String, AfterSaveListener>> afterSaveListeners =
@@ -418,8 +420,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
         entry.getValue().afterSave(model, afterSaveEvent);
       }
 
-      GenericEntity entity = (GenericEntity) model;
-      model = findOneByUuid(entity.getUuid(), model.getClass());
+      model = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
 
       return model;
     } catch (Exception e) {
@@ -434,7 +435,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
     if (model == null) {
       return null;
     }
-
+    ((GenericEntity) model).setLastModifiedDate(new Date());
     model = modelRepository.save(model);
     return model;
   }
@@ -453,6 +454,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
           entry.getValue().beforeRemove(model, beforeRemoveEvent);
         }
 
+        ((GenericEntity) model).setLastModifiedDate(new Date());
         modelRepository.delete(model);
 
         AfterRemoveEvent afterRemoveEvent = new AfterRemoveEvent(beforeRemoveEvent.getDataMap());
@@ -475,6 +477,7 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
       if (model != null) {
         removeInterceptor(model, modelClass.getSimpleName());
 
+        ((GenericEntity) model).setLastModifiedDate(new Date());
         modelRepository.delete(model);
       }
 

@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +27,7 @@ public class CommentEntityConverter implements EntityConverter<CommentDto, Comme
 
       if (source.getUuid() != null) {
         Comment prototype = modelService.findOneByUuid(source.getUuid(), Comment.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(Comment.class));
@@ -44,34 +40,28 @@ public class CommentEntityConverter implements EntityConverter<CommentDto, Comme
   private Comment convertToEntity(CommentDto source, Comment prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getHtml()),
           prototype.getHtml()) == Boolean.FALSE) {
         prototype.setHtml(StringUtils.stripToNull(source.getHtml()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getVisibled() == source.getVisibled() == Boolean.FALSE) {
         prototype.setVisibled(source.getVisibled());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getUser() == null && source.getUser() == null) {
         prototype.setUser(userService.getCurrentUserSession().getUuid());
-        prototype.setLastModifiedDate(lastModifiedDate);
       } else if (prototype.getUser().equals(source.getUser().getUuid()) == Boolean.FALSE) {
         User entityUser = modelService.findOneByUuid(source.getUser().getUuid(), User.class);
 
         if (entityUser != null) {
           prototype.setUser(entityUser.getUuid());
-          prototype.setLastModifiedDate(lastModifiedDate);
         } else {
           throw new ConverterException("User UUID not found: " + source.getUser().getUuid());
         }

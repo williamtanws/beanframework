@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,10 +22,7 @@ public class ImexEntityConverter implements EntityConverter<ImexDto, Imex> {
 
       if (source.getUuid() != null) {
         Imex prototype = modelService.findOneByUuid(source.getUuid(), Imex.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(Imex.class));
@@ -38,47 +34,38 @@ public class ImexEntityConverter implements EntityConverter<ImexDto, Imex> {
 
   private Imex convertToEntity(ImexDto source, Imex prototype) {
 
-    Date lastModifiedDate = new Date();
-
     if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
         prototype.getId()) == Boolean.FALSE) {
       prototype.setId(StringUtils.stripToNull(source.getId()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (prototype.getType() == source.getType() == Boolean.FALSE) {
       prototype.setType(source.getType());
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getDirectory()),
         prototype.getDirectory()) == Boolean.FALSE) {
       prototype.setDirectory(StringUtils.stripToNull(source.getDirectory()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getFileName()),
         prototype.getFileName()) == Boolean.FALSE) {
       prototype.setFileName(StringUtils.stripToNull(source.getFileName()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getQuery()),
         prototype.getQuery()) == Boolean.FALSE) {
       prototype.setQuery(StringUtils.stripToNull(source.getQuery()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getHeader()),
         prototype.getHeader()) == Boolean.FALSE) {
       prototype.setHeader(StringUtils.stripToNull(source.getHeader()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getSeperator()),
         prototype.getSeperator()) == Boolean.FALSE) {
       prototype.setSeperator(StringUtils.stripToNull(source.getSeperator()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     return prototype;

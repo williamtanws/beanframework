@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,10 +25,7 @@ public class UserPermissionEntityConverter
       if (source.getUuid() != null) {
         UserPermission prototype =
             modelService.findOneByUuid(source.getUuid(), UserPermission.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(UserPermission.class));
@@ -44,29 +40,24 @@ public class UserPermissionEntityConverter
       throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(source.getName(), prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getSort() == null) {
         if (prototype.getSort() != null) {
           prototype.setSort(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       } else {
         if (prototype.getSort() == null
             || prototype.getSort() == source.getSort() == Boolean.FALSE) {
           prototype.setSort(source.getSort());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
@@ -81,9 +72,6 @@ public class UserPermissionEntityConverter
                   prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
                 prototype.getAttributes().get(i)
                     .setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-                prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
-                prototype.setLastModifiedDate(lastModifiedDate);
               }
             }
           }

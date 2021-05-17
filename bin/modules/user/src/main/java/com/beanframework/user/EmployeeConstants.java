@@ -26,4 +26,13 @@ public interface EmployeeConstants {
 
   public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE =
       "employee.dynamicfield.template";
+
+  public static final String CONFIGURATION_ACCOUNT_EXPIRY_HOURS_DEFAULT =
+      "employee.account.expiry.hours.default";
+
+  public static final String CONFIGURATION_PASSWORD_EXPIRY_HOURS_DEFAULT =
+      "employee.password.expiry.hours.default";
+
+  public static final String CONFIGURATION_ACCOUNT_LOGIN_ATTEMPT_MAX_DEFAULT =
+      "employee.account.login.attempt.max.default";
 }

@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DiscriminatorColumn(name = "type")
 public class User extends GenericEntity {
 
+  public static final String TYPE = "type";
   public static final String PASSWORD = "password";
   public static final String ACCOUNT_NON_EXPIRED = "accountNonExpired";
   public static final String ACCOUNT_NON_LOCKED = "accountNonLocked";
@@ -57,9 +58,10 @@ public class User extends GenericEntity {
     super();
   }
 
-  public User(UUID uuid, String id, String name) {
+  public User(UUID uuid, String type, String id, String name) {
     super();
     setUuid(uuid);
+    setType(type);
     setId(id);
     setName(name);
   }

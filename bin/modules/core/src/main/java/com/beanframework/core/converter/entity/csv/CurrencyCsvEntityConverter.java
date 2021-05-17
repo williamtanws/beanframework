@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity.csv;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -49,41 +48,33 @@ public class CurrencyCsvEntityConverter implements EntityCsvConverter<CurrencyCs
       throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.isNotBlank(source.getId())) {
         prototype.setId(source.getId());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getName())) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getActive() != null) {
         prototype.setActive(source.getActive());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getBase() != null) {
         prototype.setBase(source.getBase());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getConversion() != null) {
         prototype.setConversion(source.getConversion());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getDigit() != null) {
         prototype.setDigit(source.getDigit());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getSymbol())) {
         prototype.setSymbol(source.getSymbol());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
     } catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,7 @@ public class CurrencyEntityConverter implements EntityConverter<CurrencyDto, Cur
     try {
       if (source.getUuid() != null) {
         Currency prototype = modelService.findOneByUuid(source.getUuid(), Currency.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
       return convertToEntity(source, modelService.create(Currency.class));
 
@@ -38,44 +34,36 @@ public class CurrencyEntityConverter implements EntityConverter<CurrencyDto, Cur
       throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getActive() == source.getActive() == Boolean.FALSE) {
         prototype.setActive(source.getActive());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getBase() == source.getBase() == Boolean.FALSE) {
         prototype.setBase(source.getBase());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getConversion() == source.getConversion() == Boolean.FALSE) {
         prototype.setConversion(source.getConversion());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getDigit() == source.getDigit() == Boolean.FALSE) {
         prototype.setDigit(source.getDigit());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getSymbol()),
           prototype.getSymbol()) == Boolean.FALSE) {
         prototype.setSymbol(StringUtils.stripToNull(source.getSymbol()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
     } catch (Exception e) {

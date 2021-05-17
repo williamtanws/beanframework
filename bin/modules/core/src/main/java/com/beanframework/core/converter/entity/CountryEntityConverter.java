@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,7 @@ public class CountryEntityConverter implements EntityConverter<CountryDto, Count
     try {
       if (source.getUuid() != null) {
         Country prototype = modelService.findOneByUuid(source.getUuid(), Country.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
       return convertToEntity(source, modelService.create(Country.class));
 
@@ -37,23 +33,19 @@ public class CountryEntityConverter implements EntityConverter<CountryDto, Count
   private Country convertToEntity(CountryDto source, Country prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getActive() == source.getActive() == Boolean.FALSE) {
         prototype.setActive(source.getActive());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
     } catch (Exception e) {
       throw new ConverterException(e.getMessage(), e);

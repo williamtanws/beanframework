@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
@@ -27,10 +26,7 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
 
       if (source.getUuid() != null) {
         DynamicField prototype = modelService.findOneByUuid(source.getUuid(), DynamicField.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(DynamicField.class));
@@ -45,60 +41,49 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
 
     try {
 
-      Date lastModifiedDate = new Date();
-
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getRequired() == null) {
         if (prototype.getRequired() != null) {
           prototype.setRequired(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       } else {
         if (prototype.getRequired() == null
             || prototype.getRequired().equals(source.getRequired()) == Boolean.FALSE) {
           prototype.setRequired(source.getRequired());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getRule()),
           prototype.getRule()) == Boolean.FALSE) {
         prototype.setRule(StringUtils.stripToNull(source.getRule()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getType() == source.getType() == Boolean.FALSE) {
         prototype.setType(source.getType());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getLabel()),
           prototype.getLabel()) == Boolean.FALSE) {
         prototype.setLabel(StringUtils.stripToNull(source.getLabel()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getGrid()),
           prototype.getGrid()) == Boolean.FALSE) {
         prototype.setGrid(StringUtils.stripToNull(source.getGrid()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Language
       if (StringUtils.isBlank(source.getSelectedLanguageUuid())) {
         prototype.setLanguage(null);
-        prototype.setLastModifiedDate(lastModifiedDate);
       } else {
         Language entityLanguage = modelService
             .findOneByUuid(UUID.fromString(source.getSelectedLanguageUuid()), Language.class);
@@ -108,7 +93,6 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
           if (prototype.getLanguage() == null
               || prototype.getLanguage().equals(entityLanguage.getUuid()) == Boolean.FALSE) {
             prototype.setLanguage(entityLanguage.getUuid());
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
       }
@@ -128,7 +112,6 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
           }
           if (remove) {
             enumerationsIterator.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -149,7 +132,6 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
                 UUID.fromString(source.getSelectedEnumerationUuids()[i]), Enumeration.class);
             if (enumeration != null) {
               prototype.getEnumerations().add(enumeration.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -158,7 +140,6 @@ public class DynamicFieldEntityConverter implements EntityConverter<DynamicField
         for (final Iterator<UUID> itr = prototype.getEnumerations().iterator(); itr.hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
