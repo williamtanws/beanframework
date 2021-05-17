@@ -39,7 +39,7 @@ public class LogentryEventListener implements ApplicationListener<AbstractEvent>
           entity.setType(authenticationEvent.getType());
           entity.setCreatedDate(new Date(authenticationEvent.getTimestamp()));
           entity.setMessage(authenticationEvent.getMessage());
-          modelService.saveEntityByLegacyMode(entity, Logentry.class);
+          modelService.saveEntityByLegacyMode(entity);
 
         } else {
           LogentryEvent logentryEvent = (LogentryEvent) event;
@@ -62,7 +62,7 @@ public class LogentryEventListener implements ApplicationListener<AbstractEvent>
                   logentryEvent.getSource().getClass().getSimpleName(),
                   sourceEntity.getUuid().toString(), sourceEntity.getId(), by));
             }
-            modelService.saveEntityByLegacyMode(entity, Logentry.class);
+            modelService.saveEntityByLegacyMode(entity);
           }
         }
       }

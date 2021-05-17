@@ -139,7 +139,8 @@ public class UserServiceImpl implements UserService {
     }
 
     if (isAdmin(user)) {
-      return new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAdminAuthorities());
+      return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
+          getAdminAuthorities());
     }
 
     // Normal user group
@@ -520,6 +521,37 @@ public class UserServiceImpl implements UserService {
           }
         }
       }
+    }
+  }
+
+  @Override
+  public void loginSuccessHandler() {
+    try {
+      User user = getCurrentUser();
+      user.getParameters().put(UserConstants.LOGIN_LAST_DATE,
+          UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
+      modelService.saveEntityByLegacyMode(user);
+      updateCurrentUserSession();
+
+      applicationEventPublisher
+          .publishEvent(new AuthenticationEvent(user, LogentryType.LOGIN, "ID=" + user.getId()));
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
+
+  @Override
+  public void logoutSuccessHandler() {
+    try {
+      User user = getCurrentUser();
+      user.getParameters().put(UserConstants.LOGOUT_LAST_DATE,
+          UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
+      modelService.saveEntityByLegacyMode(user);
+
+      applicationEventPublisher
+          .publishEvent(new AuthenticationEvent(user, LogentryType.LOGOUT, "ID=" + user.getId()));
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
     }
   }
 }

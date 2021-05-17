@@ -81,7 +81,7 @@ public class UserSettingsResource extends AbstractResource {
       user.getParameters().put("user.settings.body.smalltext", user_settings_body_smalltext);
     }
 
-    modelService.saveEntity(user);
+    modelService.saveEntityByLegacyMode(user);
     userService.updateCurrentUserSession();
 
     return new ResponseEntity<>(HttpStatus.OK);

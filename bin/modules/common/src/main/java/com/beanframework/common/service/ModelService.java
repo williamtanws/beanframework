@@ -93,11 +93,9 @@ public interface ModelService {
    * Quietly means it skip listener events, mostly used by listener itself.
    * 
    * @param model
-   * @param modelClass
    * @return
-   * @throws BusinessException
    */
-  <T> T saveEntityByLegacyMode(Object model, Class modelClass) throws BusinessException;
+  <T> T saveEntityByLegacyMode(Object model);
 
   void deleteEntity(Object entityModel, Class modelClass) throws BusinessException;
 
