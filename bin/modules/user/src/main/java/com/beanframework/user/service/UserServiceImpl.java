@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
       } else {
         user.getParameters().put(UserConstants.LOGIN_ATTEMPT_COUNT, "1");
       }
-      user = modelService.saveEntity(user);
+      user = modelService.saveEntityByLegacyMode(user);
 
       applicationEventPublisher.publishEvent(
           new AuthenticationEvent(user, LogentryType.LOGIN, "Wrong password for ID=" + id));
@@ -142,6 +142,10 @@ public class UserServiceImpl implements UserService {
       return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
           getAdminAuthorities());
     }
+
+    user.getParameters().put(UserConstants.LOGIN_LAST_DATE,
+        UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
+    modelService.saveEntityByLegacyMode(user);
 
     // Normal user group
     if (user.getEnabled() == Boolean.FALSE) {
@@ -528,10 +532,6 @@ public class UserServiceImpl implements UserService {
   public void loginSuccessHandler() {
     try {
       User user = getCurrentUser();
-      user.getParameters().put(UserConstants.LOGIN_LAST_DATE,
-          UserConstants.PARAMETER_DATE_FORMAT.format(new Date()));
-      modelService.saveEntityByLegacyMode(user);
-      updateCurrentUserSession();
 
       applicationEventPublisher
           .publishEvent(new AuthenticationEvent(user, LogentryType.LOGIN, "ID=" + user.getId()));
