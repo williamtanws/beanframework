@@ -1,6 +1,5 @@
 package com.beanframework.user.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +34,6 @@ public class AuditorServiceImpl implements AuditorService {
 
         modelService.saveEntity(auditor);
       } else {
-        Date lastModifiedDate = new Date();
         if (StringUtils.equals(model.getId(), auditor.getId()) == Boolean.FALSE
             || StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
 
@@ -46,7 +44,6 @@ public class AuditorServiceImpl implements AuditorService {
           if (StringUtils.equals(model.getName(), auditor.getName()) == Boolean.FALSE) {
             auditor.setName(model.getName());
           }
-          auditor.setLastModifiedDate(lastModifiedDate);
 
           modelService.saveEntity(auditor);
         }

@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity.csv;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -49,31 +48,25 @@ public class AddressCsvEntityConverter implements EntityCsvConverter<AddressCsv,
   private Address convertToEntity(AddressCsv source, Address prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.isNotBlank(source.getId())) {
         prototype.setId(source.getId());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getStreetName())) {
         prototype.setStreetName(source.getStreetName());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getStreetNumber())) {
         prototype.setStreetNumber(source.getStreetNumber());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getPostalCode())) {
         prototype.setPostalCode(source.getPostalCode());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getTown())) {
         prototype.setTown(source.getTown());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Country
@@ -86,7 +79,6 @@ public class AddressCsvEntityConverter implements EntityCsvConverter<AddressCsv,
           LOGGER.error("Country ID not exists: " + source.getCountryId());
         } else {
           prototype.setCountry(entity.getUuid());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 

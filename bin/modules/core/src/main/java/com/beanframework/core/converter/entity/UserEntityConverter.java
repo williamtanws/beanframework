@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,10 +34,7 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
 
       if (source.getUuid() != null) {
         User prototype = modelService.findOneByUuid(source.getUuid(), User.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(User.class));
@@ -49,66 +45,54 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
 
   }
 
-  private User convertToEntity(UserDto source, User prototype) throws ConverterException {
+  public User convertToEntity(UserDto source, User prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
-
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getPassword())) {
         prototype.setPassword(passwordEncoder.encode(source.getPassword()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getEnabled() != prototype.getEnabled()) {
         prototype.setEnabled(source.getEnabled());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getAccountNonExpired() != prototype.getAccountNonExpired()) {
         prototype.setAccountNonExpired(source.getAccountNonExpired());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getAccountNonLocked() != prototype.getAccountNonLocked()) {
         prototype.setAccountNonLocked(source.getAccountNonLocked());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getCredentialsNonExpired() != prototype.getCredentialsNonExpired()) {
         prototype.setCredentialsNonExpired(source.getCredentialsNonExpired());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Parameters
-      Map<String, String> prototypeParameters = new HashMap<String, String>();
+      Map<String, String> sourceParameters = new HashMap<String, String>();
       if (source.getSelectedParameterKeys() != null && source.getSelectedParameterValues() != null
           && source.getSelectedParameterKeys().length == source
               .getSelectedParameterValues().length) {
         for (int i = 0; i < source.getSelectedParameterKeys().length; i++) {
-          prototypeParameters.put(source.getSelectedParameterKeys()[i],
+          sourceParameters.put(source.getSelectedParameterKeys()[i],
               source.getSelectedParameterValues()[i]);
         }
       }
 
-      if (prototypeParameters.isEmpty()) {
+      if (sourceParameters.isEmpty()) {
         prototype.getParameters().clear();
-      }
-
-      if (source.getParameters().equals(prototypeParameters) == false) {
-        prototype.setParameters(prototypeParameters);
-        prototype.setLastModifiedDate(lastModifiedDate);
+      } else if (source.getParameters().equals(sourceParameters) == false) {
+        prototype.setParameters(sourceParameters);
       }
 
       // Attribute
@@ -122,9 +106,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
                   prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
                 prototype.getAttributes().get(i)
                     .setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-                prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
-                prototype.setLastModifiedDate(lastModifiedDate);
               }
             }
           }
@@ -146,7 +127,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
           }
           if (remove) {
             itr.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -167,7 +147,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
                 UUID.fromString(source.getSelectedUserGroupUuids()[i]), UserGroup.class);
             if (entity != null) {
               prototype.getUserGroups().add(entity.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -176,7 +155,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
         for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
@@ -195,7 +173,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
           }
           if (remove) {
             itr.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -216,7 +193,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
                 .findOneByUuid(UUID.fromString(source.getSelectedCompanyUuids()[i]), Company.class);
             if (entity != null) {
               prototype.getCompanies().add(entity.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -224,7 +200,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
         for (final Iterator<UUID> itr = prototype.getCompanies().iterator(); itr.hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
@@ -246,7 +221,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
             entity.setOwner(null);
             modelService.saveEntity(entity);
             it.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -268,7 +242,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
             if (entity != null) {
               entity.setOwner(prototype.getUuid());
               prototype.getAddresses().add(entity.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -278,7 +251,6 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
           entity.setOwner(null);
           modelService.saveEntity(entity);
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
@@ -288,5 +260,4 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
 
     return prototype;
   }
-
 }

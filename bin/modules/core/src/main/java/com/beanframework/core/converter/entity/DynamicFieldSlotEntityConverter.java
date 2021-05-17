@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,7 @@ public class DynamicFieldSlotEntityConverter
       if (source.getUuid() != null) {
         DynamicFieldSlot prototype =
             modelService.findOneByUuid(source.getUuid(), DynamicFieldSlot.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(DynamicFieldSlot.class));
@@ -45,37 +41,30 @@ public class DynamicFieldSlotEntityConverter
 
     try {
 
-      Date lastModifiedDate = new Date();
-
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getSort() == null) {
         if (prototype.getSort() != null) {
           prototype.setSort(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       } else {
         if (prototype.getSort() == null
             || prototype.getSort() == source.getSort() == Boolean.FALSE) {
           prototype.setSort(source.getSort());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
       // Dynamic Field
       if (StringUtils.isBlank(source.getSelectedDynamicFieldUuid())) {
         prototype.setDynamicField(null);
-        prototype.setLastModifiedDate(lastModifiedDate);
       } else {
         DynamicField entityDynamicField = modelService.findOneByUuid(
             UUID.fromString(source.getSelectedDynamicFieldUuid()), DynamicField.class);
@@ -85,7 +74,6 @@ public class DynamicFieldSlotEntityConverter
           if (prototype.getDynamicField() == null || prototype.getDynamicField()
               .equals(entityDynamicField.getUuid()) == Boolean.FALSE) {
             prototype.setDynamicField(entityDynamicField.getUuid());
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
       }

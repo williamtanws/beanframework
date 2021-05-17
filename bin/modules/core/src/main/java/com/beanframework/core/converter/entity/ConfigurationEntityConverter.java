@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity;
 
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,10 +23,7 @@ public class ConfigurationEntityConverter
 
       if (source.getUuid() != null) {
         Configuration prototype = modelService.findOneByUuid(source.getUuid(), Configuration.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(Configuration.class));
@@ -40,18 +36,14 @@ public class ConfigurationEntityConverter
 
   private Configuration convertToEntity(ConfigurationDto source, Configuration prototype) {
 
-    Date lastModifiedDate = new Date();
-
     if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
         prototype.getId()) == Boolean.FALSE) {
       prototype.setId(StringUtils.stripToNull(source.getId()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     if (StringUtils.equals(StringUtils.stripToNull(source.getValue()),
         prototype.getValue()) == Boolean.FALSE) {
       prototype.setValue(StringUtils.stripToNull(source.getValue()));
-      prototype.setLastModifiedDate(lastModifiedDate);
     }
 
     return prototype;

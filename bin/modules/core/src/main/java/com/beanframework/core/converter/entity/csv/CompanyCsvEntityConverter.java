@@ -1,6 +1,5 @@
 package com.beanframework.core.converter.entity.csv;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,16 +50,13 @@ public class CompanyCsvEntityConverter implements EntityCsvConverter<CompanyCsv,
   private Company convertToEntity(CompanyCsv source, Company prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.isNotBlank(source.getId())) {
         prototype.setId(source.getId());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.isNotBlank(source.getName())) {
         prototype.setName(source.getName());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       // Address
@@ -83,7 +79,6 @@ public class CompanyCsvEntityConverter implements EntityCsvConverter<CompanyCsv,
               LOGGER.error("Address ID not exists: " + AddressIds[i]);
             } else {
               prototype.getAddresses().add(Address.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }

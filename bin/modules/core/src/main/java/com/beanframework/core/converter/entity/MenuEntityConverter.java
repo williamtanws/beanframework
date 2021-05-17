@@ -1,7 +1,6 @@
 package com.beanframework.core.converter.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -32,12 +31,8 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
     try {
 
       if (source.getUuid() != null) {
-
         Menu prototype = modelService.findOneByUuid(source.getUuid(), Menu.class);
-
-        if (prototype != null) {
-          return convertToEntity(source, prototype);
-        }
+        return convertToEntity(source, prototype);
       }
 
       return convertToEntity(source, modelService.create(Menu.class));
@@ -59,60 +54,50 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
   private Menu convertToEntity(MenuDto source, Menu prototype) throws ConverterException {
 
     try {
-      Date lastModifiedDate = new Date();
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getName()),
           prototype.getName()) == Boolean.FALSE) {
         prototype.setName(StringUtils.stripToNull(source.getName()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getSort() == null) {
         if (prototype.getSort() != null) {
           prototype.setSort(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       } else {
         if (prototype.getSort() == null
             || prototype.getSort() == source.getSort() == Boolean.FALSE) {
           prototype.setSort(source.getSort());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getIcon()),
           prototype.getIcon()) == Boolean.FALSE) {
         prototype.setIcon(StringUtils.stripToNull(source.getIcon()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (StringUtils.equals(StringUtils.stripToNull(source.getPath()),
           prototype.getPath()) == Boolean.FALSE) {
         prototype.setPath(StringUtils.stripToNull(source.getPath()));
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (prototype.getTarget() == source.getTarget() == Boolean.FALSE) {
         prototype.setTarget(source.getTarget());
-        prototype.setLastModifiedDate(lastModifiedDate);
       }
 
       if (source.getEnabled() == null) {
         if (prototype.getEnabled() != null) {
           prototype.setEnabled(null);
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       } else {
         if (prototype.getEnabled() == null
             || prototype.getEnabled().equals(source.getEnabled()) == Boolean.FALSE) {
           prototype.setEnabled(source.getEnabled());
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
@@ -127,9 +112,6 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
                   prototype.getAttributes().get(i).getValue()) == Boolean.FALSE) {
                 prototype.getAttributes().get(i)
                     .setValue(StringUtils.stripToNull(sourceField.getValue()));
-
-                prototype.getAttributes().get(i).setLastModifiedDate(lastModifiedDate);
-                prototype.setLastModifiedDate(lastModifiedDate);
               }
             }
           }
@@ -151,7 +133,6 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
           }
           if (remove) {
             itr.remove();
-            prototype.setLastModifiedDate(lastModifiedDate);
           }
         }
 
@@ -172,7 +153,6 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
                 UUID.fromString(source.getSelectedUserGroupUuids()[i]), UserGroup.class);
             if (entity != null) {
               prototype.getUserGroups().add(entity.getUuid());
-              prototype.setLastModifiedDate(lastModifiedDate);
             }
           }
         }
@@ -181,7 +161,6 @@ public class MenuEntityConverter implements EntityConverter<MenuDto, Menu> {
         for (final Iterator<UUID> itr = prototype.getUserGroups().iterator(); itr.hasNext();) {
           itr.next();
           itr.remove();
-          prototype.setLastModifiedDate(lastModifiedDate);
         }
       }
 
