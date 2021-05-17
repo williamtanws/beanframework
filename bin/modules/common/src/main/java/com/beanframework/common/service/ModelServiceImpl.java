@@ -429,19 +429,14 @@ public class ModelServiceImpl extends AbstractModelServiceImpl {
   }
 
   @Override
-  public Object saveEntityByLegacyMode(Object model, Class modelClass) throws BusinessException {
+  public Object saveEntityByLegacyMode(Object model) {
 
     if (model == null) {
       return null;
     }
 
-    try {
-      model = modelRepository.save(model);
-      return model;
-    } catch (Exception e) {
-
-      throw new BusinessException(e.getMessage(), e);
-    }
+    model = modelRepository.save(model);
+    return model;
   }
 
   @Override

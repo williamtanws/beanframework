@@ -36,4 +36,8 @@ public interface UserService {
   Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
 
   void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
+
+  void loginSuccessHandler();
+
+  void logoutSuccessHandler();
 }
