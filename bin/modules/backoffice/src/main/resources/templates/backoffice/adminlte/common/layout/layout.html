@@ -31,7 +31,7 @@
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-fixedheader/css/fixedHeader.bootstrap4.min.css}">
 <link rel="stylesheet" th:href="@{/static/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
 
-<!-- backoffice -->
+<!-- layout -->
 <link rel="stylesheet" th:href="@{/static/backoffice/layout.css}">
 </head>
 <body th:class="'layout-top-nav '+ ${#authorization.expression('isAuthenticated()') ? (#authentication.principal.parameters.get('user.settings.body.theme') != null ? #authentication.principal.parameters.get('user.settings.body.theme') : '')+' '+(#authentication.principal.parameters.get('user.settings.body.smalltext') != null ? #authentication.principal.parameters.get('user.settings.body.smalltext') : '') : ''}" style="height: auto;">
@@ -94,10 +94,10 @@
 		<th:block th:insert="/backoffice/adminlte/common/fragment/toastr :: js"></th:block>
 	</th:block>
 	
-	<!-- backoffice -->
+	<!-- layout -->
 	<script th:src="@{/static/backoffice/layout.js}"></script>
 
-	<!-- content -->
+	<!-- content js -->
 	<th:block layout:fragment="js"></th:block>
 </body>
 </html>
