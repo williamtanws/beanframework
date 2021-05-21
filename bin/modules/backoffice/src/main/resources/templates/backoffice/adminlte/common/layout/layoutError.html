@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" style="height: auto;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE"></title>
+
+<!-- Google Font: Source Sans Pro -->
+<link th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700}" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" th:href="@{/static/adminlte/plugins/fontawesome-free/css/all.min.css}">
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/static/adminlte/dist/css/adminlte.min.css}">
+
+<!-- layout -->
+<link rel="stylesheet" th:href="@{/static/backoffice/layout.css}">
+</head>
+<body class="login-page">
+	<div layout:fragment="content"></div>
+	<!-- jQuery -->
+	<script th:src="@{/static/adminlte/plugins/jquery/jquery.min.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script th:src="@{/static/adminlte/plugins/jquery-ui/jquery-ui.min.js}"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/static/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- AdminLTE App -->
+	<script th:src="@{/static/adminlte/dist/js/adminlte.min.js}"></script>
+	<!-- layout -->
+	<script th:src="@{/static/backoffice/layout.js}"></script>
+
+	<!-- content js -->
+	<th:block layout:fragment="js"></th:block>
+</body>
+</html>

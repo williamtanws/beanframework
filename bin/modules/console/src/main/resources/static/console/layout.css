@@ -32,12 +32,17 @@
 	padding: 0px 0px 0px 5px;
 }
 
+.table-hover tbody tr {
+	cursor: pointer;
+}
+
 table .selected {
 	background-color: rgba(0, 0, 0, .075);
 }
 
 .table-select {
 	background-color: #f7f7f7;
+	cursor: select;
 }
 
 .table-select-form {

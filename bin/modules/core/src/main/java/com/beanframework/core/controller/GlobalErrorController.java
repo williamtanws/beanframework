@@ -41,7 +41,6 @@ public class GlobalErrorController implements ErrorController {
       if (StringUtils.isNotBlank(cookie.getValue())) {
         String[] value = cookie.getValue().split("/");
         originalUri = "/" + value[value.length - 1];
-        model.addAttribute("fullpage", true);
         model.addAttribute("homeurl", cookie.getValue());
       }
     }
