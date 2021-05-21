@@ -7,6 +7,10 @@
 	border-bottom: 1px solid #4b545c !important;
 }
 
+.dark-mode .iframe-mode .navbar{
+	background-color: #00000078 !important;
+}
+
 .dark-mode .navbar-nav .nav-item .active {
 	background-color: #343a40;
 	color: white;

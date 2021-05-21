@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
@@ -12,6 +13,8 @@ import com.beanframework.user.domain.User;
 public interface UserService {
 
   UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception;
+
+  UserDetails findUserDetails(String id);
 
   void setCurrentUser(User model);
 

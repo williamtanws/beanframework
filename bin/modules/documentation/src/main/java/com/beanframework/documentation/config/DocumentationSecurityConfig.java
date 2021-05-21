@@ -10,7 +10,7 @@ import com.beanframework.documentation.DocumentationConstants;
 
 @Configuration
 @EnableWebSecurity
-@Order(3)
+@Order(300)
 public class DocumentationSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Value(DocumentationConstants.Path.DOCUMENTATION)

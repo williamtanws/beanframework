@@ -24,7 +24,7 @@ import com.beanframework.user.security.UserAuthProvider;
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
+@Order(200)
 public class BackofficeSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Value(BackofficeWebConstants.Path.BACKOFFICE)

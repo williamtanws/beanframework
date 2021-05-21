@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -197,7 +199,8 @@ public class UserServiceImpl implements UserService {
       }
     }
 
-    return new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
+    return new UsernamePasswordAuthenticationToken(user, user.getPassword(),
+        getUserAuthorities(user));
   }
 
   private boolean isAdmin(User user) throws Exception {
@@ -248,7 +251,7 @@ public class UserServiceImpl implements UserService {
     return authorities;
   }
 
-  private Set<GrantedAuthority> getAuthorities(User model) throws Exception {
+  private Set<GrantedAuthority> getUserAuthorities(User model) throws Exception {
 
     try {
       // Find employee user group and sub user group authority
@@ -295,6 +298,74 @@ public class UserServiceImpl implements UserService {
     }
 
     return authorities;
+  }
+
+  @Override
+  public UserDetails findUserDetails(String id) {
+    try {
+      Map<String, Object> properties = new HashMap<String, Object>();
+      properties.put(User.ID, id);
+
+      User user = modelService.findOneByProperties(properties, User.class);
+
+      UserDetails userDetails = new UserDetails() {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public boolean isEnabled() {
+          return user.getEnabled();
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+          return user.getCredentialsNonExpired();
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+          return user.getAccountNonLocked();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+          return user.getAccountNonExpired();
+        }
+
+        @Override
+        public String getUsername() {
+          return user.getId();
+        }
+
+        @Override
+        public String getPassword() {
+          return user.getPassword();
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+          try {
+            if (isAdmin(user)) {
+              return getAdminAuthorities();
+            } else {
+              return getUserAuthorities(user);
+            }
+          } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return null;
+          }
+        }
+      };
+
+      return userDetails;
+
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      return null;
+    }
   }
 
   @Override
@@ -390,8 +461,8 @@ public class UserServiceImpl implements UserService {
           new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAdminAuthorities());
       SecurityContextHolder.getContext().setAuthentication(token);
     } else {
-      token =
-          new UsernamePasswordAuthenticationToken(user, user.getPassword(), getAuthorities(user));
+      token = new UsernamePasswordAuthenticationToken(user, user.getPassword(),
+          getUserAuthorities(user));
     }
     SecurityContextHolder.getContext().setAuthentication(token);
   }
