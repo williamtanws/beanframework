@@ -1,4 +1,4 @@
-package com.beanframework.platform.listener;
+package com.beanframework.core.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("rawtypes")
 @Component
-public class AppListener implements ApplicationListener {
+public class CoreAppListener implements ApplicationListener {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AppListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CoreAppListener.class);
 
   @Override
   public void onApplicationEvent(ApplicationEvent event) {

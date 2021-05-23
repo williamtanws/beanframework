@@ -1,14 +1,14 @@
-package com.beanframework.platform.config;
+package com.beanframework.core.config;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import com.beanframework.platform.json.NullAsEmptyStringSerializer;
+import com.beanframework.core.bean.NullAsEmptyStringSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 
 @Configuration
-public class PlatformObjectMapperConfig implements InitializingBean {
+public class CoreObjectMapperConfig implements InitializingBean {
 
   @Autowired
   private NullAsEmptyStringSerializer nullSerializer;
