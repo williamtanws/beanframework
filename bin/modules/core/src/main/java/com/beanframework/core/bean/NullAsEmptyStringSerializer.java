@@ -1,4 +1,4 @@
-package com.beanframework.platform.json;
+package com.beanframework.core.bean;
 
 import java.io.IOException;
 import org.springframework.stereotype.Component;

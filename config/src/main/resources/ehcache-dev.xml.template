@@ -11,7 +11,7 @@
 	<cache-template name="default-cache-template">
 		<listeners>
 			<listener>
-				<class>com.beanframework.platform.cache.EventLogger</class>
+				<class>com.beanframework.core.listener.CoreCacheEventListener</class>
 				<event-firing-mode>ASYNCHRONOUS</event-firing-mode>
 				<event-ordering-mode>UNORDERED</event-ordering-mode>
 				<events-to-fire-on>CREATED</events-to-fire-on>
