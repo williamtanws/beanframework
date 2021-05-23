@@ -10,13 +10,11 @@ import com.beanframework.core.data.MenuDto;
 
 public interface MenuFacade {
 
-  MenuDto findOneByUuid(UUID uuid) throws Exception;
+  MenuDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  MenuDto findOneProperties(Map<String, Object> properties) throws Exception;
+  MenuDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  MenuDto create(MenuDto model) throws BusinessException;
-
-  MenuDto update(MenuDto model) throws BusinessException;
+  MenuDto save(MenuDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
@@ -24,18 +22,18 @@ public interface MenuFacade {
 
   List<MenuDto> findMenuTree() throws BusinessException;
 
-  Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  MenuDto createDto() throws Exception;
+  MenuDto createDto() throws BusinessException;
 
-  List<MenuDto> findMenuTreeByCurrentUser() throws Exception;
+  List<MenuDto> findMenuTreeByCurrentUser() throws BusinessException;
 
-  List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception;
+  List<MenuDto> findMenuBreadcrumbsByPath(String path) throws BusinessException;
 
 }

@@ -10,25 +10,23 @@ import com.beanframework.core.data.EmployeeDto;
 
 public interface EmployeeFacade {
 
-  EmployeeDto findOneByUuid(UUID uuid) throws Exception;
+  EmployeeDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception;
+  EmployeeDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  EmployeeDto create(EmployeeDto model) throws BusinessException;
-
-  EmployeeDto update(EmployeeDto model) throws BusinessException;
+  EmployeeDto save(EmployeeDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  EmployeeDto createDto() throws Exception;
+  EmployeeDto createDto() throws BusinessException;
 
-  EmployeeDto getCurrentUser() throws Exception;
+  EmployeeDto getCurrentUser() throws BusinessException;
 }

@@ -46,7 +46,7 @@ public class CustomerController extends AbstractController {
   @GetMapping(value = CustomerWebConstants.Path.CUSTOMER)
   public String page(
       @Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto employeeDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_CUSTOMER;
   }
 
@@ -54,7 +54,7 @@ public class CustomerController extends AbstractController {
   @GetMapping(value = CustomerWebConstants.Path.CUSTOMER_FORM)
   public String form(
       @Valid @ModelAttribute(CustomerWebConstants.ModelAttribute.CUSTOMER_DTO) CustomerDto employeeDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (employeeDto.getUuid() != null) {
       employeeDto = employeeFacade.findOneByUuid(employeeDto.getUuid());
@@ -78,7 +78,7 @@ public class CustomerController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        employeeDto = employeeFacade.create(employeeDto);
+        employeeDto = employeeFacade.save(employeeDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class CustomerController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        employeeDto = employeeFacade.update(employeeDto);
+        employeeDto = employeeFacade.save(employeeDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

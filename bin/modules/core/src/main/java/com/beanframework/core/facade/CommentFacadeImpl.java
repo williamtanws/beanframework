@@ -19,22 +19,17 @@ public class CommentFacadeImpl extends AbstractFacade<Comment, CommentDto>
   private static final Class<CommentDto> dtoClass = CommentDto.class;
 
   @Override
-  public CommentDto findOneByUuid(UUID uuid) throws Exception {
+  public CommentDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public CommentDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public CommentDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public CommentDto create(CommentDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public CommentDto update(CommentDto model) throws BusinessException {
+  public CommentDto save(CommentDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class CommentFacadeImpl extends AbstractFacade<Comment, CommentDto>
   }
 
   @Override
-  public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, CommentSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public CommentDto createDto() throws Exception {
+  public CommentDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

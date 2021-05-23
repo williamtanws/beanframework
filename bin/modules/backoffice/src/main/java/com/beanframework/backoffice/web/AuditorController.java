@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.AuditorWebConstants;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.common.data.AuditorDto;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.AuditorFacade;
 import com.beanframework.core.facade.AuditorFacade.PreAuthorizeEnum;
@@ -34,7 +35,7 @@ public class AuditorController extends AbstractController {
   @GetMapping(value = AuditorWebConstants.Path.AUDITOR)
   public String list(
       @Valid @ModelAttribute(AuditorWebConstants.ModelAttribute.AUDITOR_DTO) AuditorDto auditorDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) throws BusinessException {
     model.addAttribute("create", false);
 
     if (auditorDto.getUuid() != null) {

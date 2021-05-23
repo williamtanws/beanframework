@@ -2,6 +2,8 @@ package com.beanframework.backoffice.web;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class MediaController extends AbstractController {
   @GetMapping(value = MediaWebConstants.Path.MEDIA)
   public String page(
       @Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_MEDIA;
   }
 
@@ -74,7 +76,7 @@ public class MediaController extends AbstractController {
   @GetMapping(value = MediaWebConstants.Path.MEDIA_FORM)
   public String form(
       @Valid @ModelAttribute(MediaWebConstants.ModelAttribute.MEDIA_DTO) MediaDto mediaDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (mediaDto.getUuid() != null) {
       mediaDto = mediaFacade.findOneByUuid(mediaDto.getUuid());
@@ -98,7 +100,7 @@ public class MediaController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        mediaDto = mediaFacade.create(mediaDto);
+        mediaDto = mediaFacade.save(mediaDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -126,7 +128,7 @@ public class MediaController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        mediaDto = mediaFacade.update(mediaDto);
+        mediaDto = mediaFacade.save(mediaDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -173,7 +175,8 @@ public class MediaController extends AbstractController {
   @PreAuthorize(MediaPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = MediaWebConstants.Path.MEDIA, params = "download")
   public ResponseEntity<InputStreamResource> downloadFile(
-      @RequestParam Map<String, Object> requestParams) throws Exception {
+      @RequestParam Map<String, Object> requestParams)
+      throws BusinessException, FileNotFoundException {
 
     String uuid = (String) requestParams.get("mediaUuid");
     if (StringUtils.isBlank(uuid)) {
@@ -198,7 +201,7 @@ public class MediaController extends AbstractController {
   @GetMapping(value = {MediaWebConstants.Path.MEDIA + "/{uuid}/{fileName:.+}",
       MediaConstants.MEDIA_URL + "/{uuid}/{fileName:.+}"})
   public ResponseEntity<byte[]> media(@PathVariable String uuid, @PathVariable String fileName)
-      throws Exception {
+      throws BusinessException, IOException {
 
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(Media.URL, MEDIA_URL + "/" + uuid + "/" + fileName);

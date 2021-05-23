@@ -30,18 +30,18 @@ public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends G
   private RevisionsDtoConverter dtoRevisionsConverter;
 
   public DTO findOneByUuid(UUID uuid, Class<ENTITY> entityClass, Class<DTO> dtoClass)
-      throws Exception {
+      throws BusinessException {
     return modelService.getDto(modelService.findOneByUuid(uuid, entityClass), dtoClass);
   }
 
   public DTO findOneProperties(Map<String, Object> properties, Class<ENTITY> entityClass,
-      Class<DTO> dtoClass) throws Exception {
+      Class<DTO> dtoClass) throws BusinessException {
     return modelService.getDto(modelService.findOneByProperties(properties, entityClass), dtoClass);
   }
 
   public Page<DTO> findPage(DataTableRequest dataTableRequest,
       AbstractSpecification<ENTITY> specification, Class<ENTITY> entityClass, Class<DTO> dtoClass)
-      throws Exception {
+      throws BusinessException {
     Page<ENTITY> page =
         modelService.findPage(specification, dataTableRequest.getPageable(), entityClass);
 
@@ -49,13 +49,13 @@ public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends G
     return new PageImpl<DTO>(dtos, page.getPageable(), page.getTotalElements());
   }
 
-  public int count(Class<ENTITY> entityClass) throws Exception {
+  public int count(Class<ENTITY> entityClass) {
     return modelService.countAll(entityClass);
   }
 
   @SuppressWarnings("unchecked")
   public List<Object[]> findHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass,
-      Class<DTO> dtoClass) throws Exception {
+      Class<DTO> dtoClass) throws BusinessException {
 
     List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
     if (dataTableRequest.getAuditCriterion() != null)
@@ -86,8 +86,7 @@ public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends G
     return dtos;
   }
 
-  public int findCountHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass)
-      throws Exception {
+  public int findCountHistory(DataTableRequest dataTableRequest, Class<ENTITY> entityClass) {
 
     List<AuditCriterion> auditCriterions = new ArrayList<AuditCriterion>();
     if (dataTableRequest.getAuditCriterion() != null)
@@ -102,26 +101,23 @@ public abstract class AbstractFacade<ENTITY extends GenericEntity, DTO extends G
 
   public DTO save(DTO dto, Class<ENTITY> entityClass, Class<DTO> dtoClass)
       throws BusinessException {
-    try {
-      ENTITY entity = modelService.getEntity(dto, entityClass);
-      entity = modelService.saveEntity(entity);
+    ENTITY entity = modelService.getEntity(dto, entityClass);
+    entity = modelService.saveEntity(entity);
 
+    return modelService.getDto(entity, dtoClass);
+  }
+
+  public void delete(UUID uuid, Class<ENTITY> entityClass) throws BusinessException {
+    modelService.deleteByUuid(uuid, entityClass);
+  }
+
+  public DTO createDto(Class<ENTITY> entityClass, Class<DTO> dtoClass) throws BusinessException {
+    ENTITY entity;
+    try {
+      entity = modelService.create(entityClass);
       return modelService.getDto(entity, dtoClass);
     } catch (Exception e) {
       throw new BusinessException(e.getMessage(), e);
     }
-  }
-
-  public void delete(UUID uuid, Class<ENTITY> entityClass) throws BusinessException {
-    try {
-      modelService.deleteByUuid(uuid, entityClass);
-    } catch (Exception e) {
-      throw new BusinessException(e.getMessage(), e);
-    }
-  }
-
-  public DTO createDto(Class<ENTITY> entityClass, Class<DTO> dtoClass) throws Exception {
-    ENTITY entity = modelService.create(entityClass);
-    return modelService.getDto(entity, dtoClass);
   }
 }

@@ -10,23 +10,21 @@ import com.beanframework.core.data.DynamicFieldSlotDto;
 
 public interface DynamicFieldSlotFacade {
 
-  DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception;
+  DynamicFieldSlotDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception;
+  DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  DynamicFieldSlotDto create(DynamicFieldSlotDto model) throws BusinessException;
-
-  DynamicFieldSlotDto update(DynamicFieldSlotDto model) throws BusinessException;
+  DynamicFieldSlotDto save(DynamicFieldSlotDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  DynamicFieldSlotDto createDto() throws Exception;
+  DynamicFieldSlotDto createDto() throws BusinessException;
 }

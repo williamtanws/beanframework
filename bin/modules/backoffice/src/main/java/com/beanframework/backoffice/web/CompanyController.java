@@ -46,7 +46,7 @@ public class CompanyController extends AbstractController {
   @GetMapping(value = CompanyWebConstants.Path.COMPANY)
   public String page(
       @Valid @ModelAttribute(CompanyWebConstants.ModelAttribute.COMPANY_DTO) CompanyDto companyDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_COMPANY;
   }
 
@@ -54,7 +54,7 @@ public class CompanyController extends AbstractController {
   @GetMapping(value = CompanyWebConstants.Path.COMPANY_FORM)
   public String form(
       @Valid @ModelAttribute(CompanyWebConstants.ModelAttribute.COMPANY_DTO) CompanyDto companyDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (companyDto.getUuid() != null) {
       companyDto = companyFacade.findOneByUuid(companyDto.getUuid());
@@ -78,7 +78,7 @@ public class CompanyController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        companyDto = companyFacade.create(companyDto);
+        companyDto = companyFacade.save(companyDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class CompanyController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        companyDto = companyFacade.update(companyDto);
+        companyDto = companyFacade.save(companyDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

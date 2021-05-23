@@ -46,7 +46,7 @@ public class UserPermissionController extends AbstractController {
   @GetMapping(value = UserPermissionWebConstants.Path.PERMISSION)
   public String page(
       @Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_PERMISSION;
   }
 
@@ -54,7 +54,7 @@ public class UserPermissionController extends AbstractController {
   @GetMapping(value = UserPermissionWebConstants.Path.PERMISSION_FORM)
   public String form(
       @Valid @ModelAttribute(UserPermissionWebConstants.ModelAttribute.PERMISSION_DTO) UserPermissionDto dynamicFieldDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (dynamicFieldDto.getUuid() != null) {
       dynamicFieldDto = dynamicFieldFacade.findOneByUuid(dynamicFieldDto.getUuid());
@@ -78,7 +78,7 @@ public class UserPermissionController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        dynamicFieldDto = dynamicFieldFacade.create(dynamicFieldDto);
+        dynamicFieldDto = dynamicFieldFacade.save(dynamicFieldDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class UserPermissionController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        dynamicFieldDto = dynamicFieldFacade.update(dynamicFieldDto);
+        dynamicFieldDto = dynamicFieldFacade.save(dynamicFieldDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

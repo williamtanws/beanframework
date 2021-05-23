@@ -19,22 +19,17 @@ public class CountryFacadeImpl extends AbstractFacade<Country, CountryDto>
   private static final Class<CountryDto> dtoClass = CountryDto.class;
 
   @Override
-  public CountryDto findOneByUuid(UUID uuid) throws Exception {
+  public CountryDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public CountryDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public CountryDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public CountryDto create(CountryDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public CountryDto update(CountryDto model) throws BusinessException {
+  public CountryDto save(CountryDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class CountryFacadeImpl extends AbstractFacade<Country, CountryDto>
   }
 
   @Override
-  public Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, CountrySpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public CountryDto createDto() throws Exception {
+  public CountryDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

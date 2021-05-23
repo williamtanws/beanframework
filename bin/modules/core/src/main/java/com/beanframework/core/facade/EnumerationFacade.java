@@ -10,23 +10,21 @@ import com.beanframework.core.data.EnumerationDto;
 
 public interface EnumerationFacade {
 
-  EnumerationDto findOneByUuid(UUID uuid) throws Exception;
+  EnumerationDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception;
+  EnumerationDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  EnumerationDto create(EnumerationDto model) throws BusinessException;
-
-  EnumerationDto update(EnumerationDto model) throws BusinessException;
+  EnumerationDto save(EnumerationDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  EnumerationDto createDto() throws Exception;
+  EnumerationDto createDto() throws BusinessException;
 }

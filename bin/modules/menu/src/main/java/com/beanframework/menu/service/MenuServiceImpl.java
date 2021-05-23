@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
@@ -191,7 +192,7 @@ public class MenuServiceImpl implements MenuService {
   }
 
   @Override
-  public List<Menu> findMenuBreadcrumbsByPath(String path) throws Exception {
+  public List<Menu> findMenuBreadcrumbsByPath(String path) throws InterceptorException {
     List<Menu> breadcrumbs = new ArrayList<Menu>();
 
     Map<String, Object> properties = new HashMap<String, Object>();

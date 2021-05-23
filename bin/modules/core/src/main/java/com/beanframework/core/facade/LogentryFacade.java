@@ -11,27 +11,25 @@ import com.beanframework.core.data.LogentryDto;
 
 public interface LogentryFacade {
 
-  LogentryDto findOneByUuid(UUID uuid) throws Exception;
+  LogentryDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  LogentryDto findOneProperties(Map<String, Object> properties) throws Exception;
+  LogentryDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  LogentryDto create(LogentryDto model) throws BusinessException;
-
-  LogentryDto update(LogentryDto model) throws BusinessException;
+  LogentryDto save(LogentryDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<LogentryDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<LogentryDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  LogentryDto createDto() throws Exception;
+  LogentryDto createDto() throws BusinessException;
 
   int removeAllLogentry() throws BusinessException;
 
-  int removeOldLogentryByToDate(Date date) throws Exception;
+  int removeOldLogentryByToDate(Date date) throws BusinessException;
 }

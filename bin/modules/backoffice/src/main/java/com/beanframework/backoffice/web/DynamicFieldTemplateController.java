@@ -45,7 +45,7 @@ public class DynamicFieldTemplateController extends AbstractController {
   @GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE)
   public String page(
       @Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_DYNAMICFIELDTEMPLATE;
   }
 
@@ -53,7 +53,7 @@ public class DynamicFieldTemplateController extends AbstractController {
   @GetMapping(value = DynamicFieldTemplateWebConstants.Path.DYNAMICFIELDTEMPLATE_FORM)
   public String form(
       @Valid @ModelAttribute(DynamicFieldTemplateWebConstants.ModelAttribute.DYNAMICFIELDTEMPLATE_DTO) DynamicFieldTemplateDto dynamicFieldTemplateDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (dynamicFieldTemplateDto.getUuid() != null) {
       dynamicFieldTemplateDto =
@@ -80,7 +80,7 @@ public class DynamicFieldTemplateController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        dynamicFieldTemplateDto = dynamicFieldTemplateFacade.create(dynamicFieldTemplateDto);
+        dynamicFieldTemplateDto = dynamicFieldTemplateFacade.save(dynamicFieldTemplateDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -111,7 +111,7 @@ public class DynamicFieldTemplateController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        dynamicFieldTemplateDto = dynamicFieldTemplateFacade.update(dynamicFieldTemplateDto);
+        dynamicFieldTemplateDto = dynamicFieldTemplateFacade.save(dynamicFieldTemplateDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

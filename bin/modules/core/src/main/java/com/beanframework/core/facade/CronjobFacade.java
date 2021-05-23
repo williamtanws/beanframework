@@ -10,24 +10,22 @@ import com.beanframework.core.data.CronjobDto;
 
 public interface CronjobFacade {
 
-  CronjobDto findOneByUuid(UUID uuid) throws Exception;
+  CronjobDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  CronjobDto findOneProperties(Map<String, Object> properties) throws Exception;
+  CronjobDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  CronjobDto create(CronjobDto model) throws BusinessException;
-
-  CronjobDto update(CronjobDto model) throws BusinessException;
+  CronjobDto save(CronjobDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  CronjobDto createDto() throws Exception;
+  CronjobDto createDto() throws BusinessException;
 
 }

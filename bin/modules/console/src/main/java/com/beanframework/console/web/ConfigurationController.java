@@ -45,7 +45,7 @@ public class ConfigurationController extends AbstractController {
   @GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION)
   public String page(
       @Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_CONFIGURATION;
   }
 
@@ -53,7 +53,7 @@ public class ConfigurationController extends AbstractController {
   @GetMapping(value = ConfigurationWebConstants.Path.CONFIGURATION_FORM)
   public String form(
       @Valid @ModelAttribute(ConfigurationWebConstants.ModelAttribute.CONFIGURATION_DTO) ConfigurationDto dto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (dto.getUuid() != null) {
       dto = configurationFacade.findOneByUuid(dto.getUuid());
@@ -77,7 +77,7 @@ public class ConfigurationController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        dto = configurationFacade.create(dto);
+        dto = configurationFacade.save(dto);
 
         addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -105,7 +105,7 @@ public class ConfigurationController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        dto = configurationFacade.update(dto);
+        dto = configurationFacade.save(dto);
 
         addSuccessMessage(redirectAttributes, ConsoleWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

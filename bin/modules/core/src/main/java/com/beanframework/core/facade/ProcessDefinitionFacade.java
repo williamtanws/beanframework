@@ -9,7 +9,7 @@ public interface ProcessDefinitionFacade {
 
   ProcessDefinitionDto findOneById(String deploymentId) throws BusinessException;
 
-  Page<ProcessDefinitionDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<ProcessDefinitionDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 }

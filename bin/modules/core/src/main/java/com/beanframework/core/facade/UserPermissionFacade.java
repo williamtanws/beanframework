@@ -10,26 +10,24 @@ import com.beanframework.core.data.UserPermissionDto;
 
 public interface UserPermissionFacade {
 
-  UserPermissionDto findOneByUuid(UUID uuid) throws Exception;
+  UserPermissionDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  UserPermissionDto findOneProperties(Map<String, Object> properties) throws Exception;
+  UserPermissionDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  UserPermissionDto create(UserPermissionDto model) throws BusinessException;
-
-  UserPermissionDto update(UserPermissionDto model) throws BusinessException;
+  UserPermissionDto save(UserPermissionDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<UserPermissionDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  UserPermissionDto createDto() throws Exception;
+  UserPermissionDto createDto() throws BusinessException;
 
-  List<UserPermissionDto> findAllDtoUserPermissions() throws Exception;
+  List<UserPermissionDto> findAllDtoUserPermissions() throws BusinessException;
 
 }

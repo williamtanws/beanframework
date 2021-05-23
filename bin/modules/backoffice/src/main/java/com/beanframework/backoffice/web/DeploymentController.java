@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.DeploymentWebConstants;
 import com.beanframework.backoffice.DeploymentWebConstants.DeploymentPreAuthorizeEnum;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.config.dto.DeploymentDto;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.DeploymentFacade;
@@ -32,7 +33,7 @@ public class DeploymentController extends AbstractController {
   @GetMapping(value = DeploymentWebConstants.Path.DEPLOYMENT)
   public String page(
       @Valid @ModelAttribute(DeploymentWebConstants.ModelAttribute.DEPLOYMENT) DeploymentDto deployment,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_DEPLOYMENT;
   }
 
@@ -40,7 +41,7 @@ public class DeploymentController extends AbstractController {
   @GetMapping(value = DeploymentWebConstants.Path.DEPLOYMENT_FORM)
   public String form(
       @Valid @ModelAttribute(DeploymentWebConstants.ModelAttribute.DEPLOYMENT) DeploymentDto deployment,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     deployment = deploymentFacade.findOneById(deployment.getId());
     model.addAttribute(DeploymentWebConstants.ModelAttribute.DEPLOYMENT, deployment);

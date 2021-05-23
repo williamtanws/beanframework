@@ -10,26 +10,24 @@ import com.beanframework.core.data.CustomerDto;
 
 public interface CustomerFacade {
 
-  CustomerDto findOneByUuid(UUID uuid) throws Exception;
+  CustomerDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  CustomerDto findOneProperties(Map<String, Object> properties) throws Exception;
+  CustomerDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  CustomerDto create(CustomerDto model) throws BusinessException;
-
-  CustomerDto update(CustomerDto model) throws BusinessException;
+  CustomerDto save(CustomerDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<CustomerDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  CustomerDto createDto() throws Exception;
+  CustomerDto createDto() throws BusinessException;
 
-  CustomerDto getCurrentUser() throws Exception;
+  CustomerDto getCurrentUser() throws BusinessException;
 
 }

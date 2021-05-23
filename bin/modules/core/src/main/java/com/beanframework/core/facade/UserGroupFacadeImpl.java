@@ -19,22 +19,17 @@ public class UserGroupFacadeImpl extends AbstractFacade<UserGroup, UserGroupDto>
   private static final Class<UserGroupDto> dtoClass = UserGroupDto.class;
 
   @Override
-  public UserGroupDto findOneByUuid(UUID uuid) throws Exception {
+  public UserGroupDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public UserGroupDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public UserGroupDto create(UserGroupDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public UserGroupDto update(UserGroupDto model) throws BusinessException {
+  public UserGroupDto save(UserGroupDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class UserGroupFacadeImpl extends AbstractFacade<UserGroup, UserGroupDto>
   }
 
   @Override
-  public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, UserGroupSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public UserGroupDto createDto() throws Exception {
+  public UserGroupDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

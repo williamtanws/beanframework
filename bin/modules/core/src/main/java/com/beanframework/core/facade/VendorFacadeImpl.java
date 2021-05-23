@@ -18,25 +18,16 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
   private static final Class<VendorDto> dtoClass = VendorDto.class;
 
   @Override
-  public VendorDto findOneByUuid(UUID uuid) throws Exception {
+  public VendorDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public VendorDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public VendorDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public VendorDto create(VendorDto model) throws BusinessException {
-    return save(model);
-  }
-
-  @Override
-  public VendorDto update(VendorDto model) throws BusinessException {
-    return save(model);
-  }
-
   public VendorDto save(VendorDto dto) throws BusinessException {
     try {
       if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
@@ -62,28 +53,28 @@ public class VendorFacadeImpl extends AbstractFacade<Vendor, VendorDto> implemen
   }
 
   @Override
-  public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, VendorSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public VendorDto createDto() throws Exception {
+  public VendorDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

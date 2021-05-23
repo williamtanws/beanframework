@@ -19,6 +19,7 @@ import com.beanframework.common.utils.CsvUtils;
 import com.beanframework.console.SearchWebConstants;
 import com.beanframework.console.SearchWebConstants.SearchPreAuthorizeEnum;
 import com.beanframework.core.controller.AbstractController;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Controller
 public class SearchController extends AbstractController {
@@ -45,7 +46,7 @@ public class SearchController extends AbstractController {
   @PostMapping(value = SearchWebConstants.Path.SEARCH)
   public String search(@RequestParam("query") String query, Model model,
       @RequestParam Map<String, Object> requestParams, RedirectAttributes redirectAttributes,
-      HttpServletRequest request) throws Exception {
+      HttpServletRequest request) throws JsonProcessingException {
 
     model.addAttribute("query", query);
 

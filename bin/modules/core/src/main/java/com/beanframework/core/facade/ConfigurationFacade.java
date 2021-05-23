@@ -10,27 +10,25 @@ import com.beanframework.core.data.ConfigurationDto;
 
 public interface ConfigurationFacade {
 
-  ConfigurationDto findOneByUuid(UUID uuid) throws Exception;
+  ConfigurationDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception;
+  ConfigurationDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  ConfigurationDto create(ConfigurationDto model) throws BusinessException;
-
-  ConfigurationDto update(ConfigurationDto model) throws BusinessException;
+  ConfigurationDto save(ConfigurationDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  ConfigurationDto createDto() throws Exception;
+  ConfigurationDto createDto() throws BusinessException;
 
-  String get(String id, String defaultValue) throws Exception;
+  String get(String id, String defaultValue) throws BusinessException;
 
-  boolean is(String id, boolean defaultValue) throws Exception;
+  boolean is(String id, boolean defaultValue) throws BusinessException;
 }

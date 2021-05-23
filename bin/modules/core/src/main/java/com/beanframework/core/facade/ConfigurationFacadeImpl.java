@@ -26,22 +26,18 @@ public class ConfigurationFacadeImpl extends AbstractFacade<Configuration, Confi
   private ConfigurationService configurationService;
 
   @Override
-  public ConfigurationDto findOneByUuid(UUID uuid) throws Exception {
+  public ConfigurationDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public ConfigurationDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public ConfigurationDto findOneProperties(Map<String, Object> properties)
+      throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public ConfigurationDto create(ConfigurationDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public ConfigurationDto update(ConfigurationDto model) throws BusinessException {
+  public ConfigurationDto save(ConfigurationDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -51,33 +47,34 @@ public class ConfigurationFacadeImpl extends AbstractFacade<Configuration, Confi
   }
 
   @Override
-  public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<ConfigurationDto> findPage(DataTableRequest dataTableRequest)
+      throws BusinessException {
     return findPage(dataTableRequest,
         ConfigurationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public ConfigurationDto createDto() throws Exception {
+  public ConfigurationDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
   @Override
-  public String get(String id, String defaultValue) throws Exception {
+  public String get(String id, String defaultValue) throws BusinessException {
     String value = configurationService.get(id);
     if (StringUtils.isBlank(value)) {
       return defaultValue;
@@ -87,7 +84,7 @@ public class ConfigurationFacadeImpl extends AbstractFacade<Configuration, Confi
   }
 
   @Override
-  public boolean is(String id, boolean defaultValue) throws Exception {
+  public boolean is(String id, boolean defaultValue) throws BusinessException {
     String value = configurationService.get(id);
     if (StringUtils.isBlank(value)) {
       return defaultValue;

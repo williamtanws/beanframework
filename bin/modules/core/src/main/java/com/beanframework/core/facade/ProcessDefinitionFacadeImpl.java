@@ -35,7 +35,7 @@ public class ProcessDefinitionFacadeImpl implements ProcessDefinitionFacade {
   }
 
   @Override
-  public Page<ProcessDefinitionDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<ProcessDefinitionDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     List<ProcessDefinition> page = null;
 
     if (dataTableRequest.isGlobalSearch() && StringUtils.isNotEmpty(dataTableRequest.getSearch())) {
@@ -61,7 +61,7 @@ public class ProcessDefinitionFacadeImpl implements ProcessDefinitionFacade {
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return (int) repositoryService.createProcessDefinitionQuery().count();
   }
 }

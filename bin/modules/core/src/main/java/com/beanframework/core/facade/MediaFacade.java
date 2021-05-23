@@ -10,24 +10,22 @@ import com.beanframework.core.data.MediaDto;
 
 public interface MediaFacade {
 
-  MediaDto findOneByUuid(UUID uuid) throws Exception;
+  MediaDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  MediaDto findOneProperties(Map<String, Object> properties) throws Exception;
+  MediaDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  MediaDto create(MediaDto model) throws BusinessException;
-
-  MediaDto update(MediaDto model) throws BusinessException;
+  MediaDto save(MediaDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  MediaDto createDto() throws Exception;
+  MediaDto createDto() throws BusinessException;
 
 }

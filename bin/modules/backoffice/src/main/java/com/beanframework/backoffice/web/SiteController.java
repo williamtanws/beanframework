@@ -46,7 +46,7 @@ public class SiteController extends AbstractController {
   @GetMapping(value = SiteWebConstants.Path.SITE)
   public String page(
       @Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model,
-      @RequestParam Map<String, Object> requestParams) throws Exception {
+      @RequestParam Map<String, Object> requestParams) {
     return VIEW_SITE;
   }
 
@@ -54,7 +54,7 @@ public class SiteController extends AbstractController {
   @GetMapping(value = SiteWebConstants.Path.SITE_FORM)
   public String form(
       @Valid @ModelAttribute(SiteWebConstants.ModelAttribute.SITE_DTO) SiteDto siteDto, Model model)
-      throws Exception {
+      throws BusinessException {
 
     if (siteDto.getUuid() != null) {
       siteDto = siteFacade.findOneByUuid(siteDto.getUuid());
@@ -78,7 +78,7 @@ public class SiteController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        siteDto = siteFacade.create(siteDto);
+        siteDto = siteFacade.save(siteDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class SiteController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        siteDto = siteFacade.update(siteDto);
+        siteDto = siteFacade.save(siteDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

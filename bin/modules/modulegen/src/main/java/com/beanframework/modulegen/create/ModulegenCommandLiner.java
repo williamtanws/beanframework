@@ -1,4 +1,4 @@
-package com.beanframework.modulegen;
+package com.beanframework.modulegen.create;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import com.beanframework.modulegen.create.CreateModule;
-import com.beanframework.modulegen.create.CreateModuleBackoffice;
-import com.beanframework.modulegen.create.CreateModuleCore;
 
 @Component
 public class ModulegenCommandLiner implements CommandLineRunner {

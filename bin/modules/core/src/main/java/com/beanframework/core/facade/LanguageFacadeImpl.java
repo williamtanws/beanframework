@@ -19,22 +19,17 @@ public class LanguageFacadeImpl extends AbstractFacade<Language, LanguageDto>
   private static final Class<LanguageDto> dtoClass = LanguageDto.class;
 
   @Override
-  public LanguageDto findOneByUuid(UUID uuid) throws Exception {
+  public LanguageDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public LanguageDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public LanguageDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public LanguageDto create(LanguageDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public LanguageDto update(LanguageDto model) throws BusinessException {
+  public LanguageDto save(LanguageDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class LanguageFacadeImpl extends AbstractFacade<Language, LanguageDto>
   }
 
   @Override
-  public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, LanguageSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public LanguageDto createDto() throws Exception {
+  public LanguageDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

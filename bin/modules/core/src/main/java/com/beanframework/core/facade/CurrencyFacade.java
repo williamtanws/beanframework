@@ -10,23 +10,21 @@ import com.beanframework.core.data.CurrencyDto;
 
 public interface CurrencyFacade {
 
-  CurrencyDto findOneByUuid(UUID uuid) throws Exception;
+  CurrencyDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  CurrencyDto findOneProperties(Map<String, Object> properties) throws Exception;
+  CurrencyDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  CurrencyDto create(CurrencyDto model) throws BusinessException;
-
-  CurrencyDto update(CurrencyDto model) throws BusinessException;
+  CurrencyDto save(CurrencyDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  CurrencyDto createDto() throws Exception;
+  CurrencyDto createDto() throws BusinessException;
 }
