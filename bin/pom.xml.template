@@ -36,7 +36,6 @@
         <module>modules/console</module>
         <module>modules/backoffice</module>
         <module>modules/documentation</module>
-        <module>modules/api</module>
         <module>modules/modulegen</module>
 		<!-- Custom -->
 		<!--
