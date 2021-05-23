@@ -48,7 +48,7 @@ public class MenuController extends AbstractController {
   @GetMapping(value = MenuWebConstants.Path.MENU)
   public String page(
       @Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto dynamicFieldDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_MENU;
   }
 
@@ -56,7 +56,7 @@ public class MenuController extends AbstractController {
   @GetMapping(value = MenuWebConstants.Path.MENU_FORM)
   public String form(
       @Valid @ModelAttribute(MenuWebConstants.ModelAttribute.MENU_DTO) MenuDto dynamicFieldDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (dynamicFieldDto.getUuid() != null) {
       dynamicFieldDto = menuFacade.findOneByUuid(dynamicFieldDto.getUuid());
@@ -80,7 +80,7 @@ public class MenuController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        dynamicFieldDto = menuFacade.create(dynamicFieldDto);
+        dynamicFieldDto = menuFacade.save(dynamicFieldDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -108,7 +108,7 @@ public class MenuController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        dynamicFieldDto = menuFacade.update(dynamicFieldDto);
+        dynamicFieldDto = menuFacade.save(dynamicFieldDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

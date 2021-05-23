@@ -10,23 +10,21 @@ import com.beanframework.core.data.UserGroupDto;
 
 public interface UserGroupFacade {
 
-  UserGroupDto findOneByUuid(UUID uuid) throws Exception;
+  UserGroupDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  UserGroupDto findOneProperties(Map<String, Object> properties) throws Exception;
+  UserGroupDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  UserGroupDto create(UserGroupDto model) throws BusinessException;
-
-  UserGroupDto update(UserGroupDto model) throws BusinessException;
+  UserGroupDto save(UserGroupDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<UserGroupDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  UserGroupDto createDto() throws Exception;
+  UserGroupDto createDto() throws BusinessException;
 }

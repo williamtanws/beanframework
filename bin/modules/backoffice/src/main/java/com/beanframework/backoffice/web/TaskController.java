@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.TaskWebConstants;
 import com.beanframework.backoffice.TaskWebConstants.TaskPreAuthorizeEnum;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.config.dto.TaskDto;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.TaskFacade;
@@ -31,14 +32,14 @@ public class TaskController extends AbstractController {
   @PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = TaskWebConstants.Path.TASK)
   public String page(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) TaskDto task,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_TASK;
   }
 
   @PreAuthorize(TaskPreAuthorizeEnum.HAS_READ)
   @GetMapping(value = TaskWebConstants.Path.TASK_FORM)
   public String form(@Valid @ModelAttribute(TaskWebConstants.ModelAttribute.TASK) TaskDto task,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     task = taskFacade.findOneById(task.getId());
     model.addAttribute(TaskWebConstants.ModelAttribute.TASK, task);

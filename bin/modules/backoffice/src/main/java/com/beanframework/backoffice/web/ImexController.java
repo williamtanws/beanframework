@@ -46,7 +46,7 @@ public class ImexController extends AbstractController {
   @GetMapping(value = ImexWebConstants.Path.IMEX)
   public String page(
       @Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model,
-      @RequestParam Map<String, Object> requestParams) throws Exception {
+      @RequestParam Map<String, Object> requestParams) {
     return VIEW_IMEX;
   }
 
@@ -54,7 +54,7 @@ public class ImexController extends AbstractController {
   @GetMapping(value = ImexWebConstants.Path.IMEX_FORM)
   public String form(
       @Valid @ModelAttribute(ImexWebConstants.ModelAttribute.IMEX_DTO) ImexDto imexDto, Model model)
-      throws Exception {
+      throws BusinessException {
 
     if (imexDto.getUuid() != null) {
       imexDto = imexFacade.findOneByUuid(imexDto.getUuid());
@@ -78,7 +78,7 @@ public class ImexController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        imexDto = imexFacade.create(imexDto);
+        imexDto = imexFacade.save(imexDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class ImexController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        imexDto = imexFacade.update(imexDto);
+        imexDto = imexFacade.save(imexDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

@@ -46,7 +46,7 @@ public class CommentController extends AbstractController {
   @GetMapping(value = CommentWebConstants.Path.COMMENT)
   public String page(
       @Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_COMMENT;
   }
 
@@ -54,7 +54,7 @@ public class CommentController extends AbstractController {
   @GetMapping(value = CommentWebConstants.Path.COMMENT_FORM)
   public String form(
       @Valid @ModelAttribute(CommentWebConstants.ModelAttribute.COMMENT_DTO) CommentDto commentDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (commentDto.getUuid() != null) {
       commentDto = commentFacade.findOneByUuid(commentDto.getUuid());
@@ -78,7 +78,7 @@ public class CommentController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        commentDto = commentFacade.create(commentDto);
+        commentDto = commentFacade.save(commentDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class CommentController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        commentDto = commentFacade.update(commentDto);
+        commentDto = commentFacade.save(commentDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

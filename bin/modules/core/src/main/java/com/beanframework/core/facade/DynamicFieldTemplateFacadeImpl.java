@@ -20,23 +20,18 @@ public class DynamicFieldTemplateFacadeImpl
   private static final Class<DynamicFieldTemplateDto> dtoClass = DynamicFieldTemplateDto.class;
 
   @Override
-  public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws Exception {
+  public DynamicFieldTemplateDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
   public DynamicFieldTemplateDto findOneProperties(Map<String, Object> properties)
-      throws Exception {
+      throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public DynamicFieldTemplateDto create(DynamicFieldTemplateDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public DynamicFieldTemplateDto update(DynamicFieldTemplateDto model) throws BusinessException {
+  public DynamicFieldTemplateDto save(DynamicFieldTemplateDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -47,29 +42,29 @@ public class DynamicFieldTemplateFacadeImpl
 
   @Override
   public Page<DynamicFieldTemplateDto> findPage(DataTableRequest dataTableRequest)
-      throws Exception {
+      throws BusinessException {
     return findPage(dataTableRequest,
         DynamicFieldTemplateSpecification.getPageSpecification(dataTableRequest), entityClass,
         dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public DynamicFieldTemplateDto createDto() throws Exception {
+  public DynamicFieldTemplateDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

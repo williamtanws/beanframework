@@ -9,7 +9,7 @@ public interface DeploymentFacade {
 
   DeploymentDto findOneById(String id) throws BusinessException;
 
-  Page<DeploymentDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<DeploymentDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 }

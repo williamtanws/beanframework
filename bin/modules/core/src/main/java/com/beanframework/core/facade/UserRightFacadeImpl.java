@@ -21,22 +21,17 @@ public class UserRightFacadeImpl extends AbstractFacade<UserRight, UserRightDto>
   private static final Class<UserRightDto> dtoClass = UserRightDto.class;
 
   @Override
-  public UserRightDto findOneByUuid(UUID uuid) throws Exception {
+  public UserRightDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public UserRightDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public UserRightDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public UserRightDto create(UserRightDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public UserRightDto update(UserRightDto model) throws BusinessException {
+  public UserRightDto save(UserRightDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -46,33 +41,33 @@ public class UserRightFacadeImpl extends AbstractFacade<UserRight, UserRightDto>
   }
 
   @Override
-  public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, UserRightSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public UserRightDto createDto() throws Exception {
+  public UserRightDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
   @Override
-  public List<UserRightDto> findAllDtoUserRights() throws Exception {
+  public List<UserRightDto> findAllDtoUserRights() throws BusinessException {
     Map<String, Sort.Direction> sorts = new HashMap<String, Sort.Direction>();
     sorts.put(UserRight.SORT, Sort.Direction.ASC);
 

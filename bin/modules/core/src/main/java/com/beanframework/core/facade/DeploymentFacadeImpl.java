@@ -35,7 +35,7 @@ public class DeploymentFacadeImpl implements DeploymentFacade {
   }
 
   @Override
-  public Page<DeploymentDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<DeploymentDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     List<Deployment> page = null;
 
     if (dataTableRequest.isGlobalSearch() && StringUtils.isNotEmpty(dataTableRequest.getSearch())) {
@@ -61,7 +61,7 @@ public class DeploymentFacadeImpl implements DeploymentFacade {
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return (int) repositoryService.createDeploymentQuery().count();
   }
 }

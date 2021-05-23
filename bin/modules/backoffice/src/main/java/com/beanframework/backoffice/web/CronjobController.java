@@ -46,7 +46,7 @@ public class CronjobController extends AbstractController {
   @GetMapping(value = CronjobWebConstants.Path.CRONJOB)
   public String page(
       @Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_CRONJOB;
   }
 
@@ -54,7 +54,7 @@ public class CronjobController extends AbstractController {
   @GetMapping(value = CronjobWebConstants.Path.CRONJOB_FORM)
   public String form(
       @Valid @ModelAttribute(CronjobWebConstants.ModelAttribute.CRONJOB_DTO) CronjobDto cronjobDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (cronjobDto.getUuid() != null) {
       cronjobDto = cronjobFacade.findOneByUuid(cronjobDto.getUuid());
@@ -78,7 +78,7 @@ public class CronjobController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        cronjobDto = cronjobFacade.create(cronjobDto);
+        cronjobDto = cronjobFacade.save(cronjobDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class CronjobController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        cronjobDto = cronjobFacade.update(cronjobDto);
+        cronjobDto = cronjobFacade.save(cronjobDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

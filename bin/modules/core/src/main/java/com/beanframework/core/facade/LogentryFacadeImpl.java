@@ -20,22 +20,17 @@ public class LogentryFacadeImpl extends AbstractFacade<Logentry, LogentryDto>
   private static final Class<LogentryDto> dtoClass = LogentryDto.class;
 
   @Override
-  public LogentryDto findOneByUuid(UUID uuid) throws Exception {
+  public LogentryDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public LogentryDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public LogentryDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public LogentryDto create(LogentryDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public LogentryDto update(LogentryDto model) throws BusinessException {
+  public LogentryDto save(LogentryDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -45,28 +40,28 @@ public class LogentryFacadeImpl extends AbstractFacade<Logentry, LogentryDto>
   }
 
   @Override
-  public Page<LogentryDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<LogentryDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, LogentrySpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public LogentryDto createDto() throws Exception {
+  public LogentryDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
@@ -85,7 +80,7 @@ public class LogentryFacadeImpl extends AbstractFacade<Logentry, LogentryDto>
   }
 
   @Override
-  public int removeOldLogentryByToDate(Date date) throws Exception {
+  public int removeOldLogentryByToDate(Date date) throws BusinessException {
     int count = 0;
 
     List<Logentry> oldLogentry = modelService

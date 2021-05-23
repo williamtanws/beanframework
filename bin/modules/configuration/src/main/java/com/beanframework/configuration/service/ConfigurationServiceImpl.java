@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 
@@ -14,7 +15,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
   private ModelService modelService;
 
   @Override
-  public String get(String id) throws Exception {
+  public String get(String id) throws InterceptorException {
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(Configuration.ID, id);
     Configuration entity = modelService.findOneByProperties(properties, Configuration.class);
@@ -26,7 +27,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
   }
 
   @Override
-  public String get(String id, String defaultValue) throws Exception {
+  public String get(String id, String defaultValue) throws InterceptorException {
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(Configuration.ID, id);
     Configuration entity = modelService.findOneByProperties(properties, Configuration.class);

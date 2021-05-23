@@ -19,22 +19,17 @@ public class AddressFacadeImpl extends AbstractFacade<Address, AddressDto>
   private static final Class<AddressDto> dtoClass = AddressDto.class;
 
   @Override
-  public AddressDto findOneByUuid(UUID uuid) throws Exception {
+  public AddressDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public AddressDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public AddressDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public AddressDto create(AddressDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public AddressDto update(AddressDto model) throws BusinessException {
+  public AddressDto save(AddressDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class AddressFacadeImpl extends AbstractFacade<Address, AddressDto>
   }
 
   @Override
-  public Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, AddressSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public AddressDto createDto() throws Exception {
+  public AddressDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

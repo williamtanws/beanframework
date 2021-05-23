@@ -2,6 +2,7 @@ package com.beanframework.backoffice.web;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.Map;
@@ -74,7 +75,7 @@ public class UserController extends AbstractController {
   @GetMapping(value = UserWebConstants.Path.USER)
   public String page(
       @Valid @ModelAttribute(UserWebConstants.ModelAttribute.USER_DTO) UserDto userDto, Model model,
-      @RequestParam Map<String, Object> requestParams) throws Exception {
+      @RequestParam Map<String, Object> requestParams) {
     return VIEW_USER;
   }
 
@@ -82,7 +83,7 @@ public class UserController extends AbstractController {
   @GetMapping(value = UserWebConstants.Path.USER_FORM)
   public String form(
       @Valid @ModelAttribute(UserWebConstants.ModelAttribute.USER_DTO) UserDto userDto, Model model)
-      throws Exception {
+      throws BusinessException {
 
     if (userDto.getUuid() != null) {
       userDto = userFacade.findOneByUuid(userDto.getUuid());
@@ -106,7 +107,7 @@ public class UserController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        userDto = userFacade.create(userDto);
+        userDto = userFacade.save(userDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -134,7 +135,7 @@ public class UserController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        userDto = userFacade.update(userDto);
+        userDto = userFacade.save(userDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -180,7 +181,7 @@ public class UserController extends AbstractController {
 
   @GetMapping(value = UserConstants.PATH_USER_PROFILE_PICTURE, produces = MediaType.ALL_VALUE)
   public ResponseEntity<byte[]> getImage(@RequestParam Map<String, Object> requestParams)
-      throws Exception {
+      throws IOException, BusinessException {
 
     UUID userUuid;
 
@@ -223,7 +224,7 @@ public class UserController extends AbstractController {
     }
   }
 
-  private ResponseEntity<byte[]> getDefaultPicture() throws Exception {
+  private ResponseEntity<byte[]> getDefaultPicture() throws BusinessException, IOException {
     InputStream targetStream;
 
     String configurationValue =

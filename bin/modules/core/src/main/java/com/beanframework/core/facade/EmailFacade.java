@@ -10,23 +10,21 @@ import com.beanframework.core.data.EmailDto;
 
 public interface EmailFacade {
 
-  EmailDto findOneByUuid(UUID uuid) throws Exception;
+  EmailDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  EmailDto findOneProperties(Map<String, Object> properties) throws Exception;
+  EmailDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  EmailDto create(EmailDto model) throws BusinessException;
-
-  EmailDto update(EmailDto model) throws BusinessException;
+  EmailDto save(EmailDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  EmailDto createDto() throws Exception;
+  EmailDto createDto() throws BusinessException;
 }

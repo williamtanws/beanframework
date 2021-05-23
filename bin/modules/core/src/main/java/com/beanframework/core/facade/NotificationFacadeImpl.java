@@ -1,5 +1,6 @@
 package com.beanframework.core.facade;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,13 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
   private UserService userService;
 
   @Override
-  public NotificationDto findOneByUuid(UUID uuid) throws Exception {
+  public NotificationDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public NotificationDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public NotificationDto findOneProperties(Map<String, Object> properties)
+      throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
@@ -47,29 +49,35 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
   }
 
   @Override
-  public Page<NotificationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<NotificationDto> findPage(DataTableRequest dataTableRequest)
+      throws BusinessException {
     return findPage(dataTableRequest,
         NotificationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public NotificationDto createDto() throws Exception {
+  public NotificationDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
   @Override
-  public List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws Exception {
+  public List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws BusinessException {
     User user = modelService.findOneByUuid(uuid, User.class);
     List<Notification> notifications = null;
 
     if (user.getParameters().get(NotificationConstants.USER_NOTIFICATION) != null) {
-      Date userNotificationDate = NotificationConstants.USER_NOTIFICATION_DATEFORMAT
-          .parse(user.getParameters().get(NotificationConstants.USER_NOTIFICATION));
+      Date userNotificationDate;
+      try {
+        userNotificationDate = NotificationConstants.USER_NOTIFICATION_DATEFORMAT
+            .parse(user.getParameters().get(NotificationConstants.USER_NOTIFICATION));
+      } catch (ParseException e) {
+        throw new BusinessException(e.getMessage(), e);
+      }
 
       notifications = modelService.findBySpecification(
           NotificationSpecification.getNewNotificationByFromDate(userNotificationDate),
@@ -83,12 +91,12 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
   }
 
   @Override
-  public void refreshAllNewNotificationByUser(UUID uuid) throws Exception {
+  public void refreshAllNewNotificationByUser(UUID uuid) throws BusinessException {
     // Do nothing, just evict cache from interface
   }
 
   @Override
-  public void checkedNotification(UUID uuid) throws Exception {
+  public void checkedNotification(UUID uuid) throws BusinessException {
     User user = modelService.findOneByUuid(uuid, User.class);
     user.getParameters().put(NotificationConstants.USER_NOTIFICATION,
         NotificationConstants.USER_NOTIFICATION_DATEFORMAT.format(new Date()));
@@ -111,7 +119,7 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
   }
 
   @Override
-  public int removeOldNotificationByToDate(Date date) throws Exception {
+  public int removeOldNotificationByToDate(Date date) throws BusinessException {
     int count = 0;
 
     List<Notification> oldNotification = modelService.findBySpecification(

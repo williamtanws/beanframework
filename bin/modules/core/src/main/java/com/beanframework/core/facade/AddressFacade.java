@@ -10,23 +10,21 @@ import com.beanframework.core.data.AddressDto;
 
 public interface AddressFacade {
 
-  AddressDto findOneByUuid(UUID uuid) throws Exception;
+  AddressDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  AddressDto findOneProperties(Map<String, Object> properties) throws Exception;
+  AddressDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  AddressDto create(AddressDto model) throws BusinessException;
-
-  AddressDto update(AddressDto model) throws BusinessException;
+  AddressDto save(AddressDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<AddressDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  AddressDto createDto() throws Exception;
+  AddressDto createDto() throws BusinessException;
 }

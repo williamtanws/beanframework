@@ -19,22 +19,18 @@ public class DynamicFieldFacadeImpl extends AbstractFacade<DynamicField, Dynamic
   private static final Class<DynamicFieldDto> dtoClass = DynamicFieldDto.class;
 
   @Override
-  public DynamicFieldDto findOneByUuid(UUID uuid) throws Exception {
+  public DynamicFieldDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public DynamicFieldDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public DynamicFieldDto findOneProperties(Map<String, Object> properties)
+      throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public DynamicFieldDto create(DynamicFieldDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public DynamicFieldDto update(DynamicFieldDto model) throws BusinessException {
+  public DynamicFieldDto save(DynamicFieldDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +40,29 @@ public class DynamicFieldFacadeImpl extends AbstractFacade<DynamicField, Dynamic
   }
 
   @Override
-  public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<DynamicFieldDto> findPage(DataTableRequest dataTableRequest)
+      throws BusinessException {
     return findPage(dataTableRequest,
         DynamicFieldSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public DynamicFieldDto createDto() throws Exception {
+  public DynamicFieldDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

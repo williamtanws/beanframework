@@ -46,7 +46,7 @@ public class LogentryController extends AbstractController {
   @GetMapping(value = LogentryWebConstants.Path.LOGENTRY)
   public String page(
       @Valid @ModelAttribute(LogentryWebConstants.ModelAttribute.LOGENTRY_DTO) LogentryDto logentryDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_LOGENTRY;
   }
 
@@ -54,7 +54,7 @@ public class LogentryController extends AbstractController {
   @GetMapping(value = LogentryWebConstants.Path.LOGENTRY_FORM)
   public String form(
       @Valid @ModelAttribute(LogentryWebConstants.ModelAttribute.LOGENTRY_DTO) LogentryDto logentryDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (logentryDto.getUuid() != null) {
       logentryDto = logentryFacade.findOneByUuid(logentryDto.getUuid());
@@ -78,7 +78,7 @@ public class LogentryController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        logentryDto = logentryFacade.create(logentryDto);
+        logentryDto = logentryFacade.save(logentryDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class LogentryController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        logentryDto = logentryFacade.update(logentryDto);
+        logentryDto = logentryFacade.save(logentryDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

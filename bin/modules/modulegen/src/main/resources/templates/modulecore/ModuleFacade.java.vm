@@ -12,23 +12,21 @@ import ${modulegroup}.${moduleartifact}core.data.${Moduleartifact}Dto;
 
 public interface ${Moduleartifact}Facade {
 
-	${Moduleartifact}Dto findOneByUuid(UUID uuid) throws Exception;
+	${Moduleartifact}Dto findOneByUuid(UUID uuid) throws BusinessException;
 
-	${Moduleartifact}Dto findOneProperties(Map<String, Object> properties) throws Exception;
+	${Moduleartifact}Dto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-	${Moduleartifact}Dto create(${Moduleartifact}Dto model) throws BusinessException;
-
-	${Moduleartifact}Dto update(${Moduleartifact}Dto model) throws BusinessException;
+	${Moduleartifact}Dto save(${Moduleartifact}Dto model) throws BusinessException;
 
 	void delete(UUID uuid) throws BusinessException;
 
-	Page<${Moduleartifact}Dto> findPage(DataTableRequest dataTableRequest) throws Exception;
+	Page<${Moduleartifact}Dto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-	int count() throws Exception;
+	int count();
 
-	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+	List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-	int countHistory(DataTableRequest dataTableRequest) throws Exception;
+	int countHistory(DataTableRequest dataTableRequest);
 
-	${Moduleartifact}Dto createDto() throws Exception;
+	${Moduleartifact}Dto createDto() throws BusinessException;
 }

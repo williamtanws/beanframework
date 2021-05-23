@@ -19,22 +19,18 @@ public class DynamicFieldSlotFacadeImpl extends
   private static final Class<DynamicFieldSlotDto> dtoClass = DynamicFieldSlotDto.class;
 
   @Override
-  public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws Exception {
+  public DynamicFieldSlotDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public DynamicFieldSlotDto findOneProperties(Map<String, Object> properties)
+      throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public DynamicFieldSlotDto create(DynamicFieldSlotDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public DynamicFieldSlotDto update(DynamicFieldSlotDto model) throws BusinessException {
+  public DynamicFieldSlotDto save(DynamicFieldSlotDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,29 +40,30 @@ public class DynamicFieldSlotFacadeImpl extends
   }
 
   @Override
-  public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<DynamicFieldSlotDto> findPage(DataTableRequest dataTableRequest)
+      throws BusinessException {
     return findPage(dataTableRequest,
         DynamicFieldSlotSpecification.getPageSpecification(dataTableRequest), entityClass,
         dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public DynamicFieldSlotDto createDto() throws Exception {
+  public DynamicFieldSlotDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

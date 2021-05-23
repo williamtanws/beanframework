@@ -46,7 +46,7 @@ public class DynamicFieldSlotController extends AbstractController {
   @GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT)
   public String page(
       @Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_DYNAMICFIELDSLOT;
   }
 
@@ -54,7 +54,7 @@ public class DynamicFieldSlotController extends AbstractController {
   @GetMapping(value = DynamicFieldSlotWebConstants.Path.DYNAMICFIELDSLOT_FORM)
   public String form(
       @Valid @ModelAttribute(DynamicFieldSlotWebConstants.ModelAttribute.DYNAMICFIELDSLOT_DTO) DynamicFieldSlotDto dto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (dto.getUuid() != null) {
       dto = dynamicFieldSlotFacade.findOneByUuid(dto.getUuid());
@@ -78,7 +78,7 @@ public class DynamicFieldSlotController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        dto = dynamicFieldSlotFacade.create(dto);
+        dto = dynamicFieldSlotFacade.save(dto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -107,7 +107,7 @@ public class DynamicFieldSlotController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        dto = dynamicFieldSlotFacade.update(dto);
+        dto = dynamicFieldSlotFacade.save(dto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

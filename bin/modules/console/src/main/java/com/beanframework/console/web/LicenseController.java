@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.common.utils.BooleanUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.console.ConsoleWebConstants;
@@ -38,7 +39,7 @@ public class LicenseController extends AbstractController {
   @Value(ConsoleWebConstants.Path.CONSOLE)
   private String PATH_CONSOLE;
 
-  public boolean isLicenseAccepted() throws Exception {
+  public boolean isLicenseAccepted() throws BusinessException {
 
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(Configuration.ID, LicenseWebConstants.CONFIGURATION_ID_LICENSE_ACCEPTED);
@@ -99,11 +100,8 @@ public class LicenseController extends AbstractController {
         existingConfiguration.setValue("false");
       }
 
-      if (existingConfiguration.getUuid() == null) {
-        configurationFacade.create(existingConfiguration);
-      } else {
-        configurationFacade.update(existingConfiguration);
-      }
+      configurationFacade.save(existingConfiguration);
+
       addSuccessMessage(redirectAttributes, LicenseWebConstants.Locale.ACCEPT_SUCCESS);
     } catch (Exception e) {
       addErrorMessage(ConfigurationDto.class, e.getMessage(), bindingResult, redirectAttributes);

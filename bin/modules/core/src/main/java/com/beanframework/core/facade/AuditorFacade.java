@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.beanframework.common.data.AuditorDto;
 import com.beanframework.common.data.DataTableRequest;
+import com.beanframework.common.exception.BusinessException;
 
 public interface AuditorFacade {
 
@@ -17,21 +18,21 @@ public interface AuditorFacade {
   }
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  AuditorDto findOneByUuid(UUID uuid) throws Exception;
+  AuditorDto findOneByUuid(UUID uuid) throws BusinessException;
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  AuditorDto findOneProperties(Map<String, Object> properties) throws Exception;
+  AuditorDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<AuditorDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  int count() throws Exception;
+  int count();
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
   @PreAuthorize(PreAuthorizeEnum.HAS_READ)
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
 }

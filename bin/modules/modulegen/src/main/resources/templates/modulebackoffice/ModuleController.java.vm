@@ -47,13 +47,13 @@ public class ${Moduleartifact}Controller extends AbstractController {
 
 	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT})
-	public String page(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+	public String page(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model, @RequestParam Map<String, Object> requestParams) {
 		return VIEW_${MODULEARTIFACT};
 	}
 
 	@PreAuthorize(${Moduleartifact}PreAuthorizeEnum.HAS_READ)
 	@GetMapping(value = ${Moduleartifact}WebConstants.Path.${MODULEARTIFACT}_FORM)
-	public String form(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model) throws Exception {
+	public String form(@Valid @ModelAttribute(${Moduleartifact}WebConstants.ModelAttribute.${MODULEARTIFACT}_DTO) ${Moduleartifact}Dto ${moduleartifact}Dto, Model model) throws BusinessException {
 
 		if (${moduleartifact}Dto.getUuid() != null) {
 			${moduleartifact}Dto = ${moduleartifact}Facade.findOneByUuid(${moduleartifact}Dto.getUuid());
@@ -74,7 +74,7 @@ public class ${Moduleartifact}Controller extends AbstractController {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Create new record doesn't required UUID.");
 		} else {
 			try {
-				${moduleartifact}Dto = ${moduleartifact}Facade.create(${moduleartifact}Dto);
+				${moduleartifact}Dto = ${moduleartifact}Facade.save(${moduleartifact}Dto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {
@@ -99,7 +99,7 @@ public class ${Moduleartifact}Controller extends AbstractController {
 			redirectAttributes.addFlashAttribute(BackofficeWebConstants.Model.ERROR, "Update record required existing UUID.");
 		} else {
 			try {
-				${moduleartifact}Dto = ${moduleartifact}Facade.update(${moduleartifact}Dto);
+				${moduleartifact}Dto = ${moduleartifact}Facade.save(${moduleartifact}Dto);
 
 				addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
 			} catch (BusinessException e) {

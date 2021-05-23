@@ -18,22 +18,17 @@ public class EmailFacadeImpl extends AbstractFacade<Email, EmailDto> implements 
   private static final Class<EmailDto> dtoClass = EmailDto.class;
 
   @Override
-  public EmailDto findOneByUuid(UUID uuid) throws Exception {
+  public EmailDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public EmailDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public EmailDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public EmailDto create(EmailDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public EmailDto update(EmailDto model) throws BusinessException {
+  public EmailDto save(EmailDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -43,28 +38,28 @@ public class EmailFacadeImpl extends AbstractFacade<Email, EmailDto> implements 
   }
 
   @Override
-  public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<EmailDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, EmailSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public EmailDto createDto() throws Exception {
+  public EmailDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

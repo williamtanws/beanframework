@@ -45,22 +45,17 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
   private UserService userService;
 
   @Override
-  public MenuDto findOneByUuid(UUID uuid) throws Exception {
+  public MenuDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public MenuDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public MenuDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public MenuDto create(MenuDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public MenuDto update(MenuDto model) throws BusinessException {
+  public MenuDto save(MenuDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -70,28 +65,28 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
   }
 
   @Override
-  public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, MenuSpecification.getCommonSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public MenuDto createDto() throws Exception {
+  public MenuDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
@@ -129,7 +124,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
   @Transactional
   @Override
-  public List<MenuDto> findMenuTreeByCurrentUser() throws Exception {
+  public List<MenuDto> findMenuTreeByCurrentUser() throws BusinessException {
 
     Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
     if (userGroupUuids == null || userGroupUuids.isEmpty()) {
@@ -149,7 +144,7 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
   @Transactional
   @Override
-  public List<MenuDto> findMenuBreadcrumbsByPath(String path) throws Exception {
+  public List<MenuDto> findMenuBreadcrumbsByPath(String path) throws BusinessException {
     List<Menu> models = menuService.findMenuBreadcrumbsByPath(path);
 
     List<MenuDto> dtos = new ArrayList<MenuDto>();

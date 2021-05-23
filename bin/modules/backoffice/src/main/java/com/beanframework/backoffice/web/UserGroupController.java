@@ -57,7 +57,7 @@ public class UserGroupController extends AbstractController {
   @GetMapping(value = UserGroupWebConstants.Path.USERGROUP)
   public String page(
       @Valid @ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_USERGROUP;
   }
 
@@ -65,7 +65,7 @@ public class UserGroupController extends AbstractController {
   @GetMapping(value = UserGroupWebConstants.Path.USERGROUP_FORM)
   public String form(
       @Valid @ModelAttribute(UserGroupWebConstants.ModelAttribute.USERGROUP_DTO) UserGroupDto usergroupDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     // User Authority
     List<UserRightDto> userRights = userRightFacade.findAllDtoUserRights();
@@ -96,7 +96,7 @@ public class UserGroupController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        usergroupDto = usergroupFacade.create(usergroupDto);
+        usergroupDto = usergroupFacade.save(usergroupDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -124,7 +124,7 @@ public class UserGroupController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        usergroupDto = usergroupFacade.update(usergroupDto);
+        usergroupDto = usergroupFacade.save(usergroupDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

@@ -25,25 +25,16 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto>
   private UserService userService;
 
   @Override
-  public EmployeeDto findOneByUuid(UUID uuid) throws Exception {
+  public EmployeeDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public EmployeeDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public EmployeeDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public EmployeeDto create(EmployeeDto model) throws BusinessException {
-    return save(model);
-  }
-
-  @Override
-  public EmployeeDto update(EmployeeDto model) throws BusinessException {
-    return save(model);
-  }
-
   public EmployeeDto save(EmployeeDto dto) throws BusinessException {
     try {
       if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
@@ -72,33 +63,33 @@ public class EmployeeFacadeImpl extends AbstractFacade<Employee, EmployeeDto>
   }
 
   @Override
-  public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<EmployeeDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, EmployeeSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public EmployeeDto createDto() throws Exception {
+  public EmployeeDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 
   @Override
-  public EmployeeDto getCurrentUser() throws Exception {
+  public EmployeeDto getCurrentUser() throws BusinessException {
     User user = userService.getCurrentUserSession();
     Employee employee = modelService.findOneByUuid(user.getUuid(), Employee.class);
     EmployeeDto dto = modelService.getDto(employee, dtoClass);

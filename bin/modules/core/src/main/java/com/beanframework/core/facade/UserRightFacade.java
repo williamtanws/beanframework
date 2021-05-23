@@ -10,25 +10,23 @@ import com.beanframework.core.data.UserRightDto;
 
 public interface UserRightFacade {
 
-  UserRightDto findOneByUuid(UUID uuid) throws Exception;
+  UserRightDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  UserRightDto findOneProperties(Map<String, Object> properties) throws Exception;
+  UserRightDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  UserRightDto create(UserRightDto model) throws BusinessException;
-
-  UserRightDto update(UserRightDto model) throws BusinessException;
+  UserRightDto save(UserRightDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<UserRightDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  UserRightDto createDto() throws Exception;
+  UserRightDto createDto() throws BusinessException;
 
-  List<UserRightDto> findAllDtoUserRights() throws Exception;
+  List<UserRightDto> findAllDtoUserRights() throws BusinessException;
 }

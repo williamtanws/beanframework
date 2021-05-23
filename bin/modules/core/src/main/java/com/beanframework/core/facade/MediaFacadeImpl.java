@@ -23,25 +23,16 @@ public class MediaFacadeImpl extends AbstractFacade<Media, MediaDto> implements 
   private MediaService mediaService;
 
   @Override
-  public MediaDto findOneByUuid(UUID uuid) throws Exception {
+  public MediaDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public MediaDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public MediaDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public MediaDto create(MediaDto model) throws BusinessException {
-    return save(model);
-  }
-
-  @Override
-  public MediaDto update(MediaDto model) throws BusinessException {
-    return save(model);
-  }
-
   public MediaDto save(MediaDto dto) throws BusinessException {
     try {
       Media entity = modelService.getEntity(dto, entityClass);
@@ -68,28 +59,28 @@ public class MediaFacadeImpl extends AbstractFacade<Media, MediaDto> implements 
   }
 
   @Override
-  public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<MediaDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, MediaSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public MediaDto createDto() throws Exception {
+  public MediaDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

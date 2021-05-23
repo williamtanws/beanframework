@@ -28,28 +28,17 @@ public class CronjobFacadeImpl extends AbstractFacade<Cronjob, CronjobDto>
   private CronjobManagerService cronjobManagerService;
 
   @Override
-  public CronjobDto findOneByUuid(UUID uuid) throws Exception {
+  public CronjobDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public CronjobDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public CronjobDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public CronjobDto create(CronjobDto model) throws BusinessException {
-    model = save(model, entityClass, dtoClass);
-
-    if (model.getJobTrigger() != null) {
-      trigger(model);
-    }
-
-    return model;
-  }
-
-  @Override
-  public CronjobDto update(CronjobDto model) throws BusinessException {
+  public CronjobDto save(CronjobDto model) throws BusinessException {
     model = save(model, entityClass, dtoClass);
 
     if (model.getJobTrigger() != null) {
@@ -65,28 +54,28 @@ public class CronjobFacadeImpl extends AbstractFacade<Cronjob, CronjobDto>
   }
 
   @Override
-  public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<CronjobDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, CronjobSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public CronjobDto createDto() throws Exception {
+  public CronjobDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

@@ -46,7 +46,7 @@ public class AddressController extends AbstractController {
   @GetMapping(value = AddressWebConstants.Path.ADDRESS)
   public String page(
       @Valid @ModelAttribute(AddressWebConstants.ModelAttribute.ADDRESS_DTO) AddressDto addressDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_ADDRESS;
   }
 
@@ -54,7 +54,7 @@ public class AddressController extends AbstractController {
   @GetMapping(value = AddressWebConstants.Path.ADDRESS_FORM)
   public String form(
       @Valid @ModelAttribute(AddressWebConstants.ModelAttribute.ADDRESS_DTO) AddressDto addressDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (addressDto.getUuid() != null) {
       addressDto = addressFacade.findOneByUuid(addressDto.getUuid());
@@ -78,7 +78,7 @@ public class AddressController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        addressDto = addressFacade.create(addressDto);
+        addressDto = addressFacade.save(addressDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class AddressController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        addressDto = addressFacade.update(addressDto);
+        addressDto = addressFacade.save(addressDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

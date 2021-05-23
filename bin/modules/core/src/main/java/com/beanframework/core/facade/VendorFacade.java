@@ -10,23 +10,21 @@ import com.beanframework.core.data.VendorDto;
 
 public interface VendorFacade {
 
-  VendorDto findOneByUuid(UUID uuid) throws Exception;
+  VendorDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  VendorDto findOneProperties(Map<String, Object> properties) throws Exception;
+  VendorDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  VendorDto create(VendorDto model) throws BusinessException;
-
-  VendorDto update(VendorDto model) throws BusinessException;
+  VendorDto save(VendorDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<VendorDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  VendorDto createDto() throws Exception;
+  VendorDto createDto() throws BusinessException;
 }

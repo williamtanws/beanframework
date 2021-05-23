@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.beanframework.backoffice.ProcessDefinitionWebConstants;
 import com.beanframework.backoffice.ProcessDefinitionWebConstants.ProcessDefinitionPreAuthorizeEnum;
+import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.config.dto.ProcessDefinitionDto;
 import com.beanframework.core.controller.AbstractController;
 import com.beanframework.core.facade.ProcessDefinitionFacade;
@@ -32,7 +33,7 @@ public class ProcessDefinitionController extends AbstractController {
   @GetMapping(value = ProcessDefinitionWebConstants.Path.PROCESSDEFINITION)
   public String page(
       @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinitionDto processdefinition,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_PROCESSDEFINITION;
   }
 
@@ -40,7 +41,7 @@ public class ProcessDefinitionController extends AbstractController {
   @GetMapping(value = ProcessDefinitionWebConstants.Path.PROCESSDEFINITION_FORM)
   public String form(
       @Valid @ModelAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION) ProcessDefinitionDto processdefinition,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     processdefinition = processdefinitionFacade.findOneById(processdefinition.getId());
     model.addAttribute(ProcessDefinitionWebConstants.ModelAttribute.PROCESSDEFINITION,

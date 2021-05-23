@@ -46,7 +46,7 @@ public class LanguageController extends AbstractController {
   @GetMapping(value = LanguageWebConstants.Path.LANGUAGE)
   public String page(
       @Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_LANGUAGE;
   }
 
@@ -54,7 +54,7 @@ public class LanguageController extends AbstractController {
   @GetMapping(value = LanguageWebConstants.Path.LANGUAGE_FORM)
   public String form(
       @Valid @ModelAttribute(LanguageWebConstants.ModelAttribute.LANGUAGE_DTO) LanguageDto languageDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (languageDto.getUuid() != null) {
       languageDto = languageFacade.findOneByUuid(languageDto.getUuid());
@@ -78,7 +78,7 @@ public class LanguageController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        languageDto = languageFacade.create(languageDto);
+        languageDto = languageFacade.save(languageDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class LanguageController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        languageDto = languageFacade.update(languageDto);
+        languageDto = languageFacade.save(languageDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

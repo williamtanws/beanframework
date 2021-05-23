@@ -19,22 +19,17 @@ public class CurrencyFacadeImpl extends AbstractFacade<Currency, CurrencyDto>
   private static final Class<CurrencyDto> dtoClass = CurrencyDto.class;
 
   @Override
-  public CurrencyDto findOneByUuid(UUID uuid) throws Exception {
+  public CurrencyDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public CurrencyDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public CurrencyDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public CurrencyDto create(CurrencyDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public CurrencyDto update(CurrencyDto model) throws BusinessException {
+  public CurrencyDto save(CurrencyDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class CurrencyFacadeImpl extends AbstractFacade<Currency, CurrencyDto>
   }
 
   @Override
-  public Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<CurrencyDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, CurrencySpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public CurrencyDto createDto() throws Exception {
+  public CurrencyDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

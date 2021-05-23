@@ -22,13 +22,13 @@ public class MyAccountFacadeImpl extends AbstractFacade<User, MyAccountDto>
   private UserService userService;
 
   @Override
-  public MyAccountDto getCurrentUser() throws Exception {
+  public MyAccountDto getCurrentUser() throws BusinessException {
     User user = userService.getCurrentUserSession();
     return modelService.getDto(modelService.findOneByUuid(user.getUuid(), User.class), dtoClass);
   }
 
   @Override
-  public MyAccountDto update(MyAccountDto dto) throws BusinessException {
+  public MyAccountDto save(MyAccountDto dto) throws BusinessException {
     try {
       if (dto.getProfilePicture() != null && dto.getProfilePicture().isEmpty() == Boolean.FALSE) {
         String mimetype = dto.getProfilePicture().getContentType();

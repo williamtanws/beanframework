@@ -62,7 +62,7 @@ public class UpdateController {
   @PreAuthorize(UpdatePreAuthorizeEnum.HAS_UPDATE)
   @PostMapping(value = UpdateWebConstants.Path.UPDATE)
   public String update(Model model, @RequestParam Map<String, Object> requestParams,
-      RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
+      RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
     if (requestParams.get("updateIds") == null) {
       model.addAttribute("updated", false);

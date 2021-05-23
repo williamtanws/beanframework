@@ -10,23 +10,21 @@ import com.beanframework.core.data.RegionDto;
 
 public interface RegionFacade {
 
-  RegionDto findOneByUuid(UUID uuid) throws Exception;
+  RegionDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  RegionDto findOneProperties(Map<String, Object> properties) throws Exception;
+  RegionDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  RegionDto create(RegionDto model) throws BusinessException;
-
-  RegionDto update(RegionDto model) throws BusinessException;
+  RegionDto save(RegionDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<RegionDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<RegionDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  RegionDto createDto() throws Exception;
+  RegionDto createDto() throws BusinessException;
 }

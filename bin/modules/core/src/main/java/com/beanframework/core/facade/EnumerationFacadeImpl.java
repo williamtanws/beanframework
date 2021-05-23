@@ -19,22 +19,17 @@ public class EnumerationFacadeImpl extends AbstractFacade<Enumeration, Enumerati
   private static final Class<EnumerationDto> dtoClass = EnumerationDto.class;
 
   @Override
-  public EnumerationDto findOneByUuid(UUID uuid) throws Exception {
+  public EnumerationDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public EnumerationDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public EnumerationDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public EnumerationDto create(EnumerationDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public EnumerationDto update(EnumerationDto model) throws BusinessException {
+  public EnumerationDto save(EnumerationDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -44,28 +39,28 @@ public class EnumerationFacadeImpl extends AbstractFacade<Enumeration, Enumerati
   }
 
   @Override
-  public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<EnumerationDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest,
         EnumerationSpecification.getPageSpecification(dataTableRequest), entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public EnumerationDto createDto() throws Exception {
+  public EnumerationDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 

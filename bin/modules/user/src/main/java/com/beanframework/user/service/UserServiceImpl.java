@@ -44,6 +44,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public UsernamePasswordAuthenticationToken findAuthenticate(String id, String password)
-      throws Exception {
+      throws InterceptorException {
 
     if (StringUtils.isBlank(id) || StringUtils.isBlank(password)) {
       throw new BadCredentialsException("Bad Credentials");
@@ -203,7 +204,7 @@ public class UserServiceImpl implements UserService {
         getUserAuthorities(user));
   }
 
-  private boolean isAdmin(User user) throws Exception {
+  private boolean isAdmin(User user) throws InterceptorException {
     // Find admin
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(UserGroup.ID, defaultAdminGroup);
@@ -251,34 +252,30 @@ public class UserServiceImpl implements UserService {
     return authorities;
   }
 
-  private Set<GrantedAuthority> getUserAuthorities(User model) throws Exception {
+  private Set<GrantedAuthority> getUserAuthorities(User model) throws InterceptorException {
 
-    try {
-      // Find employee user group and sub user group authority
-      Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+    // Find employee user group and sub user group authority
+    Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-      // User Group
-      for (UUID userGroupUuid : model.getUserGroups()) {
-        UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
+    // User Group
+    for (UUID userGroupUuid : model.getUserGroups()) {
+      UserGroup userGroup = modelService.findOneByUuid(userGroupUuid, UserGroup.class);
 
-        Hibernate.initialize(userGroup.getUserAuthorities());
-        authorities.addAll(getGrantedAuthority(userGroup.getUserAuthorities()));
+      Hibernate.initialize(userGroup.getUserAuthorities());
+      authorities.addAll(getGrantedAuthority(userGroup.getUserAuthorities()));
 
-        // Sub User Group
-        for (UUID subGroupUuid : userGroup.getUserGroups()) {
+      // Sub User Group
+      for (UUID subGroupUuid : userGroup.getUserGroups()) {
 
-          UserGroup subGroup = modelService.findOneByUuid(subGroupUuid, UserGroup.class);
-          if (subGroup != null) {
-            Hibernate.initialize(subGroup.getUserAuthorities());
-            authorities.addAll(getGrantedAuthority(subGroup.getUserAuthorities()));
-          }
+        UserGroup subGroup = modelService.findOneByUuid(subGroupUuid, UserGroup.class);
+        if (subGroup != null) {
+          Hibernate.initialize(subGroup.getUserAuthorities());
+          authorities.addAll(getGrantedAuthority(subGroup.getUserAuthorities()));
         }
       }
-
-      return authorities;
-    } catch (Exception e) {
-      throw new Exception(e.getMessage(), e);
     }
+
+    return authorities;
   }
 
   private Set<GrantedAuthority> getGrantedAuthority(List<UserAuthority> userAuthorities) {
@@ -435,7 +432,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser() throws Exception {
+  public User getCurrentUser() throws InterceptorException {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
     if (auth != null) {
@@ -448,7 +445,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void updateCurrentUserSession() throws Exception {
+  public void updateCurrentUserSession() throws InterceptorException {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     User principal = (User) auth.getPrincipal();
@@ -524,7 +521,7 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public Set<UUID> getAllUserGroupsByCurrentUser() throws Exception {
+  public Set<UUID> getAllUserGroupsByCurrentUser() throws InterceptorException {
     Set<UUID> userGroupUuids = new HashSet<UUID>();
 
     User user = getCurrentUserSession();

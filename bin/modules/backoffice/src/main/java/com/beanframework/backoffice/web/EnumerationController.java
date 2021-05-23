@@ -46,7 +46,7 @@ public class EnumerationController extends AbstractController {
   @GetMapping(value = EnumerationWebConstants.Path.ENUMERATION)
   public String page(
       @Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_ENUMERATION;
   }
 
@@ -54,7 +54,7 @@ public class EnumerationController extends AbstractController {
   @GetMapping(value = EnumerationWebConstants.Path.ENUMERATION_FORM)
   public String form(
       @Valid @ModelAttribute(EnumerationWebConstants.ModelAttribute.ENUMERATION_DTO) EnumerationDto enumerationDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (enumerationDto.getUuid() != null) {
       enumerationDto = enumerationFacade.findOneByUuid(enumerationDto.getUuid());
@@ -78,7 +78,7 @@ public class EnumerationController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        enumerationDto = enumerationFacade.create(enumerationDto);
+        enumerationDto = enumerationFacade.save(enumerationDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class EnumerationController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        enumerationDto = enumerationFacade.update(enumerationDto);
+        enumerationDto = enumerationFacade.save(enumerationDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

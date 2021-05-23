@@ -46,7 +46,7 @@ public class CountryController extends AbstractController {
   @GetMapping(value = CountryWebConstants.Path.COUNTRY)
   public String page(
       @Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COUNTRY_DTO) CountryDto countryDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_COUNTRY;
   }
 
@@ -54,7 +54,7 @@ public class CountryController extends AbstractController {
   @GetMapping(value = CountryWebConstants.Path.COUNTRY_FORM)
   public String form(
       @Valid @ModelAttribute(CountryWebConstants.ModelAttribute.COUNTRY_DTO) CountryDto countryDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (countryDto.getUuid() != null) {
       countryDto = countryFacade.findOneByUuid(countryDto.getUuid());
@@ -78,7 +78,7 @@ public class CountryController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        countryDto = countryFacade.create(countryDto);
+        countryDto = countryFacade.save(countryDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class CountryController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        countryDto = countryFacade.update(countryDto);
+        countryDto = countryFacade.save(countryDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

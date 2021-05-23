@@ -10,24 +10,22 @@ import com.beanframework.core.data.CommentDto;
 
 public interface CommentFacade {
 
-  CommentDto findOneByUuid(UUID uuid) throws Exception;
+  CommentDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  CommentDto findOneProperties(Map<String, Object> properties) throws Exception;
+  CommentDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  CommentDto create(CommentDto model) throws BusinessException;
-
-  CommentDto update(CommentDto model) throws BusinessException;
+  CommentDto save(CommentDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<CommentDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  CommentDto createDto() throws Exception;
+  CommentDto createDto() throws BusinessException;
 
 }

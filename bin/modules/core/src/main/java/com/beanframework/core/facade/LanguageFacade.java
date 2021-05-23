@@ -10,23 +10,21 @@ import com.beanframework.core.data.LanguageDto;
 
 public interface LanguageFacade {
 
-  LanguageDto findOneByUuid(UUID uuid) throws Exception;
+  LanguageDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  LanguageDto findOneProperties(Map<String, Object> properties) throws Exception;
+  LanguageDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  LanguageDto create(LanguageDto model) throws BusinessException;
-
-  LanguageDto update(LanguageDto model) throws BusinessException;
+  LanguageDto save(LanguageDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<LanguageDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  LanguageDto createDto() throws Exception;
+  LanguageDto createDto() throws BusinessException;
 }

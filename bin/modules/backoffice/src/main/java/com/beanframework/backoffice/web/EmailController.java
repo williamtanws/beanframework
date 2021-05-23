@@ -46,7 +46,7 @@ public class EmailController extends AbstractController {
   @GetMapping(value = EmailWebConstants.Path.EMAIL)
   public String page(
       @Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto,
-      Model model, @RequestParam Map<String, Object> requestParams) throws Exception {
+      Model model, @RequestParam Map<String, Object> requestParams) {
     return VIEW_EMAIL;
   }
 
@@ -54,7 +54,7 @@ public class EmailController extends AbstractController {
   @GetMapping(value = EmailWebConstants.Path.EMAIL_FORM)
   public String form(
       @Valid @ModelAttribute(EmailWebConstants.ModelAttribute.EMAIL_DTO) EmailDto emailDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     if (emailDto.getUuid() != null) {
       emailDto = emailFacade.findOneByUuid(emailDto.getUuid());
@@ -78,7 +78,7 @@ public class EmailController extends AbstractController {
           "Create new record doesn't required UUID.");
     } else {
       try {
-        emailDto = emailFacade.create(emailDto);
+        emailDto = emailFacade.save(emailDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {
@@ -106,7 +106,7 @@ public class EmailController extends AbstractController {
           "Update record required existing UUID.");
     } else {
       try {
-        emailDto = emailFacade.update(emailDto);
+        emailDto = emailFacade.save(emailDto);
 
         addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
       } catch (BusinessException e) {

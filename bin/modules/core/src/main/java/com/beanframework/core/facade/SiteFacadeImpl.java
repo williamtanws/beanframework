@@ -18,22 +18,17 @@ public class SiteFacadeImpl extends AbstractFacade<Site, SiteDto> implements Sit
   private static final Class<SiteDto> dtoClass = SiteDto.class;
 
   @Override
-  public SiteDto findOneByUuid(UUID uuid) throws Exception {
+  public SiteDto findOneByUuid(UUID uuid) throws BusinessException {
     return findOneByUuid(uuid, entityClass, dtoClass);
   }
 
   @Override
-  public SiteDto findOneProperties(Map<String, Object> properties) throws Exception {
+  public SiteDto findOneProperties(Map<String, Object> properties) throws BusinessException {
     return findOneProperties(properties, entityClass, dtoClass);
   }
 
   @Override
-  public SiteDto create(SiteDto model) throws BusinessException {
-    return save(model, entityClass, dtoClass);
-  }
-
-  @Override
-  public SiteDto update(SiteDto model) throws BusinessException {
+  public SiteDto save(SiteDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -43,28 +38,28 @@ public class SiteFacadeImpl extends AbstractFacade<Site, SiteDto> implements Sit
   }
 
   @Override
-  public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws Exception {
+  public Page<SiteDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
     return findPage(dataTableRequest, SiteSpecification.getPageSpecification(dataTableRequest),
         entityClass, dtoClass);
   }
 
   @Override
-  public int count() throws Exception {
+  public int count() {
     return count(entityClass);
   }
 
   @Override
-  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception {
+  public List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException {
     return findHistory(dataTableRequest, entityClass, dtoClass);
   }
 
   @Override
-  public int countHistory(DataTableRequest dataTableRequest) throws Exception {
+  public int countHistory(DataTableRequest dataTableRequest) {
     return findCountHistory(dataTableRequest, entityClass);
   }
 
   @Override
-  public SiteDto createDto() throws Exception {
+  public SiteDto createDto() throws BusinessException {
     return createDto(entityClass, dtoClass);
   }
 }

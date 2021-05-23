@@ -14,7 +14,7 @@ public class NotificationController extends AbstractController {
   private String VIEW_NOTIFICATION;
 
   @GetMapping(value = NotificationWebConstants.Path.NOTIFICATION)
-  public String page(Model model) throws Exception {
+  public String page(Model model) {
     return VIEW_NOTIFICATION;
   }
 }

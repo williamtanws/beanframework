@@ -40,7 +40,7 @@ public class MyAccountController extends AbstractController {
   @GetMapping(value = MyAccountWebConstants.Path.MYACCOUNT)
   public String form(
       @Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO) MyAccountDto myaccountDto,
-      Model model) throws Exception {
+      Model model) throws BusinessException {
 
     myaccountDto = myaccountFacade.getCurrentUser();
     model.addAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO, myaccountDto);
@@ -53,11 +53,11 @@ public class MyAccountController extends AbstractController {
   public RedirectView update(
       @Valid @ModelAttribute(MyAccountWebConstants.ModelAttribute.MYACCOUNT_DTO) MyAccountDto myaccountDto,
       Model model, BindingResult bindingResult, @RequestParam Map<String, Object> requestParams,
-      RedirectAttributes redirectAttributes) throws Exception {
+      RedirectAttributes redirectAttributes) {
 
     try {
       myaccountDto.setUuid(myaccountFacade.getCurrentUser().getUuid());
-      myaccountDto = myaccountFacade.update(myaccountDto);
+      myaccountDto = myaccountFacade.save(myaccountDto);
 
       addSuccessMessage(redirectAttributes, BackofficeWebConstants.Locale.SAVE_SUCCESS);
     } catch (BusinessException e) {

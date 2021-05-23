@@ -123,13 +123,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
   public void prepareInterceptor(Object model, String typeCode) throws InterceptorException {
 
     InterceptorContext context = new InterceptorContext();
-    try {
-      if (((GenericEntity) model).getUuid() != null) {
-        Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
-        context.setOldModel(oldModel);
-      }
-    } catch (Exception e) {
-      throw new InterceptorException(e.getMessage(), e);
+    if (((GenericEntity) model).getUuid() != null) {
+      Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
+      context.setOldModel(oldModel);
     }
 
     for (InterceptorMapping interceptorMapping : interceptorMappings) {
@@ -184,13 +180,9 @@ public abstract class AbstractModelServiceImpl implements ModelService {
   public void validateInterceptor(Object model, String typeCode) throws InterceptorException {
 
     InterceptorContext context = new InterceptorContext();
-    try {
-      if (((GenericEntity) model).getUuid() != null) {
-        Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
-        context.setOldModel(oldModel);
-      }
-    } catch (Exception e) {
-      throw new InterceptorException(e.getMessage(), e);
+    if (((GenericEntity) model).getUuid() != null) {
+      Object oldModel = findOneByUuid(((GenericEntity) model).getUuid(), model.getClass());
+      context.setOldModel(oldModel);
     }
 
     for (InterceptorMapping interceptorMapping : interceptorMappings) {

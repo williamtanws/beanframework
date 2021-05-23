@@ -7,12 +7,14 @@ import java.util.UUID;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
+import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.user.data.UserSession;
 import com.beanframework.user.domain.User;
 
 public interface UserService {
 
-  UsernamePasswordAuthenticationToken findAuthenticate(String id, String password) throws Exception;
+  UsernamePasswordAuthenticationToken findAuthenticate(String id, String password)
+      throws InterceptorException;
 
   UserDetails findUserDetails(String id);
 
@@ -20,9 +22,9 @@ public interface UserService {
 
   User getCurrentUserSession();
 
-  User getCurrentUser() throws Exception;
+  User getCurrentUser() throws InterceptorException;
 
-  void updateCurrentUserSession() throws Exception;
+  void updateCurrentUserSession() throws InterceptorException;
 
   Set<UserSession> findAllSessions();
 
@@ -36,7 +38,7 @@ public interface UserService {
 
   void deleteProfilePictureFileByUuid(UUID uuid);
 
-  Set<UUID> getAllUserGroupsByCurrentUser() throws Exception;
+  Set<UUID> getAllUserGroupsByCurrentUser() throws InterceptorException;
 
   void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
 

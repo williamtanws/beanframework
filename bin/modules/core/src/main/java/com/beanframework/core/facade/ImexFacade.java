@@ -10,23 +10,21 @@ import com.beanframework.core.data.ImexDto;
 
 public interface ImexFacade {
 
-  ImexDto findOneByUuid(UUID uuid) throws Exception;
+  ImexDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  ImexDto findOneProperties(Map<String, Object> properties) throws Exception;
+  ImexDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  ImexDto create(ImexDto model) throws BusinessException;
-
-  ImexDto update(ImexDto model) throws BusinessException;
+  ImexDto save(ImexDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<ImexDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<ImexDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  ImexDto createDto() throws Exception;
+  ImexDto createDto() throws BusinessException;
 }

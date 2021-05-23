@@ -10,23 +10,21 @@ import com.beanframework.core.data.CountryDto;
 
 public interface CountryFacade {
 
-  CountryDto findOneByUuid(UUID uuid) throws Exception;
+  CountryDto findOneByUuid(UUID uuid) throws BusinessException;
 
-  CountryDto findOneProperties(Map<String, Object> properties) throws Exception;
+  CountryDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
-  CountryDto create(CountryDto model) throws BusinessException;
-
-  CountryDto update(CountryDto model) throws BusinessException;
+  CountryDto save(CountryDto model) throws BusinessException;
 
   void delete(UUID uuid) throws BusinessException;
 
-  Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws Exception;
+  Page<CountryDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int count() throws Exception;
+  int count();
 
-  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws Exception;
+  List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
-  int countHistory(DataTableRequest dataTableRequest) throws Exception;
+  int countHistory(DataTableRequest dataTableRequest);
 
-  CountryDto createDto() throws Exception;
+  CountryDto createDto() throws BusinessException;
 }
