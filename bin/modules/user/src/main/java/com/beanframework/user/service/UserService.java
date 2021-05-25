@@ -20,8 +20,6 @@ public interface UserService {
 
   UserDetails findUserDetails(String id);
 
-  UserDetails findUserDetails(String id);
-
   void setCurrentUser(User model);
 
   User getCurrentUserSession();
