@@ -40,7 +40,7 @@ public interface UserService {
 
   void deleteProfilePictureFileByUuid(UUID uuid);
 
-  Set<UUID> getAllUserGroupsByCurrentUser() throws InterceptorException;
+  Set<UUID> getAllUserGroupsByUser(User model) throws InterceptorException;
 
   void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
 

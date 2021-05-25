@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.BackofficeWebConstants;
 import com.beanframework.backoffice.MenuWebConstants;
 import com.beanframework.backoffice.MenuWebConstants.MenuPreAuthorizeEnum;
-import com.beanframework.backoffice.api.data.MenuDataTableResponseData;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.data.DataTableResponse;
 import com.beanframework.common.data.HistoryDataTableResponseData;
@@ -29,7 +27,6 @@ import com.beanframework.common.data.TreeJson;
 import com.beanframework.common.data.TreeJsonState;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.api.AbstractResource;
-import com.beanframework.core.data.DataTableResponseData;
 import com.beanframework.core.data.MenuAttributeDto;
 import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.facade.MenuFacade;
@@ -165,36 +162,6 @@ public class MenuResource extends AbstractResource {
     }
 
     return "[" + menu.getId() + "]";
-  }
-
-  @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)
-  @RequestMapping(value = MenuWebConstants.Path.Api.MENU, method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseBody
-  public DataTableResponse<DataTableResponseData> page(HttpServletRequest request)
-      throws Exception {
-
-    DataTableRequest dataTableRequest = new DataTableRequest();
-    dataTableRequest.prepareDataTableRequest(request);
-
-    Page<MenuDto> pagination = menuFacade.findPage(dataTableRequest);
-
-    DataTableResponse<DataTableResponseData> dataTableResponse =
-        new DataTableResponse<DataTableResponseData>();
-    dataTableResponse.setDraw(dataTableRequest.getDraw());
-    dataTableResponse.setRecordsTotal(menuFacade.count());
-    dataTableResponse.setRecordsFiltered((int) pagination.getTotalElements());
-
-    for (MenuDto dto : pagination.getContent()) {
-
-      MenuDataTableResponseData data = new MenuDataTableResponseData();
-      data.setUuid(dto.getUuid().toString());
-      data.setId(StringUtils.stripToEmpty(dto.getId()));
-      data.setName(StringUtils.stripToEmpty(dto.getName()));
-      data.setSort(dto.getSort());
-      dataTableResponse.getData().add(data);
-    }
-    return dataTableResponse;
   }
 
   @PreAuthorize(MenuPreAuthorizeEnum.HAS_READ)

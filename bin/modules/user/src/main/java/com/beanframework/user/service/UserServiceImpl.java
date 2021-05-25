@@ -524,10 +524,8 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public Set<UUID> getAllUserGroupsByCurrentUser() throws InterceptorException {
+  public Set<UUID> getAllUserGroupsByUser(User user) throws InterceptorException {
     Set<UUID> userGroupUuids = new HashSet<UUID>();
-
-    User user = getCurrentUserSession();
 
     for (UUID userGroupUuid : user.getUserGroups()) {
 
