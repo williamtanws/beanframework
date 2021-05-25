@@ -47,8 +47,14 @@
 				<div class="card-body">
 					<div class="tab-content" id="custom-tabs-tabContent">
 						<div class="tab-pane fade show active" id="custom-tabs-general" role="tabpanel" aria-labelledby="custom-tabs-general-tab">
-
+							<dl class="row">
+								<dt class="col-sm-1" th:text="#{module.user.type}+':'"></dt>
+								<dd class="col-sm-11" th:text="*{type}"></dd>
+							</dl>
 							<div class="row">
+								<div class="col-md-12">
+									<hr>
+								</div>
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="id" th:text="#{module.common.id}"></label>
@@ -59,6 +65,7 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="name" th:text="#{module.user.name}"></label>
+										<span>*</span>
 										<input type="text" class="form-control" name="name" th:value="*{name}">
 									</div>
 								</div>

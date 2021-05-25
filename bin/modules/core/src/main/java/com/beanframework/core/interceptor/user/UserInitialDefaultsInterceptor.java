@@ -45,6 +45,7 @@ public class UserInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
     model.setAccountNonExpired(true);
     model.setAccountNonLocked(true);
     model.setCredentialsNonExpired(true);
+    model.setType("User");
 
     String accountExpiryHoursDefault = null;
     String accountPasswordHoursDefault = null;

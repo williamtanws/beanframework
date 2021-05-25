@@ -48,6 +48,7 @@ public class UserEntityConverter implements EntityConverter<UserDto, User> {
   public User convertToEntity(UserDto source, User prototype) throws ConverterException {
 
     try {
+
       if (StringUtils.equals(StringUtils.stripToNull(source.getId()),
           prototype.getId()) == Boolean.FALSE) {
         prototype.setId(StringUtils.stripToNull(source.getId()));

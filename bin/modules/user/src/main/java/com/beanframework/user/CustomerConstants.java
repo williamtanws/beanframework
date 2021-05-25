@@ -3,7 +3,7 @@ package com.beanframework.user;
 public interface CustomerConstants {
 
   public interface Discriminator {
-    public static final String CUSTOMER = "customer";
+    public static final String CUSTOMER = "Customer";
   }
 
   public static interface Locale {

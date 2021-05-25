@@ -3,7 +3,7 @@ package com.beanframework.user;
 public interface EmployeeConstants {
 
   public interface Discriminator {
-    public static final String EMPLOYEE = "employee";
+    public static final String EMPLOYEE = "Employee";
   }
 
   public static interface Authority {
