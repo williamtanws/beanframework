@@ -29,7 +29,7 @@ public class ConsoleLoginSuccessHandler extends SavedRequestAwareAuthenticationS
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws ServletException, IOException {
 
-    userService.loginSuccessHandler();
+    userService.loginSuccessHandler(request, response);
 
     getRedirectStrategy().sendRedirect(request, response, PATH_CONSOLE);
   }

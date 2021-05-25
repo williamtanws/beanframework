@@ -33,12 +33,15 @@ public class UserLoadInterceptor extends AbstractLoadInterceptor<User> {
   public void onLoad(User model, InterceptorContext context) throws InterceptorException {
 
     try {
-      if (model.getType().equals(EmployeeConstants.Discriminator.EMPLOYEE)) {
+      if (EmployeeConstants.Discriminator.EMPLOYEE.equals(model.getType())) {
         userService.generateUserAttribute(model, EMPLOYEE_CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-      } else if (model.getType().equals(CustomerConstants.Discriminator.CUSTOMER)) {
+
+      } else if (CustomerConstants.Discriminator.CUSTOMER.equals(model.getType())) {
         userService.generateUserAttribute(model, CUSTOMER_CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
-      } else if (model.getType().equals(VendorConstants.Discriminator.VENDOR)) {
+
+      } else if (VendorConstants.Discriminator.VENDOR.equals(model.getType())) {
         userService.generateUserAttribute(model, VENDOR_CONFIGURATION_DYNAMIC_FIELD_TEMPLATE);
+
       }
     } catch (Exception e) {
       throw new InterceptorException(e.getMessage(), e);

@@ -24,6 +24,7 @@ public class UserPopulator extends AbstractPopulator<User, UserDto>
     try {
       populateGeneric(source, target);
       target.setName(source.getName());
+      target.setType(source.getType());
       target.setAccountNonExpired(source.getAccountNonExpired());
       target.setAccountNonLocked(source.getAccountNonLocked());
       target.setCredentialsNonExpired(source.getCredentialsNonExpired());

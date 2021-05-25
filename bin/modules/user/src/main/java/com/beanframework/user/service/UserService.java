@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +46,7 @@ public interface UserService {
 
   void generateUserAttribute(User model, String configurationDynamicFieldTemplate) throws Exception;
 
-  void loginSuccessHandler();
+  void loginSuccessHandler(HttpServletRequest request, HttpServletResponse response);
 
-  void logoutSuccessHandler();
+  void logoutSuccessHandler(HttpServletRequest request, HttpServletResponse response);
 }

@@ -21,6 +21,6 @@ public class BackofficeLogoutHandler implements LogoutHandler {
   @Override
   public void logout(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) {
-    userService.logoutSuccessHandler();
+    userService.logoutSuccessHandler(request, response);
   }
 }

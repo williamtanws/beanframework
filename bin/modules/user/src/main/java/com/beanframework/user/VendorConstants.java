@@ -3,7 +3,7 @@ package com.beanframework.user;
 public interface VendorConstants {
 
   public interface Discriminator {
-    public static final String VENDOR = "vendor";
+    public static final String VENDOR = "Vendor";
   }
 
   public static interface Locale {

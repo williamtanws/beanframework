@@ -18,7 +18,7 @@ public interface NotificationFacade {
   NotificationDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
   @CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, allEntries = true)
-  NotificationDto create(NotificationDto model) throws BusinessException;
+  NotificationDto save(NotificationDto model) throws BusinessException;
 
   @CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, allEntries = true)
   void delete(UUID uuid) throws BusinessException;
@@ -31,9 +31,6 @@ public interface NotificationFacade {
 
   @Cacheable(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
   List<NotificationDto> findAllNewNotificationByUser(UUID uuid) throws BusinessException;
-
-  @CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
-  void refreshAllNewNotificationByUser(UUID uuid) throws BusinessException;
 
   @CacheEvict(value = NotificationConstants.CACHE_NOTIFICATIONS, key = "#uuid")
   void checkedNotification(UUID uuid) throws BusinessException;

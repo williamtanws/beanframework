@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.beanframework.backoffice.UserWebConstants;
-import com.beanframework.backoffice.web.BackofficeController;
 import com.beanframework.common.service.ModelService;
 import com.beanframework.common.utils.RequestUtils;
 import com.beanframework.core.api.AbstractResource;
+import com.beanframework.user.UserConstants;
 import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
@@ -49,36 +49,38 @@ public class UserSettingsResource extends AbstractResource {
     User user = userService.getCurrentUser();
 
     if (user_settings_header_theme != null) {
-      user.getParameters().put("user.settings.header.theme", user_settings_header_theme);
+      user.getParameters().put(UserConstants.UserSettings.HEADER_THEME, user_settings_header_theme);
     }
     if (user_settings_sidebar_theme != null) {
-      user.getParameters().put("user.settings.sidebar.theme", user_settings_sidebar_theme);
+      user.getParameters().put(UserConstants.UserSettings.SIDEBAR_THEME,
+          user_settings_sidebar_theme);
     }
     if (user_settings_sidebar_navflatstyle != null) {
-      user.getParameters().put("user.settings.sidebar.navflatstyle",
+      user.getParameters().put(UserConstants.UserSettings.SIDEBAR_NAVFLATSTYLE,
           user_settings_sidebar_navflatstyle);
     }
     if (user_settings_sidebar_navlegacystyle != null) {
-      user.getParameters().put("user.settings.sidebar.navlegacystyle",
+      user.getParameters().put(UserConstants.UserSettings.SIDEBAR_NAVLEGACYSTYLE,
           user_settings_sidebar_navlegacystyle);
     }
     if (user_settings_sidebar_navcompact != null) {
-      user.getParameters().put("user.settings.sidebar.navcompact",
+      user.getParameters().put(UserConstants.UserSettings.SIDEBAR_NAVCOMPACT,
           user_settings_sidebar_navcompact);
     }
     if (user_settings_sidebar_navchildindent != null) {
-      user.getParameters().put("user.settings.sidebar.navchildindent",
+      user.getParameters().put(UserConstants.UserSettings.SIDEBAR_NAVCHILDINDENT,
           user_settings_sidebar_navchildindent);
     }
     if (user_settings_body_theme != null) {
-      user.getParameters().put("user.settings.body.theme", user_settings_body_theme);
+      user.getParameters().put(UserConstants.UserSettings.BODY_THEME, user_settings_body_theme);
 
       RequestUtils.addCookie(request.getContextPath(), response,
-          BackofficeController.COOKIE_LOGIN_THEME, user_settings_body_theme, null,
+          UserConstants.UserSettings.COOKIE_LOGIN_THEME, user_settings_body_theme, null,
           request.getServerName());
     }
     if (user_settings_body_smalltext != null) {
-      user.getParameters().put("user.settings.body.smalltext", user_settings_body_smalltext);
+      user.getParameters().put(UserConstants.UserSettings.BODY_SMALLTEXT,
+          user_settings_body_smalltext);
     }
 
     modelService.saveEntityByLegacyMode(user);

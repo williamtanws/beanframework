@@ -13,7 +13,6 @@ import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
 import com.beanframework.user.UserConstants;
-import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
 @Component
@@ -39,11 +38,7 @@ public class CoreBeforeRemoveListener implements BeforeRemoveListener {
       throws ListenerException {
 
     try {
-      if (model instanceof User) {
-        User user = (User) model;
-        userService.deleteProfilePictureFileByUuid(user.getUuid());
-
-      } else if (model instanceof Media) {
+      if (model instanceof Media) {
         Media media = (Media) model;
         mediaService.removeFile(media);
 
