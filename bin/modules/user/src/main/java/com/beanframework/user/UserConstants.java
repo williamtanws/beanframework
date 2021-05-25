@@ -82,4 +82,19 @@ public final class UserConstants {
   public static final String PASSWORD_EXPIRED_DATE = "password.expired.date";
   public static final String PASSWORD_CHANGED_LAST_DATE = "password.changed.last.date";
 
+  public static interface UserSettings {
+
+    public static final String COOKIE_LOGIN_THEME = "login_theme";
+
+    public static final String HEADER_THEME = "user.settings.header.theme";
+    public static final String SIDEBAR_THEME = "user.settings.sidebar.theme";
+    public static final String SIDEBAR_NAVFLATSTYLE = "user.settings.sidebar.navflatstyle";
+    public static final String SIDEBAR_NAVLEGACYSTYLE = "user.settings.sidebar.navlegacystyle";
+    public static final String SIDEBAR_NAVCOMPACT = "user.settings.sidebar.navcompact";
+    public static final String SIDEBAR_NAVCHILDINDENT = "user.settings.sidebar.navchildindent";
+    public static final String BODY_THEME = "user.settings.body.theme";
+    public static final String BODY_SMALLTEXT = "user.settings.body.smalltext";
+
+  }
+
 }

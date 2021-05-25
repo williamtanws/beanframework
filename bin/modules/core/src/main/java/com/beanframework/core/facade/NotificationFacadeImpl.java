@@ -39,7 +39,7 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
   }
 
   @Override
-  public NotificationDto create(NotificationDto model) throws BusinessException {
+  public NotificationDto save(NotificationDto model) throws BusinessException {
     return save(model, entityClass, dtoClass);
   }
 
@@ -88,11 +88,6 @@ public class NotificationFacadeImpl extends AbstractFacade<Notification, Notific
     }
 
     return modelService.getDtoList(notifications, dtoClass);
-  }
-
-  @Override
-  public void refreshAllNewNotificationByUser(UUID uuid) throws BusinessException {
-    // Do nothing, just evict cache from interface
   }
 
   @Override

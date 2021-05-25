@@ -52,7 +52,7 @@ public class UserInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
     String dynamicFieldTemplate = null;
 
     try {
-      if (model.getType().equals(EmployeeConstants.Discriminator.EMPLOYEE)) {
+      if (EmployeeConstants.Discriminator.EMPLOYEE.equals(model.getType())) {
         accountExpiryHoursDefault =
             configurationService.get(EmployeeConstants.CONFIGURATION_ACCOUNT_EXPIRY_HOURS_DEFAULT);
         accountPasswordHoursDefault =
@@ -60,7 +60,8 @@ public class UserInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
         loginAttemptMaxDefault = configurationService
             .get(EmployeeConstants.CONFIGURATION_ACCOUNT_LOGIN_ATTEMPT_MAX_DEFAULT);
         dynamicFieldTemplate = EMPLOYEE_CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
-      } else if (model.getType().equals(CustomerConstants.Discriminator.CUSTOMER)) {
+
+      } else if (CustomerConstants.Discriminator.CUSTOMER.equals(model.getType())) {
         accountExpiryHoursDefault =
             configurationService.get(CustomerConstants.CONFIGURATION_ACCOUNT_EXPIRY_HOURS_DEFAULT);
         accountPasswordHoursDefault =
@@ -68,7 +69,8 @@ public class UserInitialDefaultsInterceptor extends AbstractInitialDefaultsInter
         loginAttemptMaxDefault = configurationService
             .get(CustomerConstants.CONFIGURATION_ACCOUNT_LOGIN_ATTEMPT_MAX_DEFAULT);
         dynamicFieldTemplate = CUSTOMER_CONFIGURATION_DYNAMIC_FIELD_TEMPLATE;
-      } else if (model.getType().equals(VendorConstants.Discriminator.VENDOR)) {
+
+      } else if (VendorConstants.Discriminator.VENDOR.equals(model.getType())) {
         accountExpiryHoursDefault =
             configurationService.get(VendorConstants.CONFIGURATION_ACCOUNT_EXPIRY_HOURS_DEFAULT);
         accountPasswordHoursDefault =

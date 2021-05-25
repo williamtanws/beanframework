@@ -16,6 +16,8 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -46,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.beanframework.common.exception.InterceptorException;
 import com.beanframework.common.service.ModelService;
+import com.beanframework.common.utils.RequestUtils;
 import com.beanframework.configuration.domain.Configuration;
 import com.beanframework.dynamicfield.domain.DynamicFieldTemplate;
 import com.beanframework.logentry.LogentryType;
@@ -597,19 +600,24 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void loginSuccessHandler() {
+  public void loginSuccessHandler(HttpServletRequest request, HttpServletResponse response) {
     try {
       User user = getCurrentUser();
 
       applicationEventPublisher
           .publishEvent(new AuthenticationEvent(user, LogentryType.LOGIN, "ID=" + user.getId()));
+
+      RequestUtils.addCookie(request.getContextPath(), response,
+          UserConstants.UserSettings.COOKIE_LOGIN_THEME,
+          user.getParameters().get("user.settings.body.theme"), null, request.getServerName());
+
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
     }
   }
 
   @Override
-  public void logoutSuccessHandler() {
+  public void logoutSuccessHandler(HttpServletRequest request, HttpServletResponse response) {
     try {
       User user = getCurrentUser();
       user.getParameters().put(UserConstants.LOGOUT_LAST_DATE,

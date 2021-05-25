@@ -34,7 +34,7 @@ import com.beanframework.core.importlistener.VendorImportListener;
 import com.beanframework.imex.registry.ImportListenerRegistry;
 
 @Component
-public class CoreListener implements ApplicationListener<ContextRefreshedEvent> {
+public class CoreRegistryListener implements ApplicationListener<ContextRefreshedEvent> {
 
   @Autowired
   private BeforeSaveListenerRegistry beforeSaveListenerRegistry;

@@ -30,7 +30,7 @@ public class BackofficeLoginSuccessHandler extends SavedRequestAwareAuthenticati
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws ServletException, IOException {
 
-    userService.loginSuccessHandler();
+    userService.loginSuccessHandler(request, response);
 
     getRedirectStrategy().sendRedirect(request, response, PATH_BACKOFFICE);
   }
