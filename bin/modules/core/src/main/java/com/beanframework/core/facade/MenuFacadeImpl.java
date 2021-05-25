@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ import com.beanframework.core.data.MenuDto;
 import com.beanframework.core.specification.MenuSpecification;
 import com.beanframework.menu.domain.Menu;
 import com.beanframework.menu.service.MenuService;
+import com.beanframework.user.domain.User;
 import com.beanframework.user.service.UserService;
 
 @Service
@@ -62,17 +62,6 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
   @Override
   public void delete(UUID uuid) throws BusinessException {
     delete(uuid, entityClass);
-  }
-
-  @Override
-  public Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws BusinessException {
-    return findPage(dataTableRequest, MenuSpecification.getCommonSpecification(dataTableRequest),
-        entityClass, dtoClass);
-  }
-
-  @Override
-  public int count() {
-    return count(entityClass);
   }
 
   @Override
@@ -124,9 +113,9 @@ public class MenuFacadeImpl extends AbstractFacade<Menu, MenuDto> implements Men
 
   @Transactional
   @Override
-  public List<MenuDto> findMenuTreeByCurrentUser() throws BusinessException {
+  public List<MenuDto> findMenuTreeByUser(User user) throws BusinessException {
 
-    Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
+    Set<UUID> userGroupUuids = userService.getAllUserGroupsByUser(user);
     if (userGroupUuids == null || userGroupUuids.isEmpty()) {
       return new ArrayList<MenuDto>();
     }

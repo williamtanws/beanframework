@@ -3,10 +3,13 @@ package com.beanframework.core.facade;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import com.beanframework.common.data.DataTableRequest;
 import com.beanframework.common.exception.BusinessException;
 import com.beanframework.core.data.MenuDto;
+import com.beanframework.menu.MenuConstants;
+import com.beanframework.user.domain.User;
 
 public interface MenuFacade {
 
@@ -14,17 +17,20 @@ public interface MenuFacade {
 
   MenuDto findOneProperties(Map<String, Object> properties) throws BusinessException;
 
+  @CacheEvict(value = {MenuConstants.CACHE_MENU_TREE, MenuConstants.CACHE_MENU_BREADCRUMBS},
+      allEntries = true)
   MenuDto save(MenuDto model) throws BusinessException;
 
+  @CacheEvict(value = {MenuConstants.CACHE_MENU_TREE, MenuConstants.CACHE_MENU_BREADCRUMBS},
+      allEntries = true)
   void delete(UUID uuid) throws BusinessException;
 
+  @CacheEvict(value = {MenuConstants.CACHE_MENU_TREE, MenuConstants.CACHE_MENU_BREADCRUMBS},
+      allEntries = true)
   void changePosition(UUID fromUuid, UUID toUuid, int toIndex) throws BusinessException;
 
+  @Cacheable(value = MenuConstants.CACHE_MENU_TREE)
   List<MenuDto> findMenuTree() throws BusinessException;
-
-  Page<MenuDto> findPage(DataTableRequest dataTableRequest) throws BusinessException;
-
-  int count();
 
   List<Object[]> findHistory(DataTableRequest dataTableRequest) throws BusinessException;
 
@@ -32,8 +38,10 @@ public interface MenuFacade {
 
   MenuDto createDto() throws BusinessException;
 
-  List<MenuDto> findMenuTreeByCurrentUser() throws BusinessException;
+  @Cacheable(value = MenuConstants.CACHE_MENU_TREE, key = "#user.uuid")
+  List<MenuDto> findMenuTreeByUser(User user) throws BusinessException;
 
+  @Cacheable(value = MenuConstants.CACHE_MENU_BREADCRUMBS, key = "#path")
   List<MenuDto> findMenuBreadcrumbsByPath(String path) throws BusinessException;
 
 }

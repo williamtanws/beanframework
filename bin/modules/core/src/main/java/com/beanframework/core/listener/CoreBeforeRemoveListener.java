@@ -13,16 +13,12 @@ import com.beanframework.media.MediaConstants;
 import com.beanframework.media.domain.Media;
 import com.beanframework.media.service.MediaService;
 import com.beanframework.user.UserConstants;
-import com.beanframework.user.service.UserService;
 
 @Component
 public class CoreBeforeRemoveListener implements BeforeRemoveListener {
 
   @Autowired
   private ModelService modelService;
-
-  @Autowired
-  private UserService userService;
 
   @Autowired
   private MediaService mediaService;

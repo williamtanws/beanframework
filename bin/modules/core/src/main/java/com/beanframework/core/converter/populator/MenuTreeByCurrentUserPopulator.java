@@ -44,7 +44,8 @@ public class MenuTreeByCurrentUserPopulator extends AbstractPopulator<Menu, Menu
       target.setTarget(source.getTarget());
       target.setEnabled(source.getEnabled());
 
-      Set<UUID> userGroupUuids = userService.getAllUserGroupsByCurrentUser();
+      Set<UUID> userGroupUuids =
+          userService.getAllUserGroupsByUser(userService.getCurrentUserSession());
       List<Menu> childs = modelService.findBySpecificationBySort(
           MenuSpecification.getMenuByEnabledByUserGroup(source.getUuid(), userGroupUuids),
           Sort.by(Direction.ASC, Menu.SORT), Menu.class);

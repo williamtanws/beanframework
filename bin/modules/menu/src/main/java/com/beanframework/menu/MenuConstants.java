@@ -16,4 +16,6 @@ public interface MenuConstants {
   }
 
   public static final String CONFIGURATION_DYNAMIC_FIELD_TEMPLATE = "menu.dynamicfield.template";
+  public static final String CACHE_MENU_TREE = "menu_tree";
+  public static final String CACHE_MENU_BREADCRUMBS = "menu_breadcrumbs";
 }
