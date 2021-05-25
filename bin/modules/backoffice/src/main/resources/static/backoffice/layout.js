@@ -68,3 +68,7 @@ $(document).ready(function() {
         }
     });
 });
+
+function clearFormTitle(){
+	$("#form-id").text('');
+}
