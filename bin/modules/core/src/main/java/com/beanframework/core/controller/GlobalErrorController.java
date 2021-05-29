@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -35,6 +36,8 @@ public class GlobalErrorController implements ErrorController {
     Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
     Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
     String message = (String) request.getAttribute("javax.servlet.error.message");
+
+    System.out.println(ExceptionUtils.getStackTrace(exception));
 
     Cookie cookie = RequestUtils.getCookie(request.getCookies(), COOKIE_DOCUMENTATION_REFERER);
     if (cookie != null) {
